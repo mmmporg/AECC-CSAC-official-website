@@ -11,12 +11,13 @@ export function isLocale(value: string): value is Locale {
 }
 
 export default getRequestConfig(async ({ locale }) => {
+  let resolvedLocale = locale
   if (!locale || !isLocale(locale)) {
-    notFound()
+    resolvedLocale = defaultLocale
   }
 
   return {
-    locale,
-    messages: (await import(`../messages/${locale}.json`)).default
+    locale: resolvedLocale,
+    messages: (await import(`../messages/${resolvedLocale}.json`)).default
   }
 })
