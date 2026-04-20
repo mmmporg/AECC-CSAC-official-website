@@ -1,0 +1,78 @@
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { AnnouncementCard } from '@/components/public/AnnouncementCard'
+import {
+  getAnnouncementById,
+  getSimilarAnnouncements
+} from '@/lib/data/public'
+import type { Locale } from '@/lib/i18n'
+import { formatDate } from '@/lib/utils'
+
+export default async function AnnouncementDetailPage({
+  params
+}: {
+  params: { locale: Locale; id: string }
+}) {
+  const locale = params.locale
+  const announcement = await getAnnouncementById(params.id)
+
+  if (!announcement) {
+    notFound()
+  }
+
+  const related = await getSimilarAnnouncements(
+    announcement.id,
+    announcement.category
+  )
+  const title = locale === 'en' ? announcement.title_en ?? announcement.title_fr : announcement.title_fr
+  const description =
+    locale === 'en'
+      ? announcement.description_en ?? announcement.description_fr
+      : announcement.description_fr
+
+  return (
+    <div className="container-shell space-y-8 py-10">
+      <nav className="text-sm text-neutral-600">
+        <Link href={`/${locale}`}>AECC</Link> /{' '}
+        <Link href={`/${locale}/annonces`}>
+          {locale === 'fr' ? 'Annonces' : 'Announcements'}
+        </Link>{' '}
+        / {title}
+      </nav>
+
+      <div className="grid gap-8 lg:grid-cols-[1.5fr_0.8fr]">
+        <article className="surface-card p-6">
+          <h1 className="text-3xl font-semibold text-neutral-900">{title}</h1>
+          <div className="mt-4 space-y-3 text-sm text-neutral-600">
+            <p>{announcement.city}</p>
+            <p>{description}</p>
+          </div>
+        </article>
+
+        <aside className="space-y-4">
+          <div className="surface-card p-5 text-sm text-neutral-600">
+            <p className="font-semibold text-neutral-900">
+              {locale === 'fr' ? 'Contact' : 'Contact'}
+            </p>
+            <p className="mt-2">{announcement.contact}</p>
+            <p className="mt-4 font-semibold text-neutral-900">
+              {locale === 'fr' ? 'Expiration' : 'Expiration'}
+            </p>
+            <p className="mt-2">{formatDate(announcement.expires_at, locale)}</p>
+          </div>
+        </aside>
+      </div>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold text-neutral-900">
+          {locale === 'fr' ? 'Annonces similaires' : 'Related announcements'}
+        </h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {related.map((item) => (
+            <AnnouncementCard announcement={item} key={item.id} locale={locale} />
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
