@@ -41,16 +41,24 @@ export default async function AnnouncementDetailPage({
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1.5fr_0.8fr]">
-        <article className="surface-card p-6">
-          <h1 className="text-3xl font-semibold text-neutral-900">{title}</h1>
-          <div className="mt-4 space-y-3 text-sm text-neutral-600">
-            <p>{announcement.city}</p>
-            <p>{description}</p>
+        <article className="space-y-6">
+          <div className="overflow-hidden rounded-2xl shadow-card">
+            <div className="aspect-[16/9] bg-gradient-to-br from-brand-700 via-brand-500 to-accent-300" />
+          </div>
+          <div className="surface-card p-8">
+            <h1 className="text-4xl font-black leading-tight text-neutral-900">{title}</h1>
+            <div className="mt-6 space-y-4 text-base leading-8 text-neutral-600">
+              <p>{description}</p>
+            </div>
           </div>
         </article>
 
         <aside className="space-y-4">
           <div className="surface-card p-5 text-sm text-neutral-600">
+            <p className="font-semibold text-neutral-900">
+              {locale === 'fr' ? 'Ville' : 'City'}
+            </p>
+            <p className="mt-2">{announcement.city}</p>
             <p className="font-semibold text-neutral-900">
               {locale === 'fr' ? 'Contact' : 'Contact'}
             </p>

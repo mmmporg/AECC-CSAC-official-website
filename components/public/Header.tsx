@@ -11,12 +11,12 @@ export async function Header({ locale }: HeaderProps) {
   const t = await getTranslations({ locale, namespace: 'nav' })
 
   return (
-    <header className="sticky top-0 z-20 border-b border-neutral-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-neutral-200 bg-neutral-50/90 backdrop-blur-xl">
       <div className="container-shell flex h-header items-center justify-between gap-4">
-        <Link className="text-lg font-semibold text-brand-700" href={`/${locale}`}>
+        <Link className="text-2xl font-black tracking-tight text-brand-700" href={`/${locale}`}>
           AECC
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-neutral-600 md:flex">
+        <nav className="hidden items-center gap-8 text-sm text-neutral-600 md:flex">
           <Link href={`/${locale}`}>{t('home')}</Link>
           <Link href={`/${locale}/histoire`}>{t('histoire')}</Link>
           <Link href={`/${locale}/annonces`}>{t('annonces')}</Link>
@@ -26,10 +26,10 @@ export async function Header({ locale }: HeaderProps) {
         <div className="flex items-center gap-3">
           <LanguageSwitcher locale={locale} />
           <Link
-            className="hidden rounded-full bg-brand-400 px-4 py-2 text-sm font-medium text-white md:inline-flex"
+            className="hidden rounded-lg bg-brand-400 px-5 py-2.5 text-sm font-bold text-white md:inline-flex"
             href="/admin/login"
           >
-            {t('admin')}
+            {t('rejoindre')}
           </Link>
         </div>
       </div>

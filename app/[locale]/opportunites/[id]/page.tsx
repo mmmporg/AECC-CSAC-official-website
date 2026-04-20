@@ -41,11 +41,18 @@ export default async function OpportunityDetailPage({
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-[1.5fr_0.8fr]">
-        <article className="surface-card p-6">
-          <h1 className="text-3xl font-semibold text-neutral-900">{title}</h1>
-          <div className="mt-4 space-y-3 text-sm text-neutral-600">
-            <p>{opportunity.organization}</p>
-            <p>{description}</p>
+        <article className="space-y-6">
+          <div className="rounded-3xl bg-brand-700 px-8 py-10 text-white">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-100">
+              {opportunity.organization}
+            </p>
+            <h1 className="mt-4 text-4xl font-black leading-tight">{title}</h1>
+            <p className="mt-6 max-w-3xl text-base leading-8 text-brand-50/90">
+              {description}
+            </p>
+          </div>
+          <div className="surface-card p-8">
+            <p className="text-base leading-8 text-neutral-600">{description}</p>
           </div>
         </article>
 

@@ -10,16 +10,10 @@ export async function Footer({ locale }: FooterProps) {
   const t = await getTranslations({ locale, namespace: 'nav' })
 
   return (
-    <footer className="mt-16 border-t border-neutral-200 bg-white">
-      <div className="container-shell grid gap-8 py-10 md:grid-cols-[1.6fr_1fr]">
-        <div className="space-y-3">
-          <p className="text-lg font-semibold text-brand-700">AECC</p>
-          <p className="max-w-xl text-sm leading-6 text-neutral-600">
-            Association des Étudiants Camerounais en Chine. Réseau de mémoire,
-            d&apos;entraide et d&apos;opportunités pour la communauté.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-4 text-sm text-neutral-600">
+    <footer className="mt-20 bg-brand-800 py-12 text-white">
+      <div className="container-shell flex flex-col items-center justify-between gap-6 md:flex-row">
+        <p className="text-xl font-bold">AECC</p>
+        <div className="flex flex-wrap justify-center gap-6 text-sm uppercase tracking-wide text-brand-100">
           <Link href={`/${locale}`}>{t('home')}</Link>
           <Link href={`/${locale}/histoire`}>{t('histoire')}</Link>
           <Link href={`/${locale}/annonces`}>{t('annonces')}</Link>
@@ -27,6 +21,7 @@ export async function Footer({ locale }: FooterProps) {
           <Link href={`/${locale}/a-propos`}>{t('apropos')}</Link>
           <Link href="/admin/login">{t('admin')}</Link>
         </div>
+        <p className="text-sm text-brand-100/80">© 2026 AECC</p>
       </div>
     </footer>
   )

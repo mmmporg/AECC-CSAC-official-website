@@ -22,18 +22,47 @@ export default async function HistoryPage({
   ])
 
   return (
-    <div className="container-shell space-y-12 py-10">
-      <section className="space-y-4">
-        <p className="text-sm uppercase tracking-[0.28em] text-brand-600">{t('label')}</p>
-        <h1 className="section-heading">{t('title')}</h1>
-        <p className="max-w-3xl section-copy">{t('subtitle')}</p>
+    <div className="space-y-20 py-10">
+      <section className="container-shell py-10 md:py-16">
+        <div className="grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
+          <div className="space-y-4">
+            <p className="text-sm font-bold uppercase tracking-[0.28em] text-accent-400">{t('label')}</p>
+            <h1 className="text-5xl font-black leading-[1.1] tracking-tight text-neutral-900 md:text-7xl">
+              {t('title')}
+            </h1>
+          </div>
+          <div className="border-l-4 border-accent-300 pl-6 text-base leading-7 text-neutral-600">
+            {t('subtitle')}
+          </div>
+        </div>
       </section>
 
-      <section className="space-y-6">
+      <section className="bg-neutral-100 py-20">
+        <div className="container-shell">
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            <div className="overflow-hidden rounded-2xl shadow-card">
+              <div className="aspect-video bg-gradient-to-br from-brand-700 via-brand-500 to-accent-300" />
+            </div>
+            <div className="space-y-6">
+              <h2 className="text-3xl font-bold text-brand-700">
+                {locale === 'fr' ? 'Le contexte initial' : 'The initial context'}
+              </h2>
+              <p className="text-base leading-8 text-neutral-600">
+                {locale === 'fr'
+                  ? "À la fin des années 90, la communauté estudiantine camerounaise en Chine se densifie. L'AECC naît de ce besoin de solidarité, d'organisation et de représentation."
+                  : 'By the late 1990s, the Cameroonian student community in China was growing. AECC emerged from the need for solidarity, structure and representation.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container-shell space-y-6">
         <Timeline events={timeline} locale={locale} />
       </section>
 
-      <section className="space-y-6">
+      <section className="bg-neutral-100 py-20">
+        <div className="container-shell space-y-8">
         <div className="space-y-2">
           <h2 className="section-heading">{t('premier_bureau')}</h2>
           <p className="section-copy">
@@ -67,9 +96,10 @@ export default async function HistoryPage({
             </tbody>
           </table>
         </div>
+        </div>
       </section>
 
-      <section className="space-y-6">
+      <section className="container-shell space-y-6">
         <div>
           <h2 className="section-heading">{t('fondateurs_title')}</h2>
           <p className="section-copy">{t('fondateurs_subtitle')}</p>

@@ -26,13 +26,18 @@ export default async function AnnouncementsPage({
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize))
 
   return (
-    <div className="container-shell space-y-8 py-10">
-      <section className="space-y-3">
-        <h1 className="section-heading">{t('title')}</h1>
-        <p className="section-copy">{t('subtitle')}</p>
+    <div className="container-shell py-10">
+      <section className="mb-12 space-y-4 text-center">
+        <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
+          {locale === 'fr' ? 'Communauté' : 'Community'}
+        </span>
+        <h1 className="text-5xl font-black tracking-tight text-neutral-900 md:text-6xl">{t('title')}</h1>
+        <p className="mx-auto max-w-2xl text-lg leading-8 text-neutral-600">{t('subtitle')}</p>
       </section>
 
-      <FilterBar kind="annonces" selectedCategory={category} selectedCity={city} />
+      <div className="sticky top-[88px] z-10 mb-12 bg-neutral-50/95 py-4 backdrop-blur">
+        <FilterBar kind="annonces" selectedCategory={category} selectedCity={city} />
+      </div>
 
       {result.items.length === 0 ? (
         <div className="surface-card p-8 text-sm text-neutral-600">{t('empty')}</div>
@@ -48,7 +53,7 @@ export default async function AnnouncementsPage({
         </div>
       )}
 
-      <div className="flex items-center justify-between">
+      <div className="mt-16 flex items-center justify-between">
         <Link
           className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
           href={`/${locale}/annonces?${new URLSearchParams({

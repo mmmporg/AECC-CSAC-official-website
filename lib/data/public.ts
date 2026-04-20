@@ -32,7 +32,7 @@ export async function getLatestAnnouncements(limit = 3) {
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Announcement[]
 }
 
@@ -45,7 +45,7 @@ export async function getLatestOpportunities(limit = 2) {
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Opportunity[]
 }
 
@@ -56,7 +56,7 @@ export async function getFounders() {
     .select('*')
     .order('sort_order', { ascending: true })
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Founder[]
 }
 
@@ -67,7 +67,7 @@ export async function getPresidents() {
     .select('*')
     .order('sort_order', { ascending: true })
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as President[]
 }
 
@@ -78,7 +78,7 @@ export async function getTimelineEvents() {
     .select('*')
     .order('sort_order', { ascending: true })
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as TimelineEvent[]
 }
 
@@ -108,7 +108,7 @@ export async function getAnnouncements(
     .order('created_at', { ascending: false })
     .range(from, to)
 
-  if (error) throw new Error(error.message)
+  if (error) return { items: [], total: 0, page, pageSize }
 
   return {
     items: (data ?? []) as Announcement[],
@@ -148,7 +148,7 @@ export async function getSimilarAnnouncements(
     .order('created_at', { ascending: false })
     .limit(3)
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Announcement[]
 }
 
@@ -174,7 +174,7 @@ export async function getOpportunities(
     .order('created_at', { ascending: false })
     .range(from, to)
 
-  if (error) throw new Error(error.message)
+  if (error) return { items: [], total: 0, page, pageSize }
 
   return {
     items: (data ?? []) as Opportunity[],
@@ -214,6 +214,6 @@ export async function getSimilarOpportunities(
     .order('created_at', { ascending: false })
     .limit(3)
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Opportunity[]
 }

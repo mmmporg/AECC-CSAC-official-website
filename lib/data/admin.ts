@@ -53,7 +53,7 @@ export async function getAdminAnnouncements() {
     .select('*')
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Announcement[]
 }
 
@@ -78,7 +78,7 @@ export async function getAdminOpportunities() {
     .select('*')
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
+  if (error) return []
   return (data ?? []) as Opportunity[]
 }
 
