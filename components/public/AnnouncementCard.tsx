@@ -20,33 +20,43 @@ export function AnnouncementCard({
       : announcement.description_fr
 
   return (
-    <article className="surface-card flex h-full flex-col p-5">
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <Badge category={announcement.category} locale={locale} />
+    <div className="group flex flex-col cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+      <div className="relative h-48 md:h-56 w-full overflow-hidden rounded-t-xl bg-[#E1F5EE]">
+        {/* Placeholder gradient mimicking image cover since we have no DB images */}
+        <div className="absolute inset-0 opacity-50 bg-gradient-to-tr from-[#1D9E75]/30 to-transparent"></div>
+        <div className="absolute top-4 left-4">
+          <Badge category={announcement.category} locale={locale} />
+        </div>
         {isNew(announcement.created_at) ? (
-          <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-700">
+          <div className="absolute top-4 right-4 bg-[#EF9F27] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
             {locale === 'fr' ? 'Nouveau' : 'New'}
-          </span>
+          </div>
         ) : null}
       </div>
-      <div className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.18em] text-neutral-600">
-          {announcement.city}
-        </p>
-        <h3 className="text-lg font-semibold text-neutral-900">{title}</h3>
-        <p className="line-clamp-3 text-sm leading-6 text-neutral-600">
+      <div className="flex flex-col flex-1 p-5 space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="bg-[#FAEEDA] text-[#D4840E] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            {announcement.city}
+          </span>
+          <span className="text-xs text-[#65635E]">
+            {formatRelativeDate(announcement.created_at, locale)}
+          </span>
+        </div>
+        <h3 className="text-lg font-bold group-hover:text-[#1D9E75] transition-colors text-[#1A1918]">
+          <Link href={`/${locale}/annonces/${announcement.id}`} className="focus:outline-none">
+            <span className="absolute inset-0" aria-hidden="true" />
+            {title}
+          </Link>
+        </h3>
+        <p className="line-clamp-2 text-sm text-[#65635E] flex-1">
           {description}
         </p>
+        <div className="pt-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#1D9E75] flex items-center gap-1 group-hover:gap-2 transition-all">
+            {locale === 'fr' ? 'VOIR LE DÉTAIL' : 'VIEW DETAILS'} <span aria-hidden="true">→</span>
+          </span>
+        </div>
       </div>
-      <div className="mt-5 flex items-center justify-between text-sm text-neutral-600">
-        <span>{formatRelativeDate(announcement.created_at, locale)}</span>
-        <Link
-          className="font-semibold text-brand-600"
-          href={`/${locale}/annonces/${announcement.id}`}
-        >
-          {locale === 'fr' ? 'Voir le détail' : 'View details'}
-        </Link>
-      </div>
-    </article>
+    </div>
   )
 }

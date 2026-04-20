@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/lib/i18n'
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
+import { NavMenu } from '@/components/public/NavMenu'
+import { SimpleLangSwitcher } from '@/components/ui/SimpleLangSwitcher'
 
 interface HeaderProps {
   locale: Locale
@@ -11,28 +12,30 @@ export async function Header({ locale }: HeaderProps) {
   const t = await getTranslations({ locale, namespace: 'nav' })
 
   return (
-    <header className="sticky top-0 z-20 border-b border-neutral-200 bg-neutral-50/90 backdrop-blur-xl">
-      <div className="container-shell flex h-header items-center justify-between gap-4">
-        <Link className="text-2xl font-black tracking-tight text-brand-700" href={`/${locale}`}>
+    <header className="fixed top-0 w-full z-50 bg-[#f9f9f7]/80 backdrop-blur-xl shadow-[0_12px_32px_rgba(26,28,27,0.04)]">
+      <nav className="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+        <Link className="text-2xl font-black text-[#00694c]" href={`/${locale}`}>
           AECC
         </Link>
-        <nav className="hidden items-center gap-8 text-sm text-neutral-600 md:flex">
-          <Link href={`/${locale}`}>{t('home')}</Link>
-          <Link href={`/${locale}/histoire`}>{t('histoire')}</Link>
-          <Link href={`/${locale}/annonces`}>{t('annonces')}</Link>
-          <Link href={`/${locale}/opportunites`}>{t('opportunites')}</Link>
-          <Link href={`/${locale}/a-propos`}>{t('apropos')}</Link>
-        </nav>
-        <div className="flex items-center gap-3">
-          <LanguageSwitcher locale={locale} />
+        
+        <NavMenu locale={locale} translations={{
+          home: t('home'),
+          histoire: t('histoire'),
+          annonces: t('annonces'),
+          opportunites: t('opportunites'),
+          apropos: t('apropos')
+        }} />
+
+        <div className="flex items-center gap-4">
+          <SimpleLangSwitcher locale={locale} />
           <Link
-            className="hidden rounded-lg bg-brand-400 px-5 py-2.5 text-sm font-bold text-white md:inline-flex"
+            className="bg-[#00694c] text-white px-6 py-2 rounded-lg font-semibold scale-95 active:scale-90 duration-200 hover:bg-[#008560] transition-all"
             href="/admin/login"
           >
             {t('rejoindre')}
           </Link>
         </div>
-      </div>
+      </nav>
     </header>
   )
 }
