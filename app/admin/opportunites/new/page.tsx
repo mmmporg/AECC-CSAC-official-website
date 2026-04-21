@@ -7,7 +7,17 @@ export default async function NewOpportunityPage() {
 
   return (
     <AdminLayout title={t('nouvelle_opportunite')}>
-      <OpportunityForm mode="create" />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-5xl">
+            Creer une opportunite
+          </h1>
+          <p className="mt-2 text-lg text-neutral-600">
+            Centralisez les opportunites utiles pour la communaute AECC.
+          </p>
+        </div>
+        <OpportunityForm mode="create" />
+      </div>
     </AdminLayout>
   )
 }

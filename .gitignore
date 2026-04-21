@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local screenshots / dev artifacts
 /screen/
+devserver.log
+server.log
+playwright-report/
+test-results/
+public/lighthouse-report.html

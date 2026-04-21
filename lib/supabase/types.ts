@@ -64,6 +64,32 @@ export interface President {
   sort_order: number
 }
 
+export interface Member {
+  id: string
+  first_name: string
+  last_name: string
+  city: string
+  university: string
+  degree: string
+  entry_year: number | null
+  graduation_year: number | null
+  linkedin_url: string | null
+  bio: string | null
+  is_active: boolean
+  created_at: string
+}
+
+export interface GalleryPhoto {
+  id: string
+  title_fr: string | null
+  title_en: string | null
+  image_url: string
+  year: number
+  event_name: string | null
+  sort_order: number
+  created_at: string
+}
+
 export interface PaginatedResult<T> {
   items: T[]
   total: number

@@ -1,171 +1,155 @@
 import Link from 'next/link'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { getAdminHistoryData } from '@/lib/data/admin'
-import {
-  deleteTimelineEvent,
-  deleteFounder,
-  deletePresident
-} from '@/app/actions/history'
+
+function toneClass(color: string) {
+  switch (color) {
+    case 'red':
+      return 'bg-[#f7d7d3] text-[#9c4840]'
+    case 'yellow':
+      return 'bg-[#f6dfb9] text-[#8a5b11]'
+    case 'gray':
+      return 'bg-neutral-200 text-neutral-700'
+    default:
+      return 'bg-brand-100 text-brand-700'
+  }
+}
 
 export default async function AdminHistoryPage() {
   const history = await getAdminHistoryData()
 
   return (
     <AdminLayout title="Gestion de l'histoire">
-      <div className="space-y-10">
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-6xl">
+            Gestion de l&apos;Histoire
+          </h1>
+        </div>
 
-        {/* ── FRISE CHRONOLOGIQUE ─────────────────────────── */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-900">
-              Frise chronologique ({history.timeline.length})
-            </h2>
-            <Link
-              className="rounded-lg bg-brand-400 px-4 py-2 text-sm font-semibold text-white"
-              href="/admin/histoire/timeline/new"
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="rounded-full bg-[#ebe6db] px-6 py-3 text-sm font-semibold text-neutral-700">
+            Frise chronologique
+          </span>
+          <span className="rounded-full px-6 py-3 text-sm font-medium text-neutral-600">
+            Fondateurs
+          </span>
+          <span className="rounded-full px-6 py-3 text-sm font-medium text-neutral-600">
+            Presidents
+          </span>
+          <Link
+            className="ml-auto rounded-xl bg-brand-600 px-6 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-brand-700"
+            href="/admin/histoire/timeline/new"
+          >
+            + Ajouter un evenement
+          </Link>
+        </div>
+
+        <p className="text-sm text-neutral-600">
+          Glissez et deposez les cartes pour reorganiser l&apos;ordre d&apos;affichage sur la frise publique.
+        </p>
+
+        <div className="space-y-3">
+          {history.timeline.map((event) => (
+            <article
+              className="admin-card flex items-center gap-5 px-5 py-6"
+              key={event.id}
             >
-              + Ajouter un événement
-            </Link>
-          </div>
-          <div className="surface-card overflow-hidden">
-            <table className="min-w-full divide-y divide-neutral-200 text-sm">
-              <thead className="bg-neutral-100 text-left text-neutral-600">
-                <tr>
-                  <th className="px-4 py-3">Période</th>
-                  <th className="px-4 py-3">Titre (FR)</th>
-                  <th className="px-4 py-3">Couleur</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 bg-white">
-                {history.timeline.map((event) => (
-                  <tr key={event.id}>
-                    <td className="px-4 py-3 text-neutral-600">{event.period}</td>
-                    <td className="px-4 py-3 font-medium text-neutral-900">{event.title_fr}</td>
-                    <td className="px-4 py-3 text-neutral-600">{event.color}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end gap-3">
-                        <Link className="text-brand-600" href={`/admin/histoire/timeline/${event.id}/edit`}>
-                          Modifier
-                        </Link>
-                        <form action={deleteTimelineEvent.bind(null, event.id)}>
-                          <button className="text-red-500" type="submit">
-                            Supprimer
-                          </button>
-                        </form>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+              <div className="text-xl text-neutral-300">::</div>
+              <div
+                className={`rounded-full px-5 py-2 text-sm font-bold ${toneClass(event.color)}`}
+              >
+                {event.period}
+              </div>
+              <div className="min-w-0 flex-1">
+                <h2 className="text-2xl font-bold text-neutral-900">{event.title_fr}</h2>
+                <p className="mt-1 text-base leading-7 text-neutral-600">
+                  {event.description_fr}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-brand-600 transition hover:bg-brand-50"
+                  href={`/admin/histoire/timeline/${event.id}/edit`}
+                >
+                  Modifier
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
 
-        {/* ── FONDATEURS ──────────────────────────────────── */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-900">
-              Fondateurs ({history.founders.length})
-            </h2>
-            <Link
-              className="rounded-lg bg-brand-400 px-4 py-2 text-sm font-semibold text-white"
-              href="/admin/histoire/fondateurs/new"
-            >
-              + Ajouter un fondateur
-            </Link>
-          </div>
-          <div className="surface-card overflow-hidden">
-            <table className="min-w-full divide-y divide-neutral-200 text-sm">
-              <thead className="bg-neutral-100 text-left text-neutral-600">
-                <tr>
-                  <th className="px-4 py-3">Nom</th>
-                  <th className="px-4 py-3">Rôle</th>
-                  <th className="px-4 py-3">In memoriam</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 bg-white">
-                {history.founders.map((founder) => (
-                  <tr key={founder.id}>
-                    <td className="px-4 py-3 font-medium text-neutral-900">{founder.full_name}</td>
-                    <td className="px-4 py-3 text-neutral-600">{founder.role_fr ?? '—'}</td>
-                    <td className="px-4 py-3">
-                      {founder.in_memoriam ? (
-                        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-700">
-                          In memoriam
-                        </span>
-                      ) : '—'}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end gap-3">
-                        <Link className="text-brand-600" href={`/admin/histoire/fondateurs/${founder.id}/edit`}>
-                          Modifier
-                        </Link>
-                        <form action={deleteFounder.bind(null, founder.id)}>
-                          <button className="text-red-500" type="submit">
-                            Supprimer
-                          </button>
-                        </form>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <div className="grid gap-6 xl:grid-cols-2">
+          <section className="admin-card p-6">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-neutral-900">
+                Fondateurs ({history.founders.length})
+              </h2>
+              <Link
+                className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-600 ring-1 ring-[#e3ded3] transition hover:bg-brand-50"
+                href="/admin/histoire/fondateurs/new"
+              >
+                Ajouter
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {history.founders.map((founder) => (
+                <div
+                  className="flex items-center justify-between rounded-xl border border-[#ece7dd] bg-[#faf7f1] px-4 py-4"
+                  key={founder.id}
+                >
+                  <div>
+                    <p className="font-semibold text-neutral-900">{founder.full_name}</p>
+                    <p className="text-sm text-neutral-600">{founder.role_fr ?? 'Sans role'}</p>
+                  </div>
+                  <Link
+                    className="text-sm font-semibold text-brand-600"
+                    href={`/admin/histoire/fondateurs/${founder.id}/edit`}
+                  >
+                    Modifier
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* ── PRÉSIDENTS ──────────────────────────────────── */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-900">
-              Présidents ({history.presidents.length})
-            </h2>
-            <Link
-              className="rounded-lg bg-brand-400 px-4 py-2 text-sm font-semibold text-white"
-              href="/admin/histoire/presidents/new"
-            >
-              + Ajouter un président
-            </Link>
-          </div>
-          <div className="surface-card overflow-hidden">
-            <table className="min-w-full divide-y divide-neutral-200 text-sm">
-              <thead className="bg-neutral-100 text-left text-neutral-600">
-                <tr>
-                  <th className="px-4 py-3">Nom</th>
-                  <th className="px-4 py-3">Période</th>
-                  <th className="px-4 py-3">Ville</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 bg-white">
-                {history.presidents.map((president) => (
-                  <tr key={president.id}>
-                    <td className="px-4 py-3 font-medium text-neutral-900">{president.full_name}</td>
-                    <td className="px-4 py-3 text-neutral-600">
-                      {president.year_start}{president.year_end ? ` – ${president.year_end}` : ''}
-                    </td>
-                    <td className="px-4 py-3 text-neutral-600">{president.city ?? '—'}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end gap-3">
-                        <Link className="text-brand-600" href={`/admin/histoire/presidents/${president.id}/edit`}>
-                          Modifier
-                        </Link>
-                        <form action={deletePresident.bind(null, president.id)}>
-                          <button className="text-red-500" type="submit">
-                            Supprimer
-                          </button>
-                        </form>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
+          <section className="admin-card p-6">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-neutral-900">
+                Presidents ({history.presidents.length})
+              </h2>
+              <Link
+                className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-600 ring-1 ring-[#e3ded3] transition hover:bg-brand-50"
+                href="/admin/histoire/presidents/new"
+              >
+                Ajouter
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {history.presidents.map((president) => (
+                <div
+                  className="flex items-center justify-between rounded-xl border border-[#ece7dd] bg-[#faf7f1] px-4 py-4"
+                  key={president.id}
+                >
+                  <div>
+                    <p className="font-semibold text-neutral-900">{president.full_name}</p>
+                    <p className="text-sm text-neutral-600">
+                      {president.year_start}
+                      {president.year_end ? ` - ${president.year_end}` : ''}
+                      {president.city ? ` • ${president.city}` : ''}
+                    </p>
+                  </div>
+                  <Link
+                    className="text-sm font-semibold text-brand-600"
+                    href={`/admin/histoire/presidents/${president.id}/edit`}
+                  >
+                    Modifier
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     </AdminLayout>
   )

@@ -7,6 +7,8 @@ import {
 } from '@/lib/data/public'
 import type { Locale } from '@/lib/i18n'
 import { formatDate } from '@/lib/utils'
+import { PageTransition } from '@/components/ui/PageTransition'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 
 export default async function OpportunityDetailPage({
   params
@@ -31,7 +33,8 @@ export default async function OpportunityDetailPage({
       : opportunity.description_fr
 
   return (
-    <div className="container-shell space-y-8 py-10">
+    <PageTransition>
+      <div className="container-shell space-y-8 py-10">
       <nav className="text-sm text-neutral-600">
         <Link href={`/${locale}`}>AECC</Link> /{' '}
         <Link href={`/${locale}/opportunites`}>
@@ -85,12 +88,15 @@ export default async function OpportunityDetailPage({
         <h2 className="text-xl font-semibold text-neutral-900">
           {locale === 'fr' ? 'Opportunités similaires' : 'Related opportunities'}
         </h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <RevealSection className="grid gap-4 md:grid-cols-3">
           {related.map((item) => (
-            <OpportunityCard key={item.id} locale={locale} opportunity={item} />
+            <RevealItem key={item.id}>
+              <OpportunityCard locale={locale} opportunity={item} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealSection>
       </section>
     </div>
+    </PageTransition>
   )
 }

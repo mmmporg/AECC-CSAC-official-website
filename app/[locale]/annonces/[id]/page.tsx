@@ -7,6 +7,8 @@ import {
 } from '@/lib/data/public'
 import type { Locale } from '@/lib/i18n'
 import { formatDate } from '@/lib/utils'
+import { PageTransition } from '@/components/ui/PageTransition'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 
 export default async function AnnouncementDetailPage({
   params
@@ -31,7 +33,8 @@ export default async function AnnouncementDetailPage({
       : announcement.description_fr
 
   return (
-    <div className="container-shell space-y-8 py-10">
+    <PageTransition>
+      <div className="container-shell space-y-8 py-10">
       <nav className="text-sm text-neutral-600">
         <Link href={`/${locale}`}>AECC</Link> /{' '}
         <Link href={`/${locale}/annonces`}>
@@ -75,12 +78,15 @@ export default async function AnnouncementDetailPage({
         <h2 className="text-xl font-semibold text-neutral-900">
           {locale === 'fr' ? 'Annonces similaires' : 'Related announcements'}
         </h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <RevealSection className="grid gap-4 md:grid-cols-3">
           {related.map((item) => (
-            <AnnouncementCard announcement={item} key={item.id} locale={locale} />
+            <RevealItem key={item.id}>
+              <AnnouncementCard announcement={item} locale={locale} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealSection>
       </section>
     </div>
+    </PageTransition>
   )
 }

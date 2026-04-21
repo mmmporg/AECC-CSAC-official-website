@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import type { Locale } from '@/lib/i18n'
+import { PageTransition } from '@/components/ui/PageTransition'
 
 export default async function AboutPage({
   params
@@ -10,8 +11,9 @@ export default async function AboutPage({
   const t = await getTranslations({ locale, namespace: 'about' })
 
   return (
-    <div className="space-y-20 py-10">
-      <section className="container-shell py-10 md:py-16">
+    <PageTransition>
+      <div className="space-y-20 py-10">
+        <section className="container-shell py-10 md:py-16">
         <div className="grid gap-12 md:grid-cols-[1.1fr_0.9fr] md:items-center">
           <div className="space-y-6">
             <span className="text-sm font-bold uppercase tracking-[0.2em] text-accent-400">
@@ -105,5 +107,6 @@ export default async function AboutPage({
         </div>
       </section>
     </div>
+    </PageTransition>
   )
 }

@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AECC Website
 
-## Getting Started
+Site officiel de l'AECC (Association des Etudiants Camerounais en Chine), construit avec Next.js 14, TypeScript strict, Supabase, Tailwind CSS et `next-intl`.
 
-First, run the development server:
+## Stack
+
+- Next.js 14 App Router
+- TypeScript strict
+- Tailwind CSS v3
+- Supabase (Postgres, Auth, RLS, Storage)
+- next-intl
+- Playwright pour les tests e2e
+
+## Prerequis
+
+- Node.js 20+
+- npm 10+
+- Un projet Supabase configure
+
+## Installation locale
+
+1. Installer les dependances :
+
+```bash
+npm install
+```
+
+2. Creer `.env.local` :
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+3. Demarrer le projet :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Base de donnees Supabase
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Les migrations versionnees sont dans [supabase/migrations](/C:/Users/YOGA/Downloads/AECC/repo/supabase/migrations).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Pour appliquer les migrations sur le projet lie :
 
-## Learn More
+```bash
+supabase link --project-ref <your-project-ref>
+supabase db push
+```
 
-To learn more about Next.js, take a look at the following resources:
+Migrations actuellement presentes :
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `001_initial_schema.sql`
+- `002_v2_annuaire_galerie.sql`
+- `003_v2_galerie_images.sql`
+- `004_v2_galerie_storage_bucket.sql`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts utiles
 
-## Deploy on Vercel
+```bash
+npm run dev
+npm run build
+npm run lint
+npm run test:e2e
+npm run test:ui
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Fonctionnalites couvertes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- pages publiques FR / EN
+- annonces publiques + details + soumission publique
+- opportunites publiques + details
+- histoire / fondateurs / presidents
+- annuaire public + demande d'inscription
+- galerie publique
+- espace admin annonces
+- espace admin opportunites
+- espace admin histoire
+- espace admin membres
+- espace admin galerie
+
+## Tests
+
+Les tests Playwright sont dans [tests/e2e](/C:/Users/YOGA/Downloads/AECC/repo/tests/e2e).
+
+Ils couvrent actuellement :
+
+- accueil
+- administration
+- historique
+- annonces
+
+## CI / CD
+
+Le repo inclut deux workflows GitHub Actions :
+
+- `ci.yml` : installation, lint, build
+- `supabase-db-push.yml` : push des migrations Supabase sur `main`
+
+Secrets GitHub requis pour les migrations :
+
+- `SUPABASE_ACCESS_TOKEN`
+- `SUPABASE_PROJECT_ID`
+- `SUPABASE_DB_PASSWORD`
+
+## Notes importantes
+
+- `SUPABASE_SERVICE_ROLE_KEY` doit rester strictement cote serveur.
+- Les artefacts locaux de debug et de test (`playwright-report`, `test-results`, logs) sont ignores.
+- Avant commit, verifier au minimum :
+
+```bash
+npm run build
+npx next lint
+```

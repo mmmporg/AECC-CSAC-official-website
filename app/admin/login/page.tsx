@@ -43,19 +43,61 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
-      <form action={handleSubmit} className="surface-card w-full max-w-md space-y-5 p-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-semibold text-neutral-900">{t('login_title')}</h1>
-          <p className="text-sm text-neutral-600">{t('login_subtitle')}</p>
+    <div className="admin-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-[10%] -top-[20%] h-[28rem] w-[28rem] rounded-full bg-brand-100/60 blur-3xl" />
+        <div className="absolute -bottom-[12%] -left-[10%] h-80 w-80 rounded-full bg-accent-50 blur-3xl" />
+      </div>
+
+      <div className="relative w-full max-w-[440px]">
+        <form action={handleSubmit} className="admin-card space-y-6 p-8 sm:p-10">
+          <div className="mb-10 flex flex-col items-center text-center">
+            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ece8df] text-3xl text-brand-700 shadow-inner">
+              <span>▣</span>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-neutral-900">{t('login_title')}</h1>
+            <p className="mt-3 max-w-xs text-base leading-7 text-neutral-600">
+              Association des Etudiants Camerounais en Chine
+            </p>
+          </div>
+
+          <Input
+            className="admin-input h-14 pl-4"
+            label={t('email').toUpperCase()}
+            name="email"
+            placeholder="admin@aec-chine.org"
+            required
+            type="email"
+          />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium tracking-wide text-neutral-900">
+                {t('password').toUpperCase()}
+              </span>
+              <span className="text-sm font-medium text-brand-600">Oublie ?</span>
+            </div>
+            <Input
+              className="admin-input h-14 pl-4"
+              label={undefined}
+              name="password"
+              placeholder="••••••••"
+              required
+              type="password"
+            />
+          </div>
+
+          {error ? <p className="text-sm text-error">{error}</p> : null}
+
+          <Button className="mt-4 h-14 w-full rounded-xl text-base font-semibold" disabled={loading} type="submit">
+            {t('signin')}
+          </Button>
+        </form>
+
+        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-neutral-600">
+          <span className="text-xs">■</span>
+          <span>Acces securise et restreint</span>
         </div>
-        <Input label={t('email')} name="email" required type="email" />
-        <Input label={t('password')} name="password" required type="password" />
-        {error ? <p className="text-sm text-error">{error}</p> : null}
-        <Button className="w-full" disabled={loading} type="submit">
-          {t('signin')}
-        </Button>
-      </form>
+      </div>
     </div>
   )
 }

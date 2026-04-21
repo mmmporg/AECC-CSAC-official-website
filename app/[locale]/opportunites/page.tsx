@@ -5,6 +5,8 @@ import { OpportunityCard } from '@/components/public/OpportunityCard'
 import { getOpportunities } from '@/lib/data/public'
 import type { Locale } from '@/lib/i18n'
 import { getPageParam, getSearchParam } from '@/lib/utils'
+import { PageTransition } from '@/components/ui/PageTransition'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 
 export default async function OpportunitiesPage({
   params,
@@ -24,7 +26,8 @@ export default async function OpportunitiesPage({
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize))
 
   return (
-    <div className="container-shell py-10">
+    <PageTransition>
+      <div className="container-shell py-10">
       <section className="mb-12 max-w-3xl space-y-4">
         <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
           {locale === 'fr' ? 'Opportunités' : 'Opportunities'}
@@ -40,15 +43,16 @@ export default async function OpportunitiesPage({
       {result.items.length === 0 ? (
         <div className="surface-card p-8 text-sm text-neutral-600">{t('empty')}</div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <RevealSection className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {result.items.map((opportunity) => (
-            <OpportunityCard
-              key={opportunity.id}
-              locale={locale}
-              opportunity={opportunity}
-            />
+            <RevealItem key={opportunity.id}>
+              <OpportunityCard
+                locale={locale}
+                opportunity={opportunity}
+              />
+            </RevealItem>
           ))}
-        </div>
+        </RevealSection>
       )}
 
       <div className="mt-16 flex items-center justify-between">
@@ -75,5 +79,6 @@ export default async function OpportunitiesPage({
         </Link>
       </div>
     </div>
+    </PageTransition>
   )
 }

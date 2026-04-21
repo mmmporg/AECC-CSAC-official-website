@@ -10,7 +10,8 @@ export function isLocale(value: string): value is Locale {
   return locales.includes(value as Locale)
 }
 
-export default getRequestConfig(async ({ locale }) => {
+export default getRequestConfig(async ({ requestLocale }) => {
+  const locale = await requestLocale
   let resolvedLocale = locale
   if (!locale || !isLocale(locale)) {
     resolvedLocale = defaultLocale

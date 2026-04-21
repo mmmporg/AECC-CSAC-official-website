@@ -18,7 +18,17 @@ export default async function EditAnnouncementPage({
 
   return (
     <AdminLayout title={t('modifier')}>
-      <AnnouncementForm initialData={announcement} mode="edit" />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-5xl">
+            Modifier l&apos;annonce
+          </h1>
+          <p className="mt-2 text-lg text-neutral-600">
+            Ajustez le contenu editorial et les informations de diffusion.
+          </p>
+        </div>
+        <AnnouncementForm initialData={announcement} mode="edit" />
+      </div>
     </AdminLayout>
   )
 }

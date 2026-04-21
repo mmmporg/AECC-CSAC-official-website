@@ -18,7 +18,17 @@ export default async function EditOpportunityPage({
 
   return (
     <AdminLayout title={t('modifier')}>
-      <OpportunityForm initialData={opportunity} mode="edit" />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-5xl">
+            Modifier l&apos;opportunite
+          </h1>
+          <p className="mt-2 text-lg text-neutral-600">
+            Mettez a jour les details et la fenetre de candidature.
+          </p>
+        </div>
+        <OpportunityForm initialData={opportunity} mode="edit" />
+      </div>
     </AdminLayout>
   )
 }

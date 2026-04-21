@@ -2,6 +2,8 @@ import { createClient, requireAdminUser } from '@/lib/supabase/server'
 import type {
   Announcement,
   Founder,
+  GalleryPhoto,
+  Member,
   Opportunity,
   President,
   TimelineEvent
@@ -116,4 +118,29 @@ export async function getAdminHistoryData() {
     founders: (founders.data ?? []) as Founder[],
     presidents: (presidents.data ?? []) as President[]
   }
+}
+
+export async function getAdminMembers() {
+  await requireAdminUser()
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('members')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) return []
+  return (data ?? []) as Member[]
+}
+
+export async function getAdminGalleryPhotos() {
+  await requireAdminUser()
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('gallery_photos')
+    .select('*')
+    .order('year', { ascending: false })
+    .order('sort_order', { ascending: true })
+
+  if (error) return []
+  return (data ?? []) as GalleryPhoto[]
 }

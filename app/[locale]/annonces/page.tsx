@@ -5,6 +5,8 @@ import { FilterBar } from '@/components/public/FilterBar'
 import { getAnnouncements } from '@/lib/data/public'
 import type { Locale } from '@/lib/i18n'
 import { getPageParam, getSearchParam } from '@/lib/utils'
+import { PageTransition } from '@/components/ui/PageTransition'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 
 export default async function AnnouncementsPage({
   params,
@@ -26,7 +28,8 @@ export default async function AnnouncementsPage({
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize))
 
   return (
-    <div className="container-shell py-10">
+    <PageTransition>
+      <div className="container-shell py-10">
       <section className="mb-12 space-y-4 text-center">
         <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
           {locale === 'fr' ? 'Communauté' : 'Community'}
@@ -36,21 +39,30 @@ export default async function AnnouncementsPage({
       </section>
 
       <div className="sticky top-[88px] z-10 mb-12 bg-neutral-50/95 py-4 backdrop-blur">
-        <FilterBar kind="annonces" selectedCategory={category} selectedCity={city} />
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <FilterBar kind="annonces" selectedCategory={category} selectedCity={city} />
+          <Link
+            href={`/${locale}/annonces/publier`}
+            className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-brand-600 hover:shadow"
+          >
+            {t('submit_btn')}
+          </Link>
+        </div>
       </div>
 
       {result.items.length === 0 ? (
         <div className="surface-card p-8 text-sm text-neutral-600">{t('empty')}</div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <RevealSection className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {result.items.map((announcement) => (
-            <AnnouncementCard
-              announcement={announcement}
-              key={announcement.id}
-              locale={locale}
-            />
+            <RevealItem key={announcement.id}>
+              <AnnouncementCard
+                announcement={announcement}
+                locale={locale}
+              />
+            </RevealItem>
           ))}
-        </div>
+        </RevealSection>
       )}
 
       <div className="mt-16 flex items-center justify-between">
@@ -79,5 +91,6 @@ export default async function AnnouncementsPage({
         </Link>
       </div>
     </div>
+    </PageTransition>
   )
 }

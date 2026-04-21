@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 import { FounderCard } from '@/components/public/FounderCard'
 import { Timeline } from '@/components/public/Timeline'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
+import { PageTransition } from '@/components/ui/PageTransition'
 import {
   getFounders,
   getPresidents,
@@ -22,7 +24,8 @@ export default async function HistoryPage({
   ])
 
   return (
-    <div className="space-y-20 py-10">
+    <PageTransition>
+      <div className="space-y-20 py-10">
       <section className="container-shell py-10 md:py-16">
         <div className="grid gap-8 md:grid-cols-[1.2fr_0.8fr] md:items-end">
           <div className="space-y-4">
@@ -104,12 +107,15 @@ export default async function HistoryPage({
           <h2 className="section-heading">{t('fondateurs_title')}</h2>
           <p className="section-copy">{t('fondateurs_subtitle')}</p>
         </div>
-        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {founders.map((founder) => (
-            <FounderCard founder={founder} key={founder.id} locale={locale} />
+        <RevealSection className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {founders.map((founder, i) => (
+            <RevealItem key={founder.id}>
+              <FounderCard founder={founder} locale={locale} index={i} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealSection>
       </section>
     </div>
+    </PageTransition>
   )
 }

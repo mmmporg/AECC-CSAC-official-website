@@ -8,6 +8,9 @@ import {
   getLatestOpportunities
 } from '@/lib/data/public'
 import type { Locale } from '@/lib/i18n'
+import { HeroSection } from '@/components/public/HeroSection'
+import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
+import { PageTransition } from '@/components/ui/PageTransition'
 
 export default async function HomePage({
   params
@@ -22,178 +25,187 @@ export default async function HomePage({
     getFounders()
   ])
 
+  const missionCards = [
+    {
+      title: locale === 'fr' ? 'Communaute' : 'Community',
+      copy:
+        locale === 'fr'
+          ? "Un reseau de solidarite pour accompagner les etudiants camerounais dans toutes les grandes villes de Chine."
+          : 'A support network for Cameroonian students across the main cities of China.',
+      href: `/${locale}/a-propos`,
+      tone: 'bg-brand-50 text-brand-700'
+    },
+    {
+      title: locale === 'fr' ? 'Memoire' : 'Memory',
+      copy:
+        locale === 'fr'
+          ? "Preserver l'histoire de l'AECC et transmettre les repères construits par les generations precedentes."
+          : 'Preserve AECC history and pass on the milestones built by previous generations.',
+      href: `/${locale}/histoire`,
+      tone: 'bg-accent-50 text-accent-400'
+    },
+    {
+      title: locale === 'fr' ? 'Opportunites' : 'Opportunities',
+      copy:
+        locale === 'fr'
+          ? "Partager les informations utiles sur les bourses, les stages, les candidatures et les evenements."
+          : 'Share useful information about scholarships, internships, applications and events.',
+      href: `/${locale}/opportunites`,
+      tone: 'bg-[#f8efef] text-[#a6554d]'
+    }
+  ]
+
   return (
-    <div className="overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative px-8 py-16 md:py-24 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-        <div className="flex-1 space-y-6 z-10 w-full lg:pr-10">
-          <h1 className="text-[3.5rem] lg:text-[4.5rem] font-black text-[#1A1918] tracking-tight leading-[1.05]">
-            L'association des étudiants <span className="text-[#0F6E56]">camerounais</span> en Chine
-          </h1>
-          <p className="text-lg text-[#65635E] max-w-xl leading-relaxed mt-6">
-            Unir, soutenir et propulser la jeunesse estudiantine camerounaise dans l'Empire du Milieu. Depuis 1997, nous bâtissons des ponts entre nos cultures et nos ambitions.
-          </p>
-          <div className="flex flex-wrap gap-4 mt-8">
-            <Link
-              className="px-8 py-4 bg-[#0F6E56] text-white rounded-md font-bold text-[0.8rem] uppercase tracking-widest hover:bg-[#085041] transition-colors shadow-sm"
-              href={`/${locale}/histoire`}
-            >
-              EXPLORER L'AECC
-            </Link>
-            <Link
-              className="px-8 py-4 bg-[#EF9F27] text-white rounded-md font-bold text-[0.8rem] uppercase tracking-widest hover:bg-[#D4840E] transition-colors shadow-sm"
-              href={`/${locale}/a-propos`}
-            >
-              NOUS CONTACTER
-            </Link>
-          </div>
-        </div>
+    <PageTransition>
+      <div className="overflow-x-hidden">
+        <HeroSection />
 
-        {/* Hero Stats Grid */}
-        <div className="flex-1 w-full grid grid-cols-2 gap-4 relative">
-          <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#EF9F27] opacity-[0.15] blur-3xl rounded-full"></div>
-          <div className="bg-white p-6 md:p-8 rounded-xl shadow-sm border border-transparent flex flex-col justify-between h-[160px] transform md:translate-y-6">
-            <span className="text-[#EF9F27] font-black text-3xl md:text-4xl">1997</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#65635E]">FONDATION</span>
-          </div>
-          <div className="bg-[#1D9E75] text-white p-6 md:p-8 rounded-xl shadow-[0_10px_30px_rgba(29,158,117,0.3)] flex flex-col justify-between h-[160px]">
-            <span className="font-black text-3xl md:text-4xl">1999</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] opacity-90">RECONNAISSANCE</span>
-          </div>
-          <div className="bg-[#F0EFEA] p-6 md:p-8 rounded-xl shadow-sm border border-transparent flex flex-col justify-between h-[160px] transform md:translate-y-6">
-            <span className="text-[#1A1918] font-black text-3xl md:text-4xl">19</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#65635E]">PRÉSIDENTS</span>
-          </div>
-          <div className="bg-[#FAEEDA] p-6 md:p-8 rounded-xl shadow-sm border border-transparent flex flex-col justify-between h-[160px]">
-            <span className="text-[#1A1918] font-black text-3xl md:text-4xl">25 ans</span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#EF9F27]">D'IMPACT</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Notre Mission Section */}
-      <section className="bg-[#F8F8F6] py-24 border-t border-[#E0DED7]">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-            <div className="space-y-2">
-              <span className="text-[#D4840E] font-bold text-[10px] uppercase tracking-[0.2em]">{locale === 'fr' ? 'Valeurs Fondatrices' : 'Founding Values'}</span>
-              <h2 className="text-[2.5rem] font-black tracking-tight text-[#1A1918]">{t('mission_title')}</h2>
+      <section className="border-y border-neutral-200 bg-neutral-50 py-20">
+        <div className="container-shell">
+          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent-400">
+                AECC
+              </span>
+              <h2 className="mt-3 text-4xl font-black tracking-tight text-neutral-900">
+                {t('mission_title')}
+              </h2>
             </div>
-            <div className="max-w-md text-[#65635E] text-sm leading-relaxed mb-2">
-              Favoriser l'intégration, promouvoir l'excellence académique et maintenir le lien culturel avec la patrie.
-            </div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Mission Card 1 */}
-            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-[#E1F5EE] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-xl">🤝</span>
-              </div>
-              <h3 className="text-lg font-bold mb-3 text-[#1A1918]">Communauté</h3>
-              <p className="text-[#65635E] text-sm leading-[1.6] mb-6">Un réseau de solidarité s'étendant à travers toutes les provinces de Chine pour ne jamais se sentir seul à l'étranger.</p>
-              <Link className="text-[#1D9E75] font-bold text-[11px] uppercase tracking-wider flex items-center gap-2 hover:gap-3 transition-all" href={`/${locale}/a-propos`}>
-                DÉCOUVRIR →
-              </Link>
-            </div>
-            {/* Mission Card 2 */}
-            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-[#FAEEDA] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-xl">🗂️</span>
-              </div>
-              <h3 className="text-lg font-bold mb-3 text-[#1A1918]">Mémoire</h3>
-              <p className="text-[#65635E] text-sm leading-[1.6] mb-6">Préserver notre héritage culturel camerounais tout en apprenant de la richesse millénaire de la civilisation chinoise.</p>
-              <Link className="text-[#D4840E] font-bold text-[11px] uppercase tracking-wider flex items-center gap-2 hover:gap-3 transition-all" href={`/${locale}/histoire`}>
-                NOTRE HISTOIRE →
-              </Link>
-            </div>
-            {/* Mission Card 3 */}
-            <div className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-[#FDECEC] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-xl">🚀</span>
-              </div>
-              <h3 className="text-lg font-bold mb-3 text-[#1A1918]">Opportunités</h3>
-              <p className="text-[#65635E] text-sm leading-[1.6] mb-6">Faciliter l'accès aux bourses, stages et carrières pour nos membres au sein des entreprises leaders mondiales.</p>
-              <Link className="text-[#E24B4A] font-bold text-[11px] uppercase tracking-wider flex items-center gap-2 hover:gap-3 transition-all" href={`/${locale}/opportunites`}>
-                SAISIR →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dernières Annonces Section */}
-      <section className="py-24 px-8 max-w-7xl mx-auto bg-[#F8F8F6]">
-        <div className="text-center mb-16">
-          <h2 className="text-[2.5rem] font-black tracking-tight text-[#1A1918] mb-3">Dernières Annonces</h2>
-          <div className="h-1 w-20 bg-[#1D9E75] mx-auto rounded-full"></div>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {announcements.map((announcement) => (
-            <AnnouncementCard
-              announcement={announcement}
-              key={announcement.id}
-              locale={locale}
-            />
-          ))}
-        </div>
-        <div className="mt-12 text-center">
-            <Link className="text-brand-600 font-bold hover:underline" href={`/${locale}/annonces`}>Voir toutes les annonces →</Link>
-        </div>
-      </section>
-
-      {/* Opportunités Récentes Section */}
-      <section className="bg-brand-800 py-24">
-        <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <span className="text-brand-100 font-bold text-sm uppercase tracking-[0.2em] mb-4 block">Carrière & Éducation</span>
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-6 leading-tight">Accélérez votre futur professionnel</h2>
-            <p className="text-white/80 text-lg mb-8 leading-relaxed">
-              Grâce à nos relais, nous sélectionnons les opportunités les plus utiles pour la communauté camerounaise en Chine.
+            <p className="max-w-md text-sm leading-7 text-neutral-600">
+              {locale === 'fr'
+                ? "Une plateforme pour informer, orienter et garder un lien durable entre les etudiants camerounais en Chine."
+                : 'A platform to inform, support and keep a durable connection between Cameroonian students in China.'}
             </p>
-            <Link className="inline-block px-8 py-4 bg-white text-brand-800 rounded-lg font-bold text-sm uppercase tracking-widest hover:bg-neutral-100 transition-all" href={`/${locale}/opportunites`}>
-              Toutes les offres
-            </Link>
           </div>
-          <div className="space-y-6">
-            {opportunities.map((opportunity) => (
-              <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all group" key={opportunity.id}>
-                 <OpportunityCard locale={locale} opportunity={opportunity} />
-              </div>
+
+          <RevealSection className="grid gap-6 md:grid-cols-3">
+            {missionCards.map((card) => (
+              <RevealItem key={card.title}>
+                <article className="admin-card p-8">
+                  <span
+                    className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl text-lg font-black ${card.tone}`}
+                  >
+                    {card.title.charAt(0)}
+                  </span>
+                  <h3 className="text-xl font-bold text-neutral-900">{card.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-neutral-600">{card.copy}</p>
+                  <Link
+                    className="mt-6 inline-flex text-xs font-bold uppercase tracking-[0.18em] text-brand-600"
+                    href={card.href}
+                  >
+                    {locale === 'fr' ? 'Voir plus' : 'Learn more'}
+                  </Link>
+                </article>
+              </RevealItem>
             ))}
-          </div>
+          </RevealSection>
         </div>
       </section>
 
-      <section className="py-24 max-w-7xl mx-auto px-8 bg-[#F8F8F6]">
-        <div className="bg-[#F0EFEA] rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/40 rounded-full -mr-32 -mt-32"></div>
-          <div className="relative z-10">
-            <span className="text-[#0F6E56] font-bold text-[10px] uppercase tracking-[0.2em] mb-4 block">Héritage</span>
-            <h2 className="text-4xl font-black mb-14 tracking-tight text-[#1A1918]">Ils ont fait l'AECC</h2>
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {founders.slice(0, 6).map((founder) => {
-                const initials = founder.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-                return (
-                  <div className="group relative flex flex-col items-center" key={founder.id} title={founder.full_name}>
-                    <div className="w-[84px] h-[84px] flex items-center justify-center rounded-full border-[3px] border-[#65635E] shadow-xl overflow-hidden bg-[#1A1918] text-white font-black text-2xl transition-transform duration-300 hover:scale-105">
-                      <span className="opacity-40">{initials}</span>
-                    </div>
-                    <div className="absolute -bottom-2 bg-black text-white text-[9px] font-bold px-2 py-[2px] rounded-full border border-[#F0EFEA] uppercase tracking-widest z-10 shadow-sm">
+      <section className="container-shell py-20">
+        <div className="mb-12 flex items-end justify-between gap-6">
+          <h2 className="text-4xl font-black tracking-tight text-neutral-900">
+            {t('latest_announcements')}
+          </h2>
+          <Link className="text-sm font-bold text-brand-600" href={`/${locale}/annonces`}>
+            {locale === 'fr' ? 'Voir toutes les annonces' : 'View all announcements'}
+          </Link>
+        </div>
+        <RevealSection className="grid gap-6 md:grid-cols-3">
+          {announcements.map((announcement) => (
+            <RevealItem key={announcement.id}>
+              <AnnouncementCard
+                announcement={announcement}
+                locale={locale}
+              />
+            </RevealItem>
+          ))}
+        </RevealSection>
+      </section>
+
+      <section className="bg-brand-800 py-20">
+        <div className="container-shell grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-start">
+          <div className="space-y-6">
+            <span className="text-sm font-bold uppercase tracking-[0.18em] text-brand-100">
+              {locale === 'fr' ? 'Carriere et education' : 'Career and education'}
+            </span>
+            <h2 className="text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
+              {locale === 'fr'
+                ? 'Des opportunites utiles pour avancer'
+                : 'Useful opportunities to move forward'}
+            </h2>
+            <p className="max-w-md text-lg leading-8 text-white/80">
+              {locale === 'fr'
+                ? "L'equipe AECC relaie les offres les plus pertinentes pour la communaute camerounaise en Chine."
+                : 'The AECC team shares the most relevant offers for the Cameroonian community in China.'}
+            </p>
+            <Link
+              className="inline-flex rounded-xl bg-white px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-brand-800 transition hover:bg-neutral-100"
+              href={`/${locale}/opportunites`}
+            >
+              {locale === 'fr' ? 'Toutes les offres' : 'All opportunities'}
+            </Link>
+          </div>
+
+          <RevealSection className="space-y-5">
+            {opportunities.map((opportunity) => (
+              <RevealItem key={opportunity.id}>
+                <div
+                  className="rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur"
+                >
+                  <OpportunityCard locale={locale} opportunity={opportunity} />
+                </div>
+              </RevealItem>
+            ))}
+          </RevealSection>
+        </div>
+      </section>
+
+      <section className="container-shell py-20">
+        <div className="rounded-[2rem] bg-neutral-100 px-8 py-14 text-center md:px-16 md:py-20">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
+            AECC
+          </span>
+          <h2 className="mt-4 text-4xl font-black tracking-tight text-neutral-900">
+            {t('founders_teaser')}
+          </h2>
+          <RevealSection className="mt-12 flex flex-wrap justify-center gap-4">
+            {founders.slice(0, 6).map((founder) => {
+              const initials = founder.full_name
+                .split(' ')
+                .map((name) => name[0] ?? '')
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+
+              return (
+                <RevealItem key={founder.id}>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-900 text-2xl font-black text-white shadow-lg">
                       {initials}
                     </div>
+                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-600">
+                      {initials}
+                    </span>
                   </div>
-                )
-              })}
-            </div>
-            <p className="text-[#65635E] max-w-2xl mx-auto mb-10 text-sm leading-[1.6]">
-              Ils ont posé les fondations de ce que nous sommes aujourd'hui. Découvrez leurs parcours inspirants et comment l'AECC a façonné leur carrière internationale.
-            </p>
-            <Link className="group relative inline-flex px-8 py-3 bg-[#0F6E56] text-white rounded-md font-bold text-sm overflow-hidden shadow-lg hover:shadow-xl transition-shadow" href={`/${locale}/histoire`}>
-              <span className="relative z-10 flex items-center gap-2">Découvrir les témoignages <span className="text-lg">🎓</span></span>
-            </Link>
-          </div>
+                </RevealItem>
+              )
+            })}
+          </RevealSection>
+          <p className="mx-auto mt-10 max-w-2xl text-sm leading-7 text-neutral-600">
+            {locale === 'fr'
+              ? "Decouvrez les personnes qui ont pose les fondations de l'association et ont porte sa continuite."
+              : 'Discover the people who laid the foundations of the association and carried its continuity.'}
+          </p>
+          <Link
+            className="mt-8 inline-flex rounded-xl bg-brand-600 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:bg-brand-700"
+            href={`/${locale}/histoire`}
+          >
+            {locale === 'fr' ? 'Voir l histoire' : 'See the history'}
+          </Link>
         </div>
       </section>
-    </div>
+      </div>
+    </PageTransition>
   )
 }

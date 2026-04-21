@@ -1,4 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
+
+export interface GalerieImage {
+  id: string;
+  annuaire_id: string | null;
+  storage_path: string;
+  title: string | null;
+  description: string | null;
+  uploaded_at: string;
+  created_by: string | null;
+}
+
 import type {
   Announcement,
   AnnouncementCategory,
@@ -7,7 +18,8 @@ import type {
   OpportunityCategory,
   PaginatedResult,
   President,
-  TimelineEvent
+  TimelineEvent,
+  GalleryPhoto
 } from '@/lib/supabase/types'
 
 interface AnnouncementFilters {
@@ -216,4 +228,16 @@ export async function getSimilarOpportunities(
 
   if (error) return []
   return (data ?? []) as Opportunity[]
+}
+
+export async function getGalleryPhotos() {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('gallery_photos')
+    .select('*')
+    .order('year', { ascending: false })
+    .order('sort_order', { ascending: true })
+
+  if (error) return []
+  return (data ?? []) as GalleryPhoto[]
 }

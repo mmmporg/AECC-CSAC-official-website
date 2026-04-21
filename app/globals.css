@@ -56,6 +56,33 @@
     @apply rounded-lg border border-neutral-200 bg-white shadow-card;
   }
 
+  .admin-shell {
+    background:
+      radial-gradient(circle at top right, rgba(179, 228, 209, 0.35), transparent 32%),
+      radial-gradient(circle at bottom left, rgba(250, 238, 218, 0.55), transparent 26%),
+      #f6f3ec;
+  }
+
+  .admin-card {
+    @apply rounded-2xl border border-[#d9d4c8] bg-white shadow-[0_18px_50px_-22px_rgba(26,25,24,0.25)];
+  }
+
+  .admin-panel {
+    @apply rounded-2xl border border-[#e8e2d5] bg-white shadow-[0_12px_36px_-20px_rgba(26,25,24,0.16)];
+  }
+
+  .admin-input {
+    @apply h-12 w-full rounded-lg border-0 bg-[#ece8df] px-4 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-600/60 focus:bg-white focus:ring-2 focus:ring-brand-400;
+  }
+
+  .admin-textarea {
+    @apply min-h-32 w-full rounded-lg border-0 bg-[#ece8df] px-4 py-3 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-600/60 focus:bg-white focus:ring-2 focus:ring-brand-400;
+  }
+
+  .admin-select {
+    @apply h-12 w-full rounded-lg border-0 bg-[#ece8df] px-4 text-sm text-neutral-900 outline-none transition focus:bg-white focus:ring-2 focus:ring-brand-400;
+  }
+
   .section-heading {
     @apply text-2xl font-semibold tracking-tight text-neutral-900 md:text-3xl;
   }
