@@ -17,15 +17,15 @@ export async function Header({ locale }: HeaderProps) {
     <AnimatedHeaderWrapper>
       <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-8">
         <Link className="group flex min-w-[10.5rem] items-center gap-3.5 xl:min-w-[14rem]" href={`/${locale}`}>
-          <div className="flex h-12 w-12 items-center justify-center rounded-[1.15rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,245,238,0.88))] shadow-[0_14px_28px_-22px_rgba(26,25,24,0.28)] ring-1 ring-white/80 transition-transform duration-200 group-hover:-translate-y-0.5">
+          <div className="flex h-12 w-12 items-center justify-center rounded-[1.1rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,245,238,0.9))] shadow-[0_14px_28px_-22px_rgba(26,25,24,0.24)] ring-1 ring-white/80 transition-transform duration-200 group-hover:-translate-y-0.5">
             <Image
               alt="AECC logo"
-              className="h-10 w-10 object-contain"
-              width={40}
-              height={40}
+              className="h-9 w-9 object-contain"
+              width={36}
+              height={36}
               priority
               unoptimized
-              src="/logo.png"
+              src="/logo-mark.png"
             />
           </div>
           <div className="hidden flex-col xl:flex">
