@@ -29,7 +29,7 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
   ]
 
   return (
-    <nav className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 xl:flex">
+    <nav className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-7 xl:flex">
       {links.map((link) => {
         const isActive = link.exact
           ? pathname === link.href
@@ -40,7 +40,7 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
             key={link.href}
             href={link.href}
             className={cn(
-              'group relative flex items-center pb-3 pt-2 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200',
+              'group relative flex items-center pb-2.5 pt-1.5 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200',
               isActive
                 ? 'text-[#0f6e56]'
                 : 'text-neutral-600 hover:text-[#1A1918]'
@@ -49,7 +49,7 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
             <span>{link.label}</span>
             <span
               className={cn(
-                'absolute inset-x-0 bottom-0 h-0.5 origin-center rounded-full transition-transform duration-200',
+                'absolute inset-x-0 bottom-0 h-px origin-center rounded-full transition-transform duration-200',
                 isActive
                   ? 'scale-x-100 bg-[#0f6e56]'
                   : 'scale-x-0 bg-neutral-300 group-hover:scale-x-100'

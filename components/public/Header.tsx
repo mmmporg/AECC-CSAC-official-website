@@ -15,24 +15,24 @@ export async function Header({ locale }: HeaderProps) {
 
   return (
     <AnimatedHeaderWrapper>
-      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8">
-        <Link className="group flex min-w-[11rem] items-center gap-4 xl:min-w-[15rem]" href={`/${locale}`}>
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/75 shadow-[0_18px_34px_-24px_rgba(26,25,24,0.32)] ring-1 ring-neutral-200/70 transition-transform duration-200 group-hover:-translate-y-0.5">
+      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-8">
+        <Link className="group flex min-w-[10.5rem] items-center gap-3.5 xl:min-w-[14rem]" href={`/${locale}`}>
+          <div className="flex h-12 w-12 items-center justify-center rounded-[1.15rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,245,238,0.88))] shadow-[0_14px_28px_-22px_rgba(26,25,24,0.28)] ring-1 ring-white/80 transition-transform duration-200 group-hover:-translate-y-0.5">
             <Image
               alt="AECC logo"
-              className="h-full w-full object-contain"
-              width={56}
-              height={56}
+              className="h-10 w-10 object-contain"
+              width={40}
+              height={40}
               priority
               unoptimized
               src="/logo.png"
             />
           </div>
           <div className="hidden flex-col xl:flex">
-            <span className="text-[0.72rem] font-black uppercase tracking-[0.24em] text-[#0f6e56]">
+            <span className="text-[0.69rem] font-black uppercase tracking-[0.22em] text-[#0f6e56]">
               AECC
             </span>
-            <span className="text-sm font-medium text-neutral-500">
+            <span className="text-[0.84rem] font-medium text-neutral-500/82">
               Cameroon students in China
             </span>
           </div>
@@ -47,10 +47,10 @@ export async function Header({ locale }: HeaderProps) {
           apropos: t('apropos')
         }} />
 
-        <div className="flex min-w-[11rem] items-center justify-end gap-3 xl:min-w-[15rem]">
+        <div className="flex min-w-[10.5rem] items-center justify-end gap-2.5 xl:min-w-[14rem]">
           <SimpleLangSwitcher locale={locale} />
           <Link
-            className="inline-flex min-h-11 items-center rounded-full bg-[linear-gradient(135deg,#0f6e56_0%,#1d9e75_100%)] px-5 py-3 text-[13px] font-black uppercase tracking-[0.14em] text-white shadow-[0_20px_44px_-24px_rgba(15,110,86,0.62)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_50px_-24px_rgba(15,110,86,0.78)]"
+            className="inline-flex min-h-10 items-center rounded-full bg-[linear-gradient(135deg,#0f6e56_0%,#1d9e75_100%)] px-5 py-2.5 text-[12px] font-black uppercase tracking-[0.16em] text-white shadow-[0_18px_36px_-24px_rgba(15,110,86,0.58)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_44px_-24px_rgba(15,110,86,0.72)]"
             href="/admin/login"
           >
             {t('rejoindre')}

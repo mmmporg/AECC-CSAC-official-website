@@ -25,7 +25,7 @@ export function SimpleLangSwitcher({ locale }: SimpleLangSwitcherProps) {
   }
 
   return (
-    <div className="inline-flex items-center rounded-full border border-neutral-200/80 bg-white/80 p-1 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 shadow-[0_14px_30px_-24px_rgba(26,25,24,0.24)] backdrop-blur-sm"
+    <div className="inline-flex items-center rounded-full border border-white/75 bg-white/62 p-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-500/80 shadow-[0_12px_22px_-20px_rgba(26,25,24,0.18)] backdrop-blur-sm"
     >
       {locales.map((option) => {
         const isActive = option === locale
@@ -34,7 +34,7 @@ export function SimpleLangSwitcher({ locale }: SimpleLangSwitcherProps) {
           return (
             <span
               key={option}
-              className="rounded-full bg-[#0f6e56] px-3 py-2 text-white"
+              className="rounded-full bg-[#167a5e] px-2.5 py-1.5 text-white"
             >
               {option}
             </span>
@@ -46,7 +46,7 @@ export function SimpleLangSwitcher({ locale }: SimpleLangSwitcherProps) {
             key={option}
             href={buildLocalePath(option)}
             className={cn(
-              'rounded-full px-3 py-2 transition-colors duration-200 hover:text-[#0f6e56]',
+              'rounded-full px-2.5 py-1.5 transition-colors duration-200 hover:text-[#0f6e56]',
               option === 'en' ? 'pr-3.5' : ''
             )}
           >
