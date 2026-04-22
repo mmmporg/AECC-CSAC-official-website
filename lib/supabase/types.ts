@@ -51,6 +51,7 @@ export interface Founder {
   full_name: string
   role_fr: string | null
   role_en: string | null
+  image_url: string | null
   in_memoriam: boolean
   sort_order: number
 }
@@ -61,6 +62,7 @@ export interface President {
   year_start: number
   year_end: number | null
   city: string | null
+  image_url: string | null
   sort_order: number
 }
 

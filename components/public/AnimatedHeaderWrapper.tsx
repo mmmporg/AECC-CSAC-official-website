@@ -15,12 +15,15 @@ export function AnimatedHeaderWrapper({ children }: { children: ReactNode }) {
 
   return (
     <motion.header
-      className="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+      initial={shouldReduce ? false : { opacity: 0, y: -18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed top-0 left-0 z-50 w-full transition-all duration-300"
       style={{
-        backgroundColor: scrolled ? 'rgba(249, 249, 247, 0.92)' : 'rgba(249, 249, 247, 1)',
+        backgroundColor: scrolled ? 'rgba(252, 249, 242, 0.84)' : 'rgba(252, 249, 242, 0.94)',
         backdropFilter: scrolled && !shouldReduce ? 'blur(12px)' : 'none',
-        boxShadow: scrolled ? '0 12px 32px rgba(26,28,27,0.04)' : 'none',
-        borderBottom: scrolled ? '1px solid #E0DED7' : '1px solid transparent',
+        boxShadow: scrolled ? '0 18px 42px rgba(26,28,27,0.08)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(224, 222, 215, 0.75)' : '1px solid transparent',
       }}
     >
       {children}

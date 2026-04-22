@@ -7,19 +7,27 @@ import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 
-const items = [
-  { href: '/admin/dashboard', key: 'dashboard' },
-  { href: '/admin/annonces', key: 'annonces_actives' },
-  { href: '/admin/opportunites', key: 'opportunites_actives' },
-  { href: '/admin/histoire', key: 'history' },
-  { href: '/admin/membres', key: 'membres' },
-  { href: '/admin/galerie', key: 'galerie' }
-]
+interface AdminSidebarProps {
+  canManageAccounts?: boolean
+}
 
-export function AdminSidebar() {
+function getItems(canManageAccounts: boolean) {
+  return [
+    { href: '/admin/dashboard', key: 'dashboard' },
+    { href: '/admin/annonces', key: 'annonces_actives' },
+    { href: '/admin/opportunites', key: 'opportunites_actives' },
+    { href: '/admin/histoire', key: 'history' },
+    { href: '/admin/membres', key: 'membres' },
+    { href: '/admin/galerie', key: 'galerie' },
+    ...(canManageAccounts ? [{ href: '/admin/comptes', key: 'comptes' }] : [])
+  ]
+}
+
+export function AdminSidebar({ canManageAccounts = false }: AdminSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const t = useTranslations('admin')
+  const items = getItems(canManageAccounts)
 
   async function handleSignOut() {
     const supabase = createClient()

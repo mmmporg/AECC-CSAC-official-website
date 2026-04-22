@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { Founder } from '@/lib/supabase/types'
 import type { Locale } from '@/lib/i18n'
@@ -25,14 +26,29 @@ export function FounderCard({ founder, locale, index }: FounderCardProps) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: (index % 4) * 0.06 }}
       whileHover={shouldReduce ? {} : { scale: 1.03, y: -2 }}
-      className="bg-white border border-neutral-200 rounded-xl p-4 flex items-center gap-3 cursor-default"
+      className="flex cursor-default items-center gap-3 rounded-xl border border-neutral-200 bg-white p-4"
     >
-      <motion.div
-        whileHover={shouldReduce ? {} : { scale: 1.1 }}
-        className="w-10 h-10 rounded-full bg-brand-50 border-2 border-brand-100 flex items-center justify-center text-brand-600 font-semibold text-sm flex-shrink-0"
-      >
-        {getInitials(founder.full_name)}
-      </motion.div>
+      {founder.image_url ? (
+        <motion.div
+          className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-2 border-brand-100"
+          whileHover={shouldReduce ? {} : { scale: 1.1 }}
+        >
+          <Image
+            alt={founder.full_name}
+            className="object-cover"
+            fill
+            sizes="48px"
+            src={founder.image_url}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          whileHover={shouldReduce ? {} : { scale: 1.1 }}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-brand-100 bg-brand-50 text-sm font-semibold text-brand-600"
+        >
+          {getInitials(founder.full_name)}
+        </motion.div>
+      )}
 
       <div className="min-w-0">
         <p className="font-medium text-neutral-900 text-sm truncate">{founder.full_name}</p>

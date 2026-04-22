@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { getAdminHistoryData } from '@/lib/data/admin'
@@ -13,6 +14,15 @@ function toneClass(color: string) {
     default:
       return 'bg-brand-100 text-brand-700'
   }
+}
+
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((part) => part[0] ?? '')
+    .join('')
+    .toUpperCase()
 }
 
 export default async function AdminHistoryPage() {
@@ -51,21 +61,14 @@ export default async function AdminHistoryPage() {
 
         <div className="space-y-3">
           {history.timeline.map((event) => (
-            <article
-              className="admin-card flex items-center gap-5 px-5 py-6"
-              key={event.id}
-            >
+            <article className="admin-card flex items-center gap-5 px-5 py-6" key={event.id}>
               <div className="text-xl text-neutral-300">::</div>
-              <div
-                className={`rounded-full px-5 py-2 text-sm font-bold ${toneClass(event.color)}`}
-              >
+              <div className={`rounded-full px-5 py-2 text-sm font-bold ${toneClass(event.color)}`}>
                 {event.period}
               </div>
               <div className="min-w-0 flex-1">
                 <h2 className="text-2xl font-bold text-neutral-900">{event.title_fr}</h2>
-                <p className="mt-1 text-base leading-7 text-neutral-600">
-                  {event.description_fr}
-                </p>
+                <p className="mt-1 text-base leading-7 text-neutral-600">{event.description_fr}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Link
@@ -98,9 +101,24 @@ export default async function AdminHistoryPage() {
                   className="flex items-center justify-between rounded-xl border border-[#ece7dd] bg-[#faf7f1] px-4 py-4"
                   key={founder.id}
                 >
-                  <div>
-                    <p className="font-semibold text-neutral-900">{founder.full_name}</p>
-                    <p className="text-sm text-neutral-600">{founder.role_fr ?? 'Sans role'}</p>
+                  <div className="flex items-center gap-3">
+                    {founder.image_url ? (
+                      <Image
+                        alt={founder.full_name}
+                        className="h-12 w-12 rounded-full object-cover ring-1 ring-neutral-200"
+                        height={48}
+                        src={founder.image_url}
+                        width={48}
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+                        {getInitials(founder.full_name)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold text-neutral-900">{founder.full_name}</p>
+                      <p className="text-sm text-neutral-600">{founder.role_fr ?? 'Sans role'}</p>
+                    </div>
                   </div>
                   <Link
                     className="text-sm font-semibold text-brand-600"
@@ -131,13 +149,28 @@ export default async function AdminHistoryPage() {
                   className="flex items-center justify-between rounded-xl border border-[#ece7dd] bg-[#faf7f1] px-4 py-4"
                   key={president.id}
                 >
-                  <div>
-                    <p className="font-semibold text-neutral-900">{president.full_name}</p>
-                    <p className="text-sm text-neutral-600">
-                      {president.year_start}
-                      {president.year_end ? ` - ${president.year_end}` : ''}
-                      {president.city ? ` • ${president.city}` : ''}
-                    </p>
+                  <div className="flex items-center gap-3">
+                    {president.image_url ? (
+                      <Image
+                        alt={president.full_name}
+                        className="h-12 w-12 rounded-full object-cover ring-1 ring-neutral-200"
+                        height={48}
+                        src={president.image_url}
+                        width={48}
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+                        {getInitials(president.full_name)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-semibold text-neutral-900">{president.full_name}</p>
+                      <p className="text-sm text-neutral-600">
+                        {president.year_start}
+                        {president.year_end ? ` - ${president.year_end}` : ''}
+                        {president.city ? ` - ${president.city}` : ''}
+                      </p>
+                    </div>
                   </div>
                   <Link
                     className="text-sm font-semibold text-brand-600"

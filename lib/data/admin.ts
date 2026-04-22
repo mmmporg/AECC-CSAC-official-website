@@ -1,4 +1,11 @@
-import { createClient, requireAdminUser } from '@/lib/supabase/server'
+import {
+  createClient,
+  requireAdminUser,
+  requireSuperAdminUser,
+  resolveUserRole,
+  type AdminRole
+} from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import type {
   Announcement,
   Founder,
@@ -8,6 +15,15 @@ import type {
   President,
   TimelineEvent
 } from '@/lib/supabase/types'
+
+export interface AdminAccount {
+  id: string
+  email: string
+  role: AdminRole
+  createdAt: string | null
+  lastSignInAt: string | null
+  isDisabled: boolean
+}
 
 export async function getAdminDashboardData() {
   await requireAdminUser()
@@ -143,4 +159,60 @@ export async function getAdminGalleryPhotos() {
 
   if (error) return []
   return (data ?? []) as GalleryPhoto[]
+}
+
+export async function getAdminAccounts() {
+  await requireSuperAdminUser()
+  const supabase = createAdminClient()
+  const accounts: AdminAccount[] = []
+  let page = 1
+  const perPage = 100
+
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({
+      page,
+      perPage
+    })
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    const users = data.users ?? []
+
+    accounts.push(
+      ...users.flatMap((user) => {
+        const role = resolveUserRole(user)
+
+        if (!role) {
+          return []
+        }
+
+        return [
+          {
+            createdAt: user.created_at ?? null,
+            email: user.email ?? 'Unknown email',
+            id: user.id,
+            isDisabled: Boolean(user.banned_until && new Date(user.banned_until).getTime() > Date.now()),
+            lastSignInAt: user.last_sign_in_at ?? null,
+            role
+          }
+        ]
+      })
+    )
+
+    if (users.length < perPage) {
+      break
+    }
+
+    page += 1
+  }
+
+  return accounts.sort((left, right) => {
+    if (left.role !== right.role) {
+      return left.role === 'super_admin' ? -1 : 1
+    }
+
+    return (right.createdAt ?? '').localeCompare(left.createdAt ?? '')
+  })
 }

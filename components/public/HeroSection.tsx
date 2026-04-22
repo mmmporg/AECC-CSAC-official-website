@@ -119,13 +119,17 @@ export function HeroSection() {
   ]
 
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-white">
+    <section className="relative flex min-h-[92vh] items-center overflow-hidden bg-[linear-gradient(180deg,#fffdf8_0%,#f5f1e7_100%)]">
       <GeometricShapes />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,rgba(255,255,255,0.88),transparent)]" />
+      <div className="pointer-events-none absolute left-[6%] top-[18%] hidden h-40 w-40 rounded-full border border-brand-100/80 md:block" />
+      <div className="pointer-events-none absolute bottom-[12%] right-[8%] hidden h-56 w-56 rounded-[2rem] bg-[linear-gradient(160deg,rgba(250,238,218,0.7),rgba(255,255,255,0.18))] md:block" />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6 py-24">
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-14 px-6 py-24 md:grid-cols-[1.05fr_0.95fr] md:items-end">
+        <div>
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-4 py-1.5 text-sm font-medium text-brand-600"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/80 px-4 py-1.5 text-sm font-medium text-brand-600 backdrop-blur-sm"
           initial={shouldReduce ? false : { opacity: 0, y: -16 }}
           transition={{ delay: 0.1, duration: 0.4 }}
         >
@@ -133,7 +137,7 @@ export function HeroSection() {
           {t('hero_badge')}
         </motion.div>
 
-        <h1 className="mb-6 text-5xl font-bold leading-tight text-neutral-900 md:text-6xl">
+        <h1 className="mb-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.04em] text-neutral-900 md:text-7xl xl:text-[5.5rem]">
           {words.map((word, index) => (
             <motion.span
               key={`${word}-${index}`}
@@ -149,7 +153,7 @@ export function HeroSection() {
 
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10 max-w-2xl text-xl text-neutral-600"
+          className="mb-10 max-w-2xl text-lg leading-8 text-neutral-600 md:text-xl"
           initial={shouldReduce ? false : { opacity: 0, y: 16 }}
           transition={{ delay: 0.9, duration: 0.5 }}
         >
@@ -162,17 +166,17 @@ export function HeroSection() {
           initial={shouldReduce ? false : { opacity: 0, y: 16 }}
           transition={{ delay: 1.1, duration: 0.5 }}
         >
-          <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
+          <motion.div whileHover={shouldReduce ? {} : { scale: 1.03, y: -2 }} whileTap={shouldReduce ? {} : { scale: 0.97 }}>
             <Link
-              className="inline-flex rounded-lg bg-brand-400 px-6 py-3 font-medium text-white transition-colors hover:bg-brand-500"
+              className="inline-flex rounded-xl bg-brand-600 px-7 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-brand-700"
               href={`/${locale}/histoire`}
             >
               {t('cta_histoire')}
             </Link>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
+          <motion.div whileHover={shouldReduce ? {} : { scale: 1.03, y: -2 }} whileTap={shouldReduce ? {} : { scale: 0.97 }}>
             <Link
-              className="inline-flex rounded-lg border border-brand-400 px-6 py-3 font-medium text-brand-400 transition-colors hover:bg-brand-50"
+              className="inline-flex rounded-xl border border-brand-600/20 bg-white/70 px-7 py-4 text-sm font-bold uppercase tracking-[0.18em] text-brand-700 transition-colors hover:bg-white"
               href={`/${locale}/annonces`}
             >
               {t('cta_annonces')}
@@ -191,6 +195,37 @@ export function HeroSection() {
             />
           ))}
         </div>
+        </div>
+
+        <motion.aside
+          animate={{ opacity: 1, x: 0 }}
+          initial={shouldReduce ? false : { opacity: 0, x: 30 }}
+          transition={{ delay: 1.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
+        >
+          <div className="rounded-[2rem] bg-neutral-900 p-8 text-white shadow-[0_32px_70px_-28px_rgba(26,25,24,0.42)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-100">
+              {locale === 'fr' ? 'Editorial note' : 'Editorial note'}
+            </p>
+            <p className="mt-4 text-3xl font-black leading-tight tracking-tight">
+              {locale === 'fr'
+                ? "Une memoire organisee. Une communaute utile. Une presence qui compte."
+                : 'An organized memory. A useful community. A presence that matters.'}
+            </p>
+            <div className="mt-8 grid gap-3 text-sm text-white/70">
+              <div className="rounded-2xl bg-white/6 px-4 py-3 backdrop-blur-sm">
+                {locale === 'fr'
+                  ? 'Annonces, opportunites et annuaire doivent etre accessibles en quelques secondes.'
+                  : 'Announcements, opportunities, and directory access should be reachable in seconds.'}
+              </div>
+              <div className="rounded-2xl bg-white/6 px-4 py-3 backdrop-blur-sm">
+                {locale === 'fr'
+                  ? "L'heritage institutionnel reste visible, mais il ne ralentit jamais l'action."
+                  : 'Institutional heritage stays visible, but never slows action down.'}
+              </div>
+            </div>
+          </div>
+        </motion.aside>
       </div>
     </section>
   )

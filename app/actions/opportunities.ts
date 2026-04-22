@@ -106,6 +106,18 @@ export async function archiveOpportunity(id: string) {
   revalidateOpportunityPaths()
 }
 
+export async function unarchiveOpportunity(id: string) {
+  const supabase = createClient()
+  await requireAdminUser()
+  const { error } = await supabase
+    .from('opportunities')
+    .update({ is_active: true })
+    .eq('id', id)
+
+  if (error) throw new Error(error.message)
+  revalidateOpportunityPaths()
+}
+
 export async function deleteOpportunity(id: string) {
   const supabase = createClient()
   await requireAdminUser()

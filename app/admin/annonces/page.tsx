@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import {
   archiveAnnouncement,
+  unarchiveAnnouncement,
   deleteAnnouncement
 } from '@/app/actions/announcements'
 import { AdminLayout } from '@/components/admin/AdminLayout'
@@ -139,7 +140,13 @@ export default async function AdminAnnouncementsPage() {
                               {t('archiver')}
                             </button>
                           </form>
-                        ) : null}
+                        ) : (
+                          <form action={unarchiveAnnouncement.bind(null, announcement.id)}>
+                            <button className="rounded-lg px-3 py-2 text-sm font-medium text-brand-600 transition hover:bg-brand-50" type="submit">
+                              {t('desarchiver')}
+                            </button>
+                          </form>
+                        )}
                         <form action={deleteAnnouncement.bind(null, announcement.id)}>
                           <button className="rounded-lg px-3 py-2 text-sm font-medium text-error transition hover:bg-red-50" type="submit">
                             {t('supprimer')}

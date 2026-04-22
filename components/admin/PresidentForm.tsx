@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { createPresident, updatePresident } from '@/app/actions/history'
@@ -38,6 +39,32 @@ export function PresidentForm({ mode, initialData }: PresidentFormProps) {
   return (
     <form action={handleSubmit} className="surface-card grid gap-5 p-6">
       <Input defaultValue={initialData?.full_name} label="Nom complet" name="full_name" required />
+      <div className="grid gap-3">
+        {initialData?.image_url ? (
+          <Image
+            alt={initialData.full_name}
+            className="h-24 w-24 rounded-full object-cover ring-1 ring-neutral-200"
+            height={96}
+            src={initialData.image_url}
+            width={96}
+          />
+        ) : null}
+        <label className="grid gap-2 text-sm text-neutral-900">
+          <span className="font-medium">Photo</span>
+          <input accept="image/*" name="image" type="file" />
+        </label>
+        {initialData?.image_url ? (
+          <label className="flex items-center gap-3 text-sm text-neutral-900">
+            <input
+              className="h-4 w-4 rounded border-neutral-300"
+              name="remove_image"
+              type="checkbox"
+              value="true"
+            />
+            <span>Supprimer la photo actuelle</span>
+          </label>
+        ) : null}
+      </div>
       <div className="grid gap-4 md:grid-cols-3">
         <Input
           defaultValue={String(initialData?.year_start ?? new Date().getFullYear())}

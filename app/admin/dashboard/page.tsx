@@ -1,6 +1,16 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { AdminLayout } from '@/components/admin/AdminLayout'
+import {
+  archiveAnnouncement,
+  deleteAnnouncement,
+  unarchiveAnnouncement
+} from '@/app/actions/announcements'
+import {
+  archiveOpportunity,
+  deleteOpportunity,
+  unarchiveOpportunity
+} from '@/app/actions/opportunities'
 import { getAdminDashboardData } from '@/lib/data/admin'
 
 export default async function AdminDashboardPage() {
@@ -107,6 +117,41 @@ export default async function AdminDashboardPage() {
                         <p className="mt-1 line-clamp-2 text-sm leading-6 text-neutral-600">
                           {announcement.description_fr}
                         </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <Link
+                            className="rounded-lg px-3 py-2 text-xs font-semibold text-brand-600 transition hover:bg-brand-50"
+                            href={`/admin/annonces/${announcement.id}/edit`}
+                          >
+                            {t('modifier')}
+                          </Link>
+                          {announcement.is_active ? (
+                            <form action={archiveAnnouncement.bind(null, announcement.id)}>
+                              <button
+                                className="rounded-lg px-3 py-2 text-xs font-semibold text-accent-400 transition hover:bg-accent-50"
+                                type="submit"
+                              >
+                                {t('archiver')}
+                              </button>
+                            </form>
+                          ) : (
+                            <form action={unarchiveAnnouncement.bind(null, announcement.id)}>
+                              <button
+                                className="rounded-lg px-3 py-2 text-xs font-semibold text-brand-600 transition hover:bg-brand-50"
+                                type="submit"
+                              >
+                                {t('desarchiver')}
+                              </button>
+                            </form>
+                          )}
+                          <form action={deleteAnnouncement.bind(null, announcement.id)}>
+                            <button
+                              className="rounded-lg px-3 py-2 text-xs font-semibold text-error transition hover:bg-red-50"
+                              type="submit"
+                            >
+                              {t('supprimer')}
+                            </button>
+                          </form>
+                        </div>
                       </div>
                       <span className="rounded-md bg-[#f0ece4] px-2 py-1 text-xs font-medium text-neutral-600">
                         {announcement.city}
@@ -141,6 +186,41 @@ export default async function AdminDashboardPage() {
                   <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-600">
                     {opportunity.description_fr}
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Link
+                      className="rounded-lg px-3 py-2 text-xs font-semibold text-brand-600 transition hover:bg-brand-50"
+                      href={`/admin/opportunites/${opportunity.id}/edit`}
+                    >
+                      {t('modifier')}
+                    </Link>
+                    {opportunity.is_active ? (
+                      <form action={archiveOpportunity.bind(null, opportunity.id)}>
+                        <button
+                          className="rounded-lg px-3 py-2 text-xs font-semibold text-accent-400 transition hover:bg-accent-50"
+                          type="submit"
+                        >
+                          {t('archiver')}
+                        </button>
+                      </form>
+                    ) : (
+                      <form action={unarchiveOpportunity.bind(null, opportunity.id)}>
+                        <button
+                          className="rounded-lg px-3 py-2 text-xs font-semibold text-brand-600 transition hover:bg-brand-50"
+                          type="submit"
+                        >
+                          {t('desarchiver')}
+                        </button>
+                      </form>
+                    )}
+                    <form action={deleteOpportunity.bind(null, opportunity.id)}>
+                      <button
+                        className="rounded-lg px-3 py-2 text-xs font-semibold text-error transition hover:bg-red-50"
+                        type="submit"
+                      >
+                        {t('supprimer')}
+                      </button>
+                    </form>
+                  </div>
                 </div>
               ))}
             </div>

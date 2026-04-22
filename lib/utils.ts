@@ -66,3 +66,16 @@ export function getPageParam(value: string | string[] | undefined): number {
   const pageValue = Number(getSearchParam(value) ?? '1')
   return Number.isFinite(pageValue) && pageValue > 0 ? pageValue : 1
 }
+
+export function getDateRangeForDay(value: string) {
+  const normalized = value.trim()
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    return null
+  }
+
+  return {
+    start: `${normalized}T00:00:00.000Z`,
+    end: `${normalized}T23:59:59.999Z`
+  }
+}

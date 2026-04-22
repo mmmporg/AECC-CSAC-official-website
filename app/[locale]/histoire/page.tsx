@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 import { FounderCard } from '@/components/public/FounderCard'
 import { Timeline } from '@/components/public/Timeline'
@@ -91,7 +92,27 @@ export default async function HistoryPage({
                     {president.year_end ? ` - ${president.year_end}` : ''}
                   </td>
                   <td className="px-4 py-3 font-medium text-neutral-900">
-                    {president.full_name}
+                    <div className="flex items-center gap-3">
+                      {president.image_url ? (
+                        <Image
+                          alt={president.full_name}
+                          className="h-10 w-10 rounded-full object-cover ring-1 ring-neutral-200"
+                          height={40}
+                          src={president.image_url}
+                          width={40}
+                        />
+                      ) : (
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+                          {president.full_name
+                            .split(' ')
+                            .slice(0, 2)
+                            .map((name) => name[0] ?? '')
+                            .join('')
+                            .toUpperCase()}
+                        </div>
+                      )}
+                      <span>{president.full_name}</span>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-neutral-600">{president.city ?? '—'}</td>
                 </tr>

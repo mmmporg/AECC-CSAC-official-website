@@ -35,41 +35,86 @@ export function GalerieGrid({ photos, locale }: Props) {
     <div className="space-y-16">
       {years.map(year => (
         <div key={year}>
-          <h3 className="mb-6 text-xl font-bold text-neutral-800">{year}</h3>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {byYear[year].map(photo => (
-              <figure
-                key={photo.id}
-                className="group relative overflow-hidden rounded-2xl bg-neutral-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    alt={
-                      (locale === 'fr' ? photo.title_fr : photo.title_en) ??
-                      photo.event_name ??
-                      `Photo ${year}`
-                    }
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    src={photo.image_url}
-                  />
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                </div>
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <h3 className="text-2xl font-black tracking-tight text-neutral-800">{year}</h3>
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">
+              {byYear[year].length} {locale === 'fr' ? 'images' : 'images'}
+            </span>
+          </div>
 
-                {(photo.title_fr || photo.title_en || photo.event_name) && (
-                  <figcaption className="absolute bottom-0 left-0 right-0 translate-y-2 px-3 py-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <p className="truncate text-sm font-semibold text-white">
-                      {(locale === 'fr' ? photo.title_fr : photo.title_en) ?? photo.event_name}
-                    </p>
-                    {photo.event_name && (locale === 'fr' ? photo.title_fr : photo.title_en) && (
-                      <p className="truncate text-xs text-white/70">{photo.event_name}</p>
-                    )}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
+          {byYear[year][0] ? (
+            <figure className="group relative mb-6 overflow-hidden rounded-[2rem] bg-neutral-100 shadow-[0_24px_60px_-32px_rgba(26,25,24,0.28)]">
+              <div className="relative aspect-[16/7]">
+                <Image
+                  alt={
+                    (locale === 'fr' ? byYear[year][0].title_fr : byYear[year][0].title_en) ??
+                    byYear[year][0].event_name ??
+                    `Photo ${year}`
+                  }
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  fill
+                  sizes="100vw"
+                  src={byYear[year][0].image_url}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a1918]/80 via-[#1a1918]/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
+                  <div className="mb-3 inline-flex rounded-full bg-white/14 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+                    {locale === 'fr' ? 'Selection de l annee' : 'Year highlight'}
+                  </div>
+                  <p className="max-w-2xl text-2xl font-black tracking-tight text-white md:text-3xl">
+                    {(locale === 'fr' ? byYear[year][0].title_fr : byYear[year][0].title_en) ??
+                      byYear[year][0].event_name ??
+                      `${locale === 'fr' ? 'Temps fort' : 'Highlight'} ${year}`}
+                  </p>
+                  {byYear[year][0].event_name &&
+                    byYear[year][0].event_name !==
+                      ((locale === 'fr' ? byYear[year][0].title_fr : byYear[year][0].title_en) ?? '') ? (
+                    <p className="mt-2 text-sm text-white/75">{byYear[year][0].event_name}</p>
+                  ) : null}
+                </div>
+              </div>
+            </figure>
+          ) : null}
+
+          <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+            {byYear[year].slice(1).map((photo, index) => {
+              const tall = index % 4 === 0 || index % 4 === 3
+
+              return (
+                <figure
+                  key={photo.id}
+                  className="group relative mb-4 break-inside-avoid overflow-hidden rounded-[1.5rem] bg-neutral-100 shadow-[0_18px_40px_-28px_rgba(26,25,24,0.3)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_55px_-28px_rgba(26,25,24,0.36)]"
+                >
+                  <div className={`relative ${tall ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}>
+                    <Image
+                      alt={
+                        (locale === 'fr' ? photo.title_fr : photo.title_en) ??
+                        photo.event_name ??
+                        `Photo ${year}`
+                      }
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      src={photo.image_url}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1a1918]/72 via-transparent to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100" />
+                  </div>
+
+                  {(photo.title_fr || photo.title_en || photo.event_name) && (
+                    <figcaption className="absolute inset-x-0 bottom-0 translate-y-1 px-4 py-4 opacity-95 transition-all duration-300 group-hover:translate-y-0">
+                      <p className="truncate text-sm font-semibold text-white">
+                        {(locale === 'fr' ? photo.title_fr : photo.title_en) ?? photo.event_name}
+                      </p>
+                      {photo.event_name && (locale === 'fr' ? photo.title_fr : photo.title_en) && (
+                        <p className="truncate text-xs uppercase tracking-[0.14em] text-white/70">
+                          {photo.event_name}
+                        </p>
+                      )}
+                    </figcaption>
+                  )}
+                </figure>
+              )
+            })}
           </div>
         </div>
       ))}

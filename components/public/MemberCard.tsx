@@ -16,46 +16,68 @@ export function MemberCard({ member, locale }: MemberCardProps) {
   const profileLabel = locale === 'fr' ? 'Consulter le profil' : 'View profile'
 
   return (
-    <div className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-      <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-100 text-lg font-bold text-brand-700">
-          {initials}
+    <article className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.6rem] bg-white shadow-[0_14px_34px_-22px_rgba(26,25,24,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_28px_54px_-26px_rgba(26,25,24,0.3)]">
+      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-600 via-brand-400 to-accent-300" />
+      <div className="absolute -right-8 top-8 h-28 w-28 rounded-full bg-brand-50 transition-transform duration-500 group-hover:scale-110" />
+
+      <div className="relative p-6">
+        <div className="flex items-start gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#0F6E56,#1D9E75)] text-lg font-black text-white shadow-[0_12px_24px_-16px_rgba(15,110,86,0.6)]">
+            {initials}
+          </div>
+
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-500">
+              {member.city}
+            </p>
+            <h3 className="truncate text-xl font-black tracking-tight text-neutral-900">
+              {member.first_name} {member.last_name}
+            </h3>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-hidden">
-          <h3 className="truncate text-lg font-bold text-neutral-900">
-            {member.first_name} {member.last_name}
-          </h3>
-          <p className="truncate text-sm font-medium text-brand-600">{member.city}</p>
+        <div className="mt-5 rounded-2xl bg-neutral-50 p-4">
+          <div className="space-y-3 text-sm text-neutral-600">
+            <p className="flex items-start gap-2">
+              <svg className="mt-0.5 h-4 w-4 shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M12 14l9-5-9-5-9 5 9 5z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                <path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              </svg>
+              <span className="line-clamp-2">{member.university}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <svg className="h-4 w-4 shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              </svg>
+              <span>
+                {member.degree} {graduationLabel}
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div className="mt-4 space-y-2 text-sm text-neutral-600">
-        <p className="flex items-start gap-2">
-          <svg className="mt-0.5 h-4 w-4 shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M12 14l9-5-9-5-9 5 9 5z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-            <path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-          </svg>
-          <span className="line-clamp-2">{member.university}</span>
-        </p>
-        <p className="flex items-center gap-2">
-          <svg className="h-4 w-4 shrink-0 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-          </svg>
-          <span>
-            {member.degree} {graduationLabel}
-          </span>
-        </p>
-      </div>
+        {member.bio ? (
+          <p className="mt-4 line-clamp-3 text-sm italic leading-7 text-neutral-500">
+            &ldquo;{member.bio}&rdquo;
+          </p>
+        ) : null}
 
-      {member.bio ? (
-        <p className="mt-4 line-clamp-3 text-sm italic text-neutral-500">
-          &ldquo;{member.bio}&rdquo;
-        </p>
-      ) : null}
+        {!member.linkedin_url ? (
+          <div className="mt-5 rounded-2xl border border-dashed border-neutral-200 px-4 py-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-400">
+              {locale === 'fr' ? 'Contact direct' : 'Direct contact'}
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">
+              {locale === 'fr'
+                ? 'Email et WeChat seront affiches ici lorsque ces champs seront disponibles.'
+                : 'Email and WeChat will appear here when these fields are available.'}
+            </p>
+          </div>
+        ) : null}
+      </div>
 
       {member.linkedin_url ? (
-        <div className="mt-6 border-t border-neutral-100 pt-4">
+        <div className="border-t border-neutral-100 px-6 py-4">
           <a
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#0a66c2] hover:underline"
             href={member.linkedin_url}
@@ -69,6 +91,6 @@ export function MemberCard({ member, locale }: MemberCardProps) {
           </a>
         </div>
       ) : null}
-    </div>
+    </article>
   )
 }

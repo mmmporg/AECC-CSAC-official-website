@@ -24,59 +24,79 @@ export function AnnouncementCard({
       : announcement.description_fr
 
   return (
-    <motion.div
-      whileHover={shouldReduce ? {} : { y: -4, boxShadow: '0 12px 32px rgba(29,158,117,0.12)' }}
-      transition={{ duration: 0.2 }}
-      className="group flex flex-col cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow h-full"
+    <motion.article
+      whileHover={
+        shouldReduce
+          ? {}
+          : {
+              y: -8,
+              rotate: -0.35,
+              boxShadow: '0 30px 60px rgba(15,110,86,0.14)'
+            }
+      }
+      whileTap={shouldReduce ? {} : { scale: 0.992 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[1.35rem] bg-white shadow-[0_12px_30px_-18px_rgba(26,25,24,0.2)]"
     >
-      <div className="relative h-48 md:h-56 w-full overflow-hidden rounded-t-xl bg-[#E1F5EE]">
-        {/* Placeholder gradient mimicking image cover since we have no DB images */}
-        <div className="absolute inset-0 opacity-50 bg-gradient-to-tr from-[#1D9E75]/30 to-transparent"></div>
-        <div className="absolute top-4 left-4">
-          <Badge category={announcement.category} locale={locale} />
+      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-600 via-brand-400 to-accent-300" />
+
+      <div className="relative h-48 w-full overflow-hidden rounded-t-[1.35rem] bg-[#E1F5EE] md:h-56">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.82),transparent_32%),linear-gradient(135deg,rgba(29,158,117,0.36),rgba(250,238,218,0.22),transparent)]" />
+        <div className="absolute -right-8 top-6 h-24 w-24 rounded-full border border-white/30 bg-white/15 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110" />
+        <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3">
+          <div className="max-w-[70%]">
+            <div className="mb-3">
+              <Badge category={announcement.category} locale={locale} />
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-700/80">
+              {announcement.city}
+            </p>
+          </div>
+          <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] font-medium text-neutral-700 backdrop-blur-sm">
+            {formatRelativeDate(announcement.created_at, locale)}
+          </span>
         </div>
+
         {isNew(announcement.created_at) ? (
-          <motion.div 
-            animate={shouldReduce ? {} : { opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute top-4 right-4 bg-[#EF9F27] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm"
+          <motion.div
+            animate={shouldReduce ? {} : { opacity: [1, 0.75, 1], y: [0, -2, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute right-4 top-4 rounded-full bg-[#EF9F27] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-sm"
           >
             {locale === 'fr' ? 'Nouveau' : 'New'}
           </motion.div>
         ) : null}
       </div>
-      <div className="flex flex-col flex-1 p-5 space-y-3">
-        <div className="flex items-center gap-2">
-          <span className="bg-[#FAEEDA] text-[#D4840E] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-            {announcement.city}
-          </span>
-          <span className="text-xs text-[#65635E]">
-            {formatRelativeDate(announcement.created_at, locale)}
-          </span>
-        </div>
-        <h3 className="text-lg font-bold group-hover:text-[#1D9E75] transition-colors text-[#1A1918]">
+
+      <div className="flex flex-1 flex-col space-y-4 p-6">
+        <h3 className="text-xl font-black tracking-tight text-[#1A1918] transition-colors group-hover:text-[#0F6E56]">
           <Link href={`/${locale}/annonces/${announcement.id}`} className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             {title}
           </Link>
         </h3>
-        <p className="line-clamp-2 text-sm text-[#65635E] flex-1">
+
+        <p className="flex-1 line-clamp-3 text-sm leading-7 text-[#65635E]">
           {description}
         </p>
-        <div className="pt-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-[#1D9E75] flex items-center gap-1">
-            {locale === 'fr' ? 'VOIR LE DÉTAIL' : 'VIEW DETAILS'} 
+
+        <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+          <span className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#1D9E75]">
+            {locale === 'fr' ? 'Voir le detail' : 'View details'}
             <motion.span
               initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 0, x: -4 }}
               whileHover={{ opacity: 1, x: 0 }}
-              className="font-medium inline-block"
+              className="inline-block font-medium"
             >
               →
             </motion.span>
           </span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-neutral-400">
+            AECC
+          </span>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   )
 }

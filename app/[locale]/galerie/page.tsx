@@ -25,7 +25,8 @@ export default async function GaleriePage({
   params: { locale: Locale }
 }) {
   const locale = params.locale
-  const photos = await getGalleryPhotos()
+  const photosResult = await getGalleryPhotos()
+  const photos = photosResult.items
 
   const title = locale === 'fr' ? 'Galerie Photos' : 'Photo Gallery'
   const subtitle =

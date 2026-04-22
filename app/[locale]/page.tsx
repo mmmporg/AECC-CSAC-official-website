@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { AnnouncementCard } from '@/components/public/AnnouncementCard'
@@ -12,6 +13,10 @@ import { HeroSection } from '@/components/public/HeroSection'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 import { PageTransition } from '@/components/ui/PageTransition'
 
+type FeedItem =
+  | { kind: 'announcement'; item: Awaited<ReturnType<typeof getLatestAnnouncements>>[number] }
+  | { kind: 'opportunity'; item: Awaited<ReturnType<typeof getLatestOpportunities>>[number] }
+
 export default async function HomePage({
   params
 }: {
@@ -20,10 +25,17 @@ export default async function HomePage({
   const locale = params.locale
   const t = await getTranslations({ locale, namespace: 'home' })
   const [announcements, opportunities, founders] = await Promise.all([
-    getLatestAnnouncements(3),
+    getLatestAnnouncements(2),
     getLatestOpportunities(2),
     getFounders()
   ])
+
+  const mixedFeed: FeedItem[] = [
+    announcements[0] ? { kind: 'announcement', item: announcements[0] } : null,
+    opportunities[0] ? { kind: 'opportunity', item: opportunities[0] } : null,
+    announcements[1] ? { kind: 'announcement', item: announcements[1] } : null,
+    opportunities[1] ? { kind: 'opportunity', item: opportunities[1] } : null
+  ].filter((entry): entry is FeedItem => entry !== null)
 
   const missionCards = [
     {
@@ -102,58 +114,65 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="container-shell py-20">
-        <div className="mb-12 flex items-end justify-between gap-6">
-          <h2 className="text-4xl font-black tracking-tight text-neutral-900">
-            {t('latest_announcements')}
-          </h2>
-          <Link className="text-sm font-bold text-brand-600" href={`/${locale}/annonces`}>
-            {locale === 'fr' ? 'Voir toutes les annonces' : 'View all announcements'}
-          </Link>
-        </div>
-        <RevealSection className="grid gap-6 md:grid-cols-3">
-          {announcements.map((announcement) => (
-            <RevealItem key={announcement.id}>
-              <AnnouncementCard
-                announcement={announcement}
-                locale={locale}
-              />
-            </RevealItem>
-          ))}
-        </RevealSection>
-      </section>
-
-      <section className="bg-brand-800 py-20">
-        <div className="container-shell grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-start">
+      <section className="relative overflow-hidden bg-neutral-100 py-20">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(15,110,86,0.12),transparent_45%),radial-gradient(circle_at_top_right,rgba(212,132,14,0.12),transparent_35%)]" />
+        <div className="container-shell relative grid gap-10 md:grid-cols-[0.78fr_1.22fr] md:items-start">
           <div className="space-y-6">
-            <span className="text-sm font-bold uppercase tracking-[0.18em] text-brand-100">
-              {locale === 'fr' ? 'Carriere et education' : 'Career and education'}
+            <span className="text-sm font-bold uppercase tracking-[0.18em] text-brand-700">
+              {locale === 'fr' ? 'Temps fort' : 'Highlights'}
             </span>
-            <h2 className="text-4xl font-black leading-tight tracking-tight text-white md:text-5xl">
+            <h2 className="text-4xl font-black leading-tight tracking-tight text-neutral-900 md:text-5xl">
               {locale === 'fr'
-                ? 'Des opportunites utiles pour avancer'
-                : 'Useful opportunities to move forward'}
+                ? 'Un flux mixte pour agir vite'
+                : 'A mixed feed built for action'}
             </h2>
-            <p className="max-w-md text-lg leading-8 text-white/80">
+            <p className="max-w-md text-lg leading-8 text-neutral-600">
               {locale === 'fr'
-                ? "L'equipe AECC relaie les offres les plus pertinentes pour la communaute camerounaise en Chine."
-                : 'The AECC team shares the most relevant offers for the Cameroonian community in China.'}
+                ? "La homepage montre un equilibre clair entre l'entraide immediate et les trajectoires d'avenir : 2 annonces recentes et 2 opportunites utiles."
+                : 'The homepage balances immediate community needs and forward-looking opportunities: 2 recent announcements and 2 useful opportunities.'}
             </p>
-            <Link
-              className="inline-flex rounded-xl bg-white px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-brand-800 transition hover:bg-neutral-100"
-              href={`/${locale}/opportunites`}
-            >
-              {locale === 'fr' ? 'Toutes les offres' : 'All opportunities'}
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                className="inline-flex rounded-xl bg-brand-600 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-brand-700"
+                href={`/${locale}/annonces`}
+              >
+                {locale === 'fr' ? 'Toutes les annonces' : 'All announcements'}
+              </Link>
+              <Link
+                className="inline-flex rounded-xl bg-accent-300 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-accent-400"
+                href={`/${locale}/opportunites`}
+              >
+                {locale === 'fr' ? 'Toutes les opportunites' : 'All opportunities'}
+              </Link>
+            </div>
           </div>
 
-          <RevealSection className="space-y-5">
-            {opportunities.map((opportunity) => (
-              <RevealItem key={opportunity.id}>
+          <RevealSection className="grid gap-6 md:grid-cols-2">
+            {mixedFeed.map((entry, index) => (
+              <RevealItem key={`${entry.kind}-${entry.item.id}`}>
                 <div
-                  className="rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur"
+                  className={`relative h-full overflow-hidden rounded-[1.75rem] p-[1px] ${
+                    index % 2 === 0
+                      ? 'bg-[linear-gradient(160deg,rgba(15,110,86,0.28),rgba(255,255,255,0.92))]'
+                      : 'bg-[linear-gradient(160deg,rgba(212,132,14,0.24),rgba(255,255,255,0.92))]'
+                  }`}
                 >
-                  <OpportunityCard locale={locale} opportunity={opportunity} />
+                  <div className="absolute left-5 top-5 z-10 inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
+                    {entry.kind === 'announcement'
+                      ? locale === 'fr'
+                        ? 'Annonce'
+                        : 'Announcement'
+                      : locale === 'fr'
+                        ? 'Opportunite'
+                        : 'Opportunity'}
+                  </div>
+                  <div className="h-full rounded-[calc(1.75rem-1px)] bg-white/96 p-0 pt-8 shadow-[0_24px_60px_-30px_rgba(26,25,24,0.22)] backdrop-blur-sm">
+                    {entry.kind === 'announcement' ? (
+                      <AnnouncementCard announcement={entry.item} locale={locale} />
+                    ) : (
+                      <OpportunityCard locale={locale} opportunity={entry.item} />
+                    )}
+                  </div>
                 </div>
               </RevealItem>
             ))}
@@ -181,9 +200,19 @@ export default async function HomePage({
               return (
                 <RevealItem key={founder.id}>
                   <div className="flex flex-col items-center gap-2">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-900 text-2xl font-black text-white shadow-lg">
-                      {initials}
-                    </div>
+                    {founder.image_url ? (
+                      <Image
+                        alt={founder.full_name}
+                        className="h-20 w-20 rounded-full object-cover shadow-lg"
+                        height={80}
+                        src={founder.image_url}
+                        width={80}
+                      />
+                    ) : (
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-900 text-2xl font-black text-white shadow-lg">
+                        {initials}
+                      </div>
+                    )}
                     <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-600">
                       {initials}
                     </span>

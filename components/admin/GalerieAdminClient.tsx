@@ -14,7 +14,8 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
   const [deleteTarget, setDeleteTarget] = useState<GalleryPhoto | null>(null)
   const [isPending, startTransition] = useTransition()
   const [uploadError, setUploadError] = useState<string | null>(null)
-  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   function handleCancelDelete() {
     setDeleteTarget(null)
@@ -41,11 +42,16 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
     event.preventDefault()
     setUploadError(null)
     setUploadSuccess(false)
+    setIsUploading(true)
+    setUploadProgress(0)
 
     const formData = new FormData(event.currentTarget)
 
     startTransition(async () => {
-      const result = await uploadGalleryPhoto(formData)
+      const result = await uploadGalleryPhoto(formData, (uploaded, total) => {
+        const percent = Math.round((uploaded / total) * 100)
+        setUploadProgress(percent)
+      })
 
       if (result.success) {
         setUploadSuccess(true)
@@ -55,6 +61,7 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
 
       setUploadError(result.error ?? 'Erreur inconnue')
     })
+    setIsUploading(false)
   }
 
   return (

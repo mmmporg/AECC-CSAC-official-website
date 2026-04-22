@@ -19,10 +19,12 @@ export default async function AnnouncementsPage({
   const t = await getTranslations({ locale, namespace: 'annonces' })
   const category = getSearchParam(searchParams.category)
   const city = getSearchParam(searchParams.city)
+  const date = getSearchParam(searchParams.date)
   const page = getPageParam(searchParams.page)
   const result = await getAnnouncements({
     category: category as never,
     city,
+    date,
     page
   })
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize))
@@ -40,7 +42,12 @@ export default async function AnnouncementsPage({
 
       <div className="sticky top-[88px] z-10 mb-12 bg-neutral-50/95 py-4 backdrop-blur">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <FilterBar kind="annonces" selectedCategory={category} selectedCity={city} />
+          <FilterBar
+            kind="annonces"
+            selectedCategory={category}
+            selectedCity={city}
+            selectedDate={date}
+          />
           <Link
             href={`/${locale}/annonces/publier`}
             className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-brand-600 hover:shadow"
@@ -71,6 +78,7 @@ export default async function AnnouncementsPage({
           href={`/${locale}/annonces?${new URLSearchParams({
             ...(category ? { category } : {}),
             ...(city ? { city } : {}),
+            ...(date ? { date } : {}),
             page: String(Math.max(1, page - 1))
           }).toString()}`}
         >
@@ -84,6 +92,7 @@ export default async function AnnouncementsPage({
           href={`/${locale}/annonces?${new URLSearchParams({
             ...(category ? { category } : {}),
             ...(city ? { city } : {}),
+            ...(date ? { date } : {}),
             page: String(Math.min(totalPages, page + 1))
           }).toString()}`}
         >

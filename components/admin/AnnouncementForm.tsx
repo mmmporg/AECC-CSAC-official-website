@@ -15,11 +15,38 @@ interface AnnouncementFormProps {
   initialData?: Announcement
 }
 
+interface AnnouncementFormState {
+  title_fr: string
+  title_en: string
+  description_fr: string
+  description_en: string
+  category: string
+  city: string
+  contact: string
+  expires_at: string
+  is_active: boolean
+}
+
+function getInitialState(initialData?: Announcement): AnnouncementFormState {
+  return {
+    title_fr: initialData?.title_fr ?? '',
+    title_en: initialData?.title_en ?? '',
+    description_fr: initialData?.description_fr ?? '',
+    description_en: initialData?.description_en ?? '',
+    category: initialData?.category ?? announcementCategories[0],
+    city: initialData?.city ?? cityOptions[0],
+    contact: initialData?.contact ?? '',
+    expires_at: initialData?.expires_at?.slice(0, 10) ?? '',
+    is_active: initialData?.is_active ?? true
+  }
+}
+
 export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
   const t = useTranslations('admin')
   const router = useRouter()
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [formState, setFormState] = useState<AnnouncementFormState>(() => getInitialState(initialData))
 
   function handleSubmit(formData: FormData) {
     startTransition(async () => {
@@ -45,9 +72,16 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
     })
   }
 
-  const titlePreview = initialData?.title_fr ?? "Titre de l'annonce apparaitra ici..."
+  function updateField<Key extends keyof AnnouncementFormState>(
+    key: Key,
+    value: AnnouncementFormState[Key]
+  ) {
+    setFormState((current) => ({ ...current, [key]: value }))
+  }
+
+  const titlePreview = formState.title_fr || "Titre de l'annonce apparaitra ici..."
   const descriptionPreview =
-    initialData?.description_fr ??
+    formState.description_fr ||
     "La description que vous redigez s'affichera dans cette zone. Elle sera automatiquement tronquee si elle est trop longue."
 
   return (
@@ -62,18 +96,20 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
           <div className="grid gap-5 md:grid-cols-2">
             <Input
               className="admin-input"
-              defaultValue={initialData?.title_fr}
               label="TITRE (FRANCAIS) *"
               name="title_fr"
+              onChange={(event) => updateField('title_fr', event.target.value)}
               placeholder="Ex: Reunion generale..."
               required
+              value={formState.title_fr}
             />
             <Input
               className="admin-input"
-              defaultValue={initialData?.title_en ?? ''}
               label="TITLE (ENGLISH)"
               name="title_en"
+              onChange={(event) => updateField('title_en', event.target.value)}
               placeholder="Ex: General Meeting..."
+              value={formState.title_en}
             />
           </div>
           <div className="mt-5 space-y-5">
@@ -83,10 +119,11 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
               </span>
               <textarea
                 className="admin-textarea min-h-36"
-                defaultValue={initialData?.description_fr}
                 name="description_fr"
+                onChange={(event) => updateField('description_fr', event.target.value)}
                 placeholder="Detaillez l'annonce ici..."
                 required
+                value={formState.description_fr}
               />
             </label>
             <label className="grid gap-2 text-sm">
@@ -95,9 +132,10 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
               </span>
               <textarea
                 className="admin-textarea min-h-32"
-                defaultValue={initialData?.description_en ?? ''}
                 name="description_en"
+                onChange={(event) => updateField('description_en', event.target.value)}
                 placeholder="Provide details here..."
+                value={formState.description_en}
               />
             </label>
           </div>
@@ -114,8 +152,9 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
               <span className="font-medium tracking-wide text-neutral-900">CATEGORIE *</span>
               <select
                 className="admin-select"
-                defaultValue={initialData?.category ?? announcementCategories[0]}
                 name="category"
+                onChange={(event) => updateField('category', event.target.value)}
+                value={formState.category}
               >
                 {announcementCategories.map((category) => (
                   <option key={category} value={category}>
@@ -130,8 +169,9 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
               </span>
               <select
                 className="admin-select"
-                defaultValue={initialData?.city ?? cityOptions[0]}
                 name="city"
+                onChange={(event) => updateField('city', event.target.value)}
+                value={formState.city}
               >
                 {cityOptions.map((city) => (
                   <option key={city} value={city}>
@@ -145,26 +185,29 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
           <div className="mt-5 grid gap-5 md:grid-cols-2">
             <Input
               className="admin-input"
-              defaultValue={initialData?.contact}
               label="CONTACT RESPONSABLE (EMAIL OU WECHAT) *"
               name="contact"
+              onChange={(event) => updateField('contact', event.target.value)}
               placeholder="Ex: contact@aec-chine.org"
               required
+              value={formState.contact}
             />
             <Input
               className="admin-input"
-              defaultValue={initialData?.expires_at?.slice(0, 10) ?? ''}
               label="DATE D'EXPIRATION"
               name="expires_at"
+              onChange={(event) => updateField('expires_at', event.target.value)}
               type="date"
+              value={formState.expires_at}
             />
           </div>
 
           <label className="mt-5 flex items-center gap-3 text-sm text-neutral-900">
             <input
+              checked={formState.is_active}
               className="h-4 w-4 rounded border-neutral-300"
-              defaultChecked={initialData?.is_active ?? true}
               name="is_active"
+              onChange={(event) => updateField('is_active', event.target.checked)}
               type="checkbox"
               value="true"
             />
@@ -214,15 +257,18 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
             <div className="h-36 bg-[radial-gradient(circle_at_70%_70%,rgba(239,159,39,0.5),transparent_28%),radial-gradient(circle_at_35%_40%,rgba(29,158,117,0.55),transparent_30%),linear-gradient(135deg,#234332,#10140f)]" />
             <div className="space-y-4 p-5">
               <span className="inline-flex rounded-full bg-accent-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-accent-400">
-                Categorie
+                {formState.category}
               </span>
               <div className="flex items-center gap-3 text-xs font-medium text-neutral-600">
-                <span>Aujourd&apos;hui</span>
+                <span>{formState.expires_at || "Aujourd'hui"}</span>
                 <span>&middot;</span>
-                <span>Ville / Campus</span>
+                <span>{formState.city || 'Ville / Campus'}</span>
               </div>
               <h3 className="text-3xl font-bold leading-tight text-neutral-900">{titlePreview}</h3>
               <p className="text-sm leading-6 text-neutral-600">{descriptionPreview}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
+                {formState.contact || 'Contact responsable'}
+              </p>
             </div>
           </div>
         </section>

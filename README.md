@@ -57,6 +57,7 @@ Migrations actuellement presentes :
 - `002_v2_annuaire_galerie.sql`
 - `003_v2_galerie_images.sql`
 - `004_v2_galerie_storage_bucket.sql`
+- `006_history_images.sql`
 
 ## Scripts utiles
 
@@ -86,12 +87,15 @@ npm run test:ui
 
 Les tests Playwright sont dans [tests/e2e](/C:/Users/YOGA/Downloads/AECC/repo/tests/e2e).
 
+`npm run test:e2e` demarre maintenant automatiquement le serveur local sur `http://localhost:3000`.
+
 Ils couvrent actuellement :
 
 - accueil
 - administration
 - historique
 - annonces
+- opportunites
 
 ## CI / CD
 
@@ -109,6 +113,8 @@ Secrets GitHub requis pour les migrations :
 ## Notes importantes
 
 - `SUPABASE_SERVICE_ROLE_KEY` doit rester strictement cote serveur.
+- Les roles admin sont portes par `user_metadata.role` dans Supabase Auth avec deux valeurs supportees : `admin` et `super_admin`.
+- La page `/admin/comptes` est reservee aux `super_admin` et permet de creer, promouvoir, retrograder et desactiver temporairement les comptes d'administration.
 - Les artefacts locaux de debug et de test (`playwright-report`, `test-results`, logs) sont ignores.
 - Avant commit, verifier au minimum :
 

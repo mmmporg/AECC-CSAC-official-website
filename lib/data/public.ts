@@ -21,16 +21,20 @@ import type {
   TimelineEvent,
   GalleryPhoto
 } from '@/lib/supabase/types'
+import { getDateRangeForDay } from '@/lib/utils'
 
 interface AnnouncementFilters {
   category?: AnnouncementCategory
   city?: string
+  date?: string
   page?: number
   pageSize?: number
 }
 
 interface OpportunityFilters {
   category?: OpportunityCategory
+  domain?: string
+  deadline?: string
   page?: number
   pageSize?: number
 }
@@ -116,6 +120,14 @@ export async function getAnnouncements(
     query = query.ilike('city', `%${filters.city}%`)
   }
 
+  if (filters.date) {
+    const range = getDateRangeForDay(filters.date)
+
+    if (range) {
+      query = query.gte('created_at', range.start).lte('created_at', range.end)
+    }
+  }
+
   const { data, error, count } = await query
     .order('created_at', { ascending: false })
     .range(from, to)
@@ -182,6 +194,24 @@ export async function getOpportunities(
     query = query.eq('category', filters.category)
   }
 
+  if (filters.domain) {
+    const search = filters.domain.trim()
+
+    if (search) {
+      query = query.or(
+        `organization.ilike.%${search}%,title_fr.ilike.%${search}%,title_en.ilike.%${search}%,description_fr.ilike.%${search}%,description_en.ilike.%${search}%`
+      )
+    }
+  }
+
+  if (filters.deadline) {
+    const range = getDateRangeForDay(filters.deadline)
+
+    if (range) {
+      query = query.lte('deadline', range.end)
+    }
+  }
+
   const { data, error, count } = await query
     .order('created_at', { ascending: false })
     .range(from, to)
@@ -230,14 +260,29 @@ export async function getSimilarOpportunities(
   return (data ?? []) as Opportunity[]
 }
 
-export async function getGalleryPhotos() {
+export async function getGalleryPhotos(page: number = 1, pageSize: number = 12) {
+  const supabase = createClient()
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+  const { data, error, count } = await supabase
+    .from('gallery_photos')
+    .select('*', { count: 'exact' })
+    .order('year', { ascending: false })
+    .order('sort_order', { ascending: true })
+    .range(from, to)
+
+  if (error) return { items: [], total: 0, page, pageSize }
+  return { items: (data ?? []) as GalleryPhoto[], total: count ?? 0, page, pageSize }
+}
+
+export async function getGalerieImages() {
   const supabase = createClient()
   const { data, error } = await supabase
-    .from('gallery_photos')
+    .from('galerie_images')
     .select('*')
-    .order('year', { ascending: false })
+    .order('uploaded_at', { ascending: false })
     .order('sort_order', { ascending: true })
 
   if (error) return []
-  return (data ?? []) as GalleryPhoto[]
+  return (data ?? []) as GalerieImage[]
 }

@@ -114,6 +114,18 @@ export async function archiveAnnouncement(id: string) {
   revalidateAnnouncementPaths()
 }
 
+export async function unarchiveAnnouncement(id: string) {
+  const supabase = createClient()
+  await requireAdminUser()
+  const { error } = await supabase
+    .from('announcements')
+    .update({ is_active: true })
+    .eq('id', id)
+
+  if (error) throw new Error(error.message)
+  revalidateAnnouncementPaths()
+}
+
 export async function deleteAnnouncement(id: string) {
   const supabase = createClient()
   await requireAdminUser()

@@ -18,9 +18,13 @@ export default async function OpportunitiesPage({
   const locale = params.locale
   const t = await getTranslations({ locale, namespace: 'opportunites' })
   const category = getSearchParam(searchParams.category)
+  const domain = getSearchParam(searchParams.domain)
+  const deadline = getSearchParam(searchParams.deadline)
   const page = getPageParam(searchParams.page)
   const result = await getOpportunities({
     category: category as never,
+    domain,
+    deadline,
     page
   })
   const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize))
@@ -37,7 +41,12 @@ export default async function OpportunitiesPage({
       </section>
 
       <div className="mb-12">
-        <FilterBar kind="opportunites" selectedCategory={category} />
+        <FilterBar
+          kind="opportunites"
+          selectedCategory={category}
+          selectedDomain={domain}
+          selectedDeadline={deadline}
+        />
       </div>
 
       {result.items.length === 0 ? (
@@ -60,6 +69,8 @@ export default async function OpportunitiesPage({
           className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
           href={`/${locale}/opportunites?${new URLSearchParams({
             ...(category ? { category } : {}),
+            ...(domain ? { domain } : {}),
+            ...(deadline ? { deadline } : {}),
             page: String(Math.max(1, page - 1))
           }).toString()}`}
         >
@@ -72,6 +83,8 @@ export default async function OpportunitiesPage({
           className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
           href={`/${locale}/opportunites?${new URLSearchParams({
             ...(category ? { category } : {}),
+            ...(domain ? { domain } : {}),
+            ...(deadline ? { deadline } : {}),
             page: String(Math.min(totalPages, page + 1))
           }).toString()}`}
         >

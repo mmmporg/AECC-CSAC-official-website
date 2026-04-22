@@ -15,12 +15,39 @@ interface OpportunityFormProps {
   initialData?: Opportunity
 }
 
+interface OpportunityFormState {
+  title_fr: string
+  title_en: string
+  description_fr: string
+  description_en: string
+  category: string
+  organization: string
+  external_link: string
+  deadline: string
+  is_active: boolean
+}
+
+function getInitialState(initialData?: Opportunity): OpportunityFormState {
+  return {
+    title_fr: initialData?.title_fr ?? '',
+    title_en: initialData?.title_en ?? '',
+    description_fr: initialData?.description_fr ?? '',
+    description_en: initialData?.description_en ?? '',
+    category: initialData?.category ?? opportunityCategories[0],
+    organization: initialData?.organization ?? '',
+    external_link: initialData?.external_link ?? '',
+    deadline: initialData?.deadline?.slice(0, 10) ?? '',
+    is_active: initialData?.is_active ?? true
+  }
+}
+
 export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
   const t = useTranslations('admin')
   const router = useRouter()
   const [showEnglishFields, setShowEnglishFields] = useState(Boolean(initialData?.title_en))
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [formState, setFormState] = useState<OpportunityFormState>(() => getInitialState(initialData))
 
   function handleSubmit(formData: FormData) {
     startTransition(async () => {
@@ -46,6 +73,18 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
     })
   }
 
+  function updateField<Key extends keyof OpportunityFormState>(
+    key: Key,
+    value: OpportunityFormState[Key]
+  ) {
+    setFormState((current) => ({ ...current, [key]: value }))
+  }
+
+  const titlePreview = formState.title_fr || "Titre de l'opportunite"
+  const descriptionPreview =
+    formState.description_fr ||
+    "Le resume de l'opportunite apparaitra ici pour guider la mise en forme."
+
   return (
     <form action={handleSubmit} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <div className="space-y-6">
@@ -66,18 +105,20 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
           <div className="grid gap-5 md:grid-cols-2">
             <Input
               className="admin-input"
-              defaultValue={initialData?.title_fr}
               label="TITRE (FRANCAIS) *"
               name="title_fr"
+              onChange={(event) => updateField('title_fr', event.target.value)}
               placeholder="Ex: Bourse d'excellence..."
               required
+              value={formState.title_fr}
             />
             <Input
               className="admin-input"
-              defaultValue={initialData?.title_en ?? ''}
               label="TITLE (ENGLISH)"
               name="title_en"
+              onChange={(event) => updateField('title_en', event.target.value)}
               placeholder="Ex: Excellence Scholarship..."
+              value={formState.title_en}
             />
           </div>
           <div className="mt-5 space-y-5">
@@ -87,10 +128,11 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
               </span>
               <textarea
                 className="admin-textarea min-h-36"
-                defaultValue={initialData?.description_fr}
                 name="description_fr"
+                onChange={(event) => updateField('description_fr', event.target.value)}
                 placeholder="Detaillez l'opportunite ici..."
                 required
+                value={formState.description_fr}
               />
             </label>
             {showEnglishFields ? (
@@ -100,9 +142,10 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
                 </span>
                 <textarea
                   className="admin-textarea min-h-32"
-                  defaultValue={initialData?.description_en ?? ''}
                   name="description_en"
+                  onChange={(event) => updateField('description_en', event.target.value)}
                   placeholder="Provide details here..."
+                  value={formState.description_en}
                 />
               </label>
             ) : null}
@@ -120,8 +163,9 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
               <span className="font-medium tracking-wide text-neutral-900">CATEGORIE *</span>
               <select
                 className="admin-select"
-                defaultValue={initialData?.category ?? opportunityCategories[0]}
                 name="category"
+                onChange={(event) => updateField('category', event.target.value)}
+                value={formState.category}
               >
                 {opportunityCategories.map((category) => (
                   <option key={category} value={category}>
@@ -132,34 +176,38 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
             </label>
             <Input
               className="admin-input"
-              defaultValue={initialData?.organization}
               label="ORGANISATION *"
               name="organization"
+              onChange={(event) => updateField('organization', event.target.value)}
               placeholder="Ex: Gouvernement Chinois"
               required
+              value={formState.organization}
             />
           </div>
           <div className="mt-5 grid gap-5 md:grid-cols-2">
             <Input
               className="admin-input"
-              defaultValue={initialData?.external_link ?? ''}
               label="LIEN EXTERNE"
               name="external_link"
+              onChange={(event) => updateField('external_link', event.target.value)}
               type="url"
+              value={formState.external_link}
             />
             <Input
               className="admin-input"
-              defaultValue={initialData?.deadline?.slice(0, 10) ?? ''}
               label="DATE LIMITE"
               name="deadline"
+              onChange={(event) => updateField('deadline', event.target.value)}
               type="date"
+              value={formState.deadline}
             />
           </div>
           <label className="mt-5 flex items-center gap-3 text-sm text-neutral-900">
             <input
+              checked={formState.is_active}
               className="h-4 w-4 rounded border-neutral-300"
-              defaultChecked={initialData?.is_active ?? true}
               name="is_active"
+              onChange={(event) => updateField('is_active', event.target.checked)}
               type="checkbox"
               value="true"
             />
@@ -205,18 +253,17 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
           </p>
           <div className="rounded-2xl border border-[#ece7dd] bg-[#f7f3eb] p-5">
             <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-brand-700">
-              {initialData?.category ?? 'Categorie'}
+              {formState.category}
             </span>
-            <p className="mt-4 text-2xl font-bold text-neutral-900">
-              {initialData?.title_fr ?? "Titre de l'opportunite"}
-            </p>
+            <p className="mt-4 text-2xl font-bold text-neutral-900">{titlePreview}</p>
             <p className="mt-1 text-sm text-neutral-600">
-              {initialData?.organization ?? 'Organisation'}
+              {formState.organization || 'Organisation'}
             </p>
-            <p className="mt-4 text-sm leading-6 text-neutral-600">
-              {initialData?.description_fr ??
-                "Le resume de l'opportunite apparaitra ici pour guider la mise en forme."}
-            </p>
+            <p className="mt-4 text-sm leading-6 text-neutral-600">{descriptionPreview}</p>
+            <div className="mt-4 flex items-center justify-between text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
+              <span>{formState.deadline || 'Sans limite'}</span>
+              <span>{formState.external_link || 'Lien externe'}</span>
+            </div>
           </div>
         </section>
       </aside>
