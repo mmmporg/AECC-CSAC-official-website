@@ -7,6 +7,7 @@ import type { Locale } from '@/lib/i18n'
 import { getPageParam, getSearchParam } from '@/lib/utils'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
+import { HeroEntrance, HeroEntranceItem } from '@/components/ui/HeroEntrance'
 
 export default async function OpportunitiesPage({
   params,
@@ -28,13 +29,19 @@ export default async function OpportunitiesPage({
   return (
     <PageTransition>
       <div className="container-shell py-10">
-      <section className="mb-12 max-w-3xl space-y-4">
-        <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
-          {locale === 'fr' ? 'Opportunités' : 'Opportunities'}
-        </span>
-        <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-5xl">{t('title')}</h1>
-        <p className="text-lg leading-8 text-neutral-600">{t('subtitle')}</p>
-      </section>
+      <HeroEntrance className="mb-14 max-w-3xl space-y-5">
+        <HeroEntranceItem>
+          <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-700">
+            {locale === 'fr' ? 'Opportunités' : 'Opportunities'}
+          </span>
+        </HeroEntranceItem>
+        <HeroEntranceItem>
+          <h1 className="text-5xl font-black leading-tight tracking-tight text-neutral-900 md:text-6xl">{t('title')}</h1>
+        </HeroEntranceItem>
+        <HeroEntranceItem>
+          <p className="max-w-xl text-lg leading-8 text-neutral-600">{t('subtitle')}</p>
+        </HeroEntranceItem>
+      </HeroEntrance>
 
       <div className="mb-12">
         <FilterBar kind="opportunites" selectedCategory={category} />
@@ -57,25 +64,25 @@ export default async function OpportunitiesPage({
 
       <div className="mt-16 flex items-center justify-between">
         <Link
-          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
+          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition-all hover:scale-[0.97] hover:border-brand-400 hover:text-brand-700"
           href={`/${locale}/opportunites?${new URLSearchParams({
             ...(category ? { category } : {}),
             page: String(Math.max(1, page - 1))
           }).toString()}`}
         >
-          {locale === 'fr' ? 'Précédent' : 'Previous'}
+          ← {locale === 'fr' ? 'Précédent' : 'Previous'}
         </Link>
-        <span className="text-sm text-neutral-600">
+        <span className="text-sm tabular-nums text-neutral-500">
           {page} / {totalPages}
         </span>
         <Link
-          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
+          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition-all hover:scale-[0.97] hover:border-brand-400 hover:text-brand-700"
           href={`/${locale}/opportunites?${new URLSearchParams({
             ...(category ? { category } : {}),
             page: String(Math.min(totalPages, page + 1))
           }).toString()}`}
         >
-          {locale === 'fr' ? 'Suivant' : 'Next'}
+          {locale === 'fr' ? 'Suivant' : 'Next'} →
         </Link>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { InteractiveMap } from '@/components/public/InteractiveMap'
 import { MemberCard } from '@/components/public/MemberCard'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RevealItem, RevealSection } from '@/components/ui/RevealSection'
+import { HeroEntrance, HeroEntranceItem } from '@/components/ui/HeroEntrance'
 import type { Locale } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
@@ -41,25 +42,33 @@ export default async function DirectoryPage({
       <div className="container-shell py-12 md:py-20">
         <RevealSection className="space-y-8">
           <RevealItem>
-            <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
+            <HeroEntrance className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
               <div className="max-w-2xl">
-                <span className="mb-4 inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
-                  {t('network_badge')}
-                </span>
-                <h1 className="text-4xl font-black tracking-tight text-neutral-900 md:text-5xl">
-                  {t('title')}
-                </h1>
-                <p className="mt-4 text-lg leading-8 text-neutral-600">
-                  {t('subtitle')}
-                </p>
+                <HeroEntranceItem>
+                  <span className="mb-4 inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-700">
+                    {t('network_badge')}
+                  </span>
+                </HeroEntranceItem>
+                <HeroEntranceItem>
+                  <h1 className="text-5xl font-black leading-tight tracking-tight text-neutral-900 md:text-6xl">
+                    {t('title')}
+                  </h1>
+                </HeroEntranceItem>
+                <HeroEntranceItem>
+                  <p className="mt-4 max-w-md text-lg leading-8 text-neutral-600">
+                    {t('subtitle')}
+                  </p>
+                </HeroEntranceItem>
               </div>
-              <Link
-                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-brand-500 px-8 py-4 text-lg font-bold text-white shadow-sm transition-all hover:-translate-y-1 hover:bg-brand-600 hover:shadow-md"
-                href={`/${locale}/annuaire/rejoindre`}
-              >
-                {t('join_btn')}
-              </Link>
-            </div>
+              <HeroEntranceItem>
+                <Link
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-brand-500 px-8 py-4 text-lg font-bold text-white shadow-sm transition-all hover:-translate-y-1 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-500/20 active:scale-[0.97]"
+                  href={`/${locale}/annuaire/rejoindre`}
+                >
+                  {t('join_btn')}
+                </Link>
+              </HeroEntranceItem>
+            </HeroEntrance>
           </RevealItem>
 
           <RevealItem>

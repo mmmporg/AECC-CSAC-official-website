@@ -43,26 +43,26 @@ export function OpportunityCard({
               </motion.span>
             ) : null}
           </div>
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.18em] text-neutral-600">
+          <div className="space-y-2.5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-neutral-500">
               {opportunity.organization}
             </p>
-            <h3 className="text-lg font-semibold text-neutral-900 group-hover:text-brand-400 transition-colors">
+            <h3 className="text-base font-bold leading-snug text-neutral-900 transition-colors group-hover:text-brand-600">
               {title}
             </h3>
             <p className="line-clamp-3 text-sm leading-6 text-neutral-600">
               {description}
             </p>
           </div>
-          <div className="mt-5 flex items-center justify-between text-sm text-neutral-600">
-            <span>{formatDate(opportunity.deadline, locale)}</span>
-            <span className="font-semibold text-brand-600 flex items-center gap-1">
-              {locale === 'fr' ? 'Voir le détail' : 'View details'}
+          <div className="mt-5 flex items-center justify-between">
+            <span className="text-[11px] font-medium text-neutral-500">{formatDate(opportunity.deadline, locale)}</span>
+            <span className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600">
+              {locale === 'fr' ? 'Voir' : 'View'}
               <motion.span
                 initial={{ opacity: 0, x: -4 }}
                 animate={{ opacity: 0, x: -4 }}
                 whileHover={{ opacity: 1, x: 0 }}
-                className="font-medium inline-block"
+                className="inline-block font-medium"
               >
                 →
               </motion.span>

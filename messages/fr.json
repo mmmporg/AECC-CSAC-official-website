@@ -184,6 +184,8 @@
     "form_entry_year": "Année d'arrivée",
     "form_grad_year": "Année de diplomation prévue",
     "form_linkedin": "Lien LinkedIn",
+    "form_email": "Email (visible dans l'annuaire)",
+    "form_wechat": "Identifiant WeChat",
     "form_bio": "Courte biographie",
     "submit": "Soumettre mon profil",
     "success_msg": "Merci ! Votre profil a été transmis à notre équipe qui le validera sous peu.",
@@ -193,6 +195,9 @@
     "error_generic": "Une erreur est survenue.",
     "placeholder_university": "Ex: Shanghai Jiao Tong University",
     "placeholder_degree": "Ex: Master en Informatique",
-    "placeholder_bio": "En quelques mots..."
+    "placeholder_bio": "En quelques mots...",
+    "placeholder_email": "Ex: votre@email.com",
+    "placeholder_wechat": "Ex: wechat_id_123",
+    "wechat_copied": "ID copié !"
   }
 }

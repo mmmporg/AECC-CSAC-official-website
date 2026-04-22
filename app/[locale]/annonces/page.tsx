@@ -7,6 +7,7 @@ import type { Locale } from '@/lib/i18n'
 import { getPageParam, getSearchParam } from '@/lib/utils'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
+import { HeroEntrance, HeroEntranceItem } from '@/components/ui/HeroEntrance'
 
 export default async function AnnouncementsPage({
   params,
@@ -30,13 +31,19 @@ export default async function AnnouncementsPage({
   return (
     <PageTransition>
       <div className="container-shell py-10">
-      <section className="mb-12 space-y-4 text-center">
-        <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
-          {locale === 'fr' ? 'Communauté' : 'Community'}
-        </span>
-        <h1 className="text-5xl font-black tracking-tight text-neutral-900 md:text-6xl">{t('title')}</h1>
-        <p className="mx-auto max-w-2xl text-lg leading-8 text-neutral-600">{t('subtitle')}</p>
-      </section>
+      <HeroEntrance className="mb-14 space-y-5 text-center">
+        <HeroEntranceItem>
+          <span className="inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-700">
+            {locale === 'fr' ? 'Communauté' : 'Community'}
+          </span>
+        </HeroEntranceItem>
+        <HeroEntranceItem>
+          <h1 className="text-5xl font-black leading-tight tracking-tight text-neutral-900 md:text-6xl">{t('title')}</h1>
+        </HeroEntranceItem>
+        <HeroEntranceItem>
+          <p className="mx-auto max-w-xl text-lg leading-8 text-neutral-600">{t('subtitle')}</p>
+        </HeroEntranceItem>
+      </HeroEntrance>
 
       <div className="sticky top-[88px] z-10 mb-12 bg-neutral-50/95 py-4 backdrop-blur">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -67,27 +74,27 @@ export default async function AnnouncementsPage({
 
       <div className="mt-16 flex items-center justify-between">
         <Link
-          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
+          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition-all hover:scale-[0.97] hover:border-brand-400 hover:text-brand-700"
           href={`/${locale}/annonces?${new URLSearchParams({
             ...(category ? { category } : {}),
             ...(city ? { city } : {}),
             page: String(Math.max(1, page - 1))
           }).toString()}`}
         >
-          {locale === 'fr' ? 'Précédent' : 'Previous'}
+          ← {locale === 'fr' ? 'Précédent' : 'Previous'}
         </Link>
-        <span className="text-sm text-neutral-600">
+        <span className="text-sm tabular-nums text-neutral-500">
           {page} / {totalPages}
         </span>
         <Link
-          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm text-neutral-600"
+          className="rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-600 transition-all hover:scale-[0.97] hover:border-brand-400 hover:text-brand-700"
           href={`/${locale}/annonces?${new URLSearchParams({
             ...(category ? { category } : {}),
             ...(city ? { city } : {}),
             page: String(Math.min(totalPages, page + 1))
           }).toString()}`}
         >
-          {locale === 'fr' ? 'Suivant' : 'Next'}
+          {locale === 'fr' ? 'Suivant' : 'Next'} →
         </Link>
       </div>
     </div>
