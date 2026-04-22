@@ -29,10 +29,10 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
   ]
 
   return (
-    <nav className="hidden absolute left-1/2 -translate-x-1/2 items-center gap-10 text-[15px] font-semibold text-[#65635E] lg:flex">
+    <nav className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-7 xl:flex">
       {links.map((link) => {
-        const isActive = link.exact 
-          ? pathname === link.href 
+        const isActive = link.exact
+          ? pathname === link.href
           : pathname.startsWith(link.href)
 
         return (
@@ -40,13 +40,21 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
             key={link.href}
             href={link.href}
             className={cn(
-              'transition-all duration-200 py-1',
+              'group relative flex items-center pb-2.5 pt-1.5 text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200',
               isActive
-                ? 'border-b-2 border-[#1D9E75] text-[#1D9E75]'
-                : 'hover:text-[#1A1918] border-b-2 border-transparent hover:border-neutral-200'
+                ? 'text-[#0f6e56]'
+                : 'text-neutral-600 hover:text-[#1A1918]'
             )}
           >
-            {link.label}
+            <span>{link.label}</span>
+            <span
+              className={cn(
+                'absolute inset-x-0 bottom-0 h-px origin-center rounded-full transition-transform duration-200',
+                isActive
+                  ? 'scale-x-100 bg-[#0f6e56]'
+                  : 'scale-x-0 bg-neutral-300 group-hover:scale-x-100'
+              )}
+            />
           </Link>
         )
       })}
