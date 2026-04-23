@@ -16,7 +16,7 @@ export default defineConfig({
   reporter: 'html',
   use: {
     actionTimeout: 0,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://127.0.0.1:3210',
     trace: 'on-first-retry',
   },
   projects: [
@@ -26,9 +26,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    command:
+      `powershell -NoProfile -Command "$existing = netstat -ano | Select-String '127.0.0.1:3210' | Select-Object -First 1; if ($existing) { $portProcessId = (($existing -split '\\s+')[-1]); if ($portProcessId -match '^\\d+$') { taskkill /PID $portProcessId /F | Out-Null } }; if (Test-Path .next) { Remove-Item -Recurse -Force .next }; npm run build; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; npx next start --hostname 127.0.0.1 --port 3210"`,
+    url: 'http://127.0.0.1:3210',
+    reuseExistingServer: false,
+    timeout: 300000,
   },
 });

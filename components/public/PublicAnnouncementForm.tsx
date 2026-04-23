@@ -15,7 +15,6 @@ export function PublicAnnouncementForm() {
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [isPending, startTransition] = useTransition()
   const [isSuccess, setIsSuccess] = useState(false)
-
   function handleSubmit(formData: FormData) {
     setFeedback(null)
     startTransition(async () => {
@@ -66,16 +65,16 @@ export function PublicAnnouncementForm() {
           />
         </div>
 
-        <div className="md:col-span-2 space-y-2">
+        <div className="md:col-span-2">
           <label className="block text-sm font-medium tracking-wide text-neutral-900">
             {t('form_desc_label')}
-          </label>
-          <textarea
-            className="w-full min-h-[120px] rounded-xl border-neutral-300 p-3 shadow-sm focus:border-brand-500 focus:ring-brand-500"
+            <textarea
+              className="mt-2 w-full min-h-[140px] rounded-xl border border-neutral-300 bg-white p-3 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500"
             name="description_fr"
             placeholder={t('form_desc_placeholder')}
             required
           />
+          </label>
         </div>
 
         <div className="space-y-2">

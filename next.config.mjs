@@ -25,8 +25,10 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
 }
 
 const nextConfig = {
+  compress: true,
   images: {
-    remotePatterns
+    remotePatterns,
+    formats: ['image/avif', 'image/webp']
   }
 }
 

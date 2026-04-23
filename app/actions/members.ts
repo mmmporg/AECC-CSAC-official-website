@@ -14,6 +14,7 @@ const MAX_NAME_LENGTH = 80
 const MAX_UNIVERSITY_LENGTH = 160
 const MAX_DEGREE_LENGTH = 120
 const MAX_BIO_LENGTH = 300
+const MAX_WECHAT_LENGTH = 80
 const MIN_YEAR = 1990
 const MAX_YEAR_OFFSET = 10
 
@@ -84,6 +85,14 @@ function validateLinkedInUrl(value: string | null) {
   }
 }
 
+function validateEmail(value: string | null) {
+  if (!value) return
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(value)) {
+    throw new Error('Adresse email invalide')
+  }
+}
+
 export async function submitPublicMember(formData: FormData): Promise<ActionResult> {
   try {
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -111,6 +120,8 @@ export async function submitPublicMember(formData: FormData): Promise<ActionResu
     const university = readField(formData, 'university')
     const degree = readField(formData, 'degree')
     const linkedinUrl = readField(formData, 'linkedin_url', false)
+    const email = readField(formData, 'email', false)
+    const wechat = readField(formData, 'wechat', false)
     const bio = readField(formData, 'bio', false)
 
     assertMaxLength(firstName, 'first_name', MAX_NAME_LENGTH)
@@ -118,20 +129,24 @@ export async function submitPublicMember(formData: FormData): Promise<ActionResu
     assertMaxLength(university, 'university', MAX_UNIVERSITY_LENGTH)
     assertMaxLength(degree, 'degree', MAX_DEGREE_LENGTH)
     assertMaxLength(bio, 'bio', MAX_BIO_LENGTH)
+    assertMaxLength(wechat, 'wechat', MAX_WECHAT_LENGTH)
     validateLinkedInUrl(linkedinUrl)
+    validateEmail(email)
 
     const payload = {
       approved_by: null,
       bio,
       city,
       degree,
+      email,
       entry_year: readOptionalYear(formData, 'entry_year'),
       first_name: firstName,
       graduation_year: readOptionalYear(formData, 'graduation_year'),
       is_active: false,
       last_name: lastName,
       linkedin_url: linkedinUrl,
-      university
+      university,
+      wechat
     }
 
     const { error } = await supabase.from('members').insert(payload)
@@ -142,7 +157,7 @@ export async function submitPublicMember(formData: FormData): Promise<ActionResu
 
     revalidatePath('/admin/dashboard')
     revalidatePath('/fr/annuaire')
-    revalidatePath('/en/annuaire')
+  revalidatePath('/en/annuaire')
 
     return { success: true }
   } catch (error) {

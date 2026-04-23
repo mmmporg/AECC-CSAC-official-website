@@ -26,15 +26,9 @@ export function FilterBar({
     kind === 'annonces' ? announcementCategories : opportunityCategories
 
   return (
-    <form
-      className={`surface-card grid gap-4 p-4 ${
-        kind === 'annonces'
-          ? 'md:grid-cols-[1fr_1fr_1fr_auto]'
-          : 'md:grid-cols-[1fr_1fr_1fr_auto]'
-      }`}
-    >
+    <form className="public-card grid gap-3 p-4 sm:grid-cols-2 md:grid-cols-[1fr_1fr_1fr_auto]">
       <select
-        className="h-11 rounded-lg border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+        className="h-11 rounded-xl border border-neutral-200 bg-white/90 px-4 text-sm text-neutral-900 shadow-sm"
         defaultValue={selectedCategory ?? ''}
         name="category"
       >
@@ -48,13 +42,13 @@ export function FilterBar({
       {kind === 'annonces' ? (
         <>
           <input
-            className="h-11 rounded-lg border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+            className="h-11 rounded-xl border border-neutral-200 bg-white/90 px-4 text-sm text-neutral-900 shadow-sm"
             defaultValue={selectedCity ?? ''}
             name="city"
             placeholder={t('city_placeholder')}
           />
           <input
-            className="h-11 rounded-lg border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+            className="h-11 rounded-xl border border-neutral-200 bg-white/90 px-4 text-sm text-neutral-900 shadow-sm"
             defaultValue={selectedDate ?? ''}
             name="date"
             type="date"
@@ -63,20 +57,20 @@ export function FilterBar({
       ) : (
         <>
           <input
-            className="h-11 rounded-lg border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+            className="h-11 rounded-xl border border-neutral-200 bg-white/90 px-4 text-sm text-neutral-900 shadow-sm"
             defaultValue={selectedDomain ?? ''}
             name="domain"
             placeholder={t('domain_placeholder')}
           />
           <input
-            className="h-11 rounded-lg border border-neutral-200 bg-white px-4 text-sm text-neutral-900"
+            className="h-11 rounded-xl border border-neutral-200 bg-white/90 px-4 text-sm text-neutral-900 shadow-sm"
             defaultValue={selectedDeadline ?? ''}
             name="deadline"
             type="date"
           />
         </>
       )}
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant="outline" className="sm:col-span-2 md:col-span-1">
         {t('filter_cta')}
       </Button>
     </form>

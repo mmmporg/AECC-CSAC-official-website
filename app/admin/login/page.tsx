@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
         <form action={handleSubmit} className="admin-card space-y-6 p-8 sm:p-10">
           <div className="mb-10 flex flex-col items-center text-center">
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#ece8df] text-3xl text-brand-700 shadow-inner">
-              <span>▣</span>
+              <span aria-hidden="true">●</span>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900">{t('login_title')}</h1>
             <p className="mt-3 max-w-xs text-base leading-7 text-neutral-600">
@@ -69,6 +69,7 @@ export default function AdminLoginPage() {
             required
             type="email"
           />
+
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium tracking-wide text-neutral-900">
@@ -94,7 +95,7 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-8 flex items-center justify-center gap-2 text-sm text-neutral-600">
-          <span className="text-xs">■</span>
+          <span aria-hidden="true" className="text-xs">●</span>
           <span>Acces securise et restreint</span>
         </div>
       </div>

@@ -45,8 +45,6 @@ function revalidateOpportunityPaths() {
   revalidatePath('/admin/opportunites')
   revalidatePath('/fr/opportunites')
   revalidatePath('/en/opportunites')
-  revalidatePath('/fr')
-  revalidatePath('/en')
 }
 
 export async function createOpportunity(formData: FormData): Promise<ActionResult> {

@@ -76,6 +76,8 @@ export interface Member {
   entry_year: number | null
   graduation_year: number | null
   linkedin_url: string | null
+  email: string | null
+  wechat: string | null
   bio: string | null
   is_active: boolean
   created_at: string

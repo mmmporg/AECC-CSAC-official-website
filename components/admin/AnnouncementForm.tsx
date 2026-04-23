@@ -6,8 +6,10 @@ import { useTranslations } from 'next-intl'
 import { createAnnouncement, updateAnnouncement } from '@/app/actions/announcements'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { Toast } from '@/components/ui/Toast'
 import { announcementCategories, cityOptions } from '@/lib/options'
+import { normalizeRichTextInput } from '@/lib/rich-text'
 import type { Announcement } from '@/lib/supabase/types'
 
 interface AnnouncementFormProps {
@@ -82,7 +84,7 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
   const titlePreview = formState.title_fr || "Titre de l'annonce apparaitra ici..."
   const descriptionPreview =
     formState.description_fr ||
-    "La description que vous redigez s'affichera dans cette zone. Elle sera automatiquement tronquee si elle est trop longue."
+    '<p>La description que vous redigez s\'affichera dans cette zone. Utilisez le gras, les listes et les liens pour structurer l\'information.</p>'
 
   return (
     <form action={handleSubmit} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -113,31 +115,21 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
             />
           </div>
           <div className="mt-5 space-y-5">
-            <label className="grid gap-2 text-sm">
-              <span className="font-medium tracking-wide text-neutral-900">
-                DESCRIPTION (FRANCAIS) *
-              </span>
-              <textarea
-                className="admin-textarea min-h-36"
-                name="description_fr"
-                onChange={(event) => updateField('description_fr', event.target.value)}
-                placeholder="Detaillez l'annonce ici..."
-                required
-                value={formState.description_fr}
-              />
-            </label>
-            <label className="grid gap-2 text-sm">
-              <span className="font-medium tracking-wide text-neutral-900">
-                DESCRIPTION (ENGLISH)
-              </span>
-              <textarea
-                className="admin-textarea min-h-32"
-                name="description_en"
-                onChange={(event) => updateField('description_en', event.target.value)}
-                placeholder="Provide details here..."
-                value={formState.description_en}
-              />
-            </label>
+            <RichTextEditor
+              label="DESCRIPTION (FRANCAIS) *"
+              name="description_fr"
+              onChange={(value) => updateField('description_fr', value)}
+              placeholder="Detaillez l'annonce ici avec du texte riche."
+              required
+              value={formState.description_fr}
+            />
+            <RichTextEditor
+              label="DESCRIPTION (ENGLISH)"
+              name="description_en"
+              onChange={(value) => updateField('description_en', value)}
+              placeholder="Provide rich formatted details here."
+              value={formState.description_en}
+            />
           </div>
         </section>
 
@@ -265,7 +257,10 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
                 <span>{formState.city || 'Ville / Campus'}</span>
               </div>
               <h3 className="text-3xl font-bold leading-tight text-neutral-900">{titlePreview}</h3>
-              <p className="text-sm leading-6 text-neutral-600">{descriptionPreview}</p>
+              <div
+                className="prose prose-sm max-w-none prose-p:text-neutral-600 prose-li:text-neutral-600 prose-strong:text-neutral-900 prose-a:text-[#1D9E75]"
+                dangerouslySetInnerHTML={{ __html: normalizeRichTextInput(descriptionPreview) }}
+              />
               <p className="text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
                 {formState.contact || 'Contact responsable'}
               </p>
@@ -286,6 +281,9 @@ export function AnnouncementForm({ mode, initialData }: AnnouncementFormProps) {
             </p>
             <p>
               <strong className="text-neutral-900">Visuel:</strong> la categorie influence la carte publique.
+            </p>
+            <p>
+              <strong className="text-neutral-900">Formatage:</strong> utilisez le gras, les listes et les liens pour clarifier.
             </p>
           </div>
         </section>

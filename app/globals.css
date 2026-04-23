@@ -11,6 +11,12 @@
   --color-brand-700: #085041;
   --color-brand-800: #04342C;
 
+  --color-heritage-50: #FCE7E3;
+  --color-heritage-100: #F8C7BE;
+  --color-heritage-400: #D54832;
+  --color-heritage-500: #B93724;
+  --color-heritage-700: #7C2015;
+
   --color-accent-50: #FAEEDA;
   --color-accent-300: #EF9F27;
   --color-accent-400: #D4840E;
@@ -56,6 +62,34 @@
     @apply rounded-lg border border-neutral-200 bg-white shadow-card;
   }
 
+  .public-page {
+    background:
+      radial-gradient(circle at 12% 18%, rgba(29, 158, 117, 0.14), transparent 22%),
+      radial-gradient(circle at 82% 14%, rgba(213, 72, 50, 0.1), transparent 20%),
+      radial-gradient(circle at 58% 72%, rgba(239, 159, 39, 0.12), transparent 22%),
+      linear-gradient(180deg, #fff4e9 0%, #fff8ef 22%, #f6f8ef 52%, #f8ece6 100%);
+  }
+
+  .public-hero-shell {
+    @apply relative overflow-hidden rounded-[2.2rem] border border-white/50 bg-[linear-gradient(135deg,rgba(255,251,243,0.88),rgba(250,244,234,0.84)_46%,rgba(249,236,230,0.82)_100%)] shadow-[0_40px_110px_-54px_rgba(26,25,24,0.42)] backdrop-blur-md;
+  }
+
+  .public-hero-dark {
+    @apply relative overflow-hidden rounded-[1.8rem] bg-[linear-gradient(135deg,#0c1511_0%,#12392f_34%,#7c2015_82%)] text-white shadow-[0_28px_80px_-36px_rgba(0,0,0,0.64)];
+  }
+
+  .public-panel {
+    @apply rounded-[1.8rem] border border-white/45 bg-[linear-gradient(135deg,rgba(255,248,239,0.9),rgba(250,236,229,0.82))] shadow-[0_28px_70px_-36px_rgba(26,25,24,0.2)];
+  }
+
+  .public-card {
+    @apply overflow-hidden rounded-[1.6rem] border border-white/45 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(252,248,241,0.94))] shadow-[0_24px_60px_-34px_rgba(26,25,24,0.22)];
+  }
+
+  .public-kicker {
+    @apply inline-flex rounded-full bg-brand-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-700;
+  }
+
   .admin-shell {
     background:
       radial-gradient(circle at top right, rgba(179, 228, 209, 0.35), transparent 32%),
@@ -89,5 +123,45 @@
 
   .section-copy {
     @apply text-sm leading-6 text-neutral-600 md:text-base;
+  }
+
+  .rich-editor__content h3 {
+    @apply mt-6 text-xl font-bold tracking-tight text-neutral-900;
+  }
+
+  .rich-editor__content p {
+    @apply my-3;
+  }
+
+  .rich-editor__content ul {
+    @apply my-4 list-disc pl-6;
+  }
+
+  .rich-editor__content ol {
+    @apply my-4 list-decimal pl-6;
+  }
+
+  .rich-editor__content a,
+  .rich-content a {
+    @apply break-words text-brand-400 underline decoration-brand-100 underline-offset-4;
+  }
+
+  .rich-content.prose h1,
+  .rich-content.prose h2,
+  .rich-content.prose h3,
+  .rich-content.prose h4 {
+    @apply tracking-tight text-neutral-900;
+  }
+
+  .rich-content.prose h3 {
+    @apply text-xl font-bold;
+  }
+
+  .rich-content.prose ul {
+    @apply pl-6;
+  }
+
+  .rich-content.prose ol {
+    @apply pl-6;
   }
 }

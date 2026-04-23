@@ -6,8 +6,10 @@ import { useTranslations } from 'next-intl'
 import { createOpportunity, updateOpportunity } from '@/app/actions/opportunities'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import { Toast } from '@/components/ui/Toast'
 import { opportunityCategories } from '@/lib/options'
+import { normalizeRichTextInput } from '@/lib/rich-text'
 import type { Opportunity } from '@/lib/supabase/types'
 
 interface OpportunityFormProps {
@@ -83,7 +85,7 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
   const titlePreview = formState.title_fr || "Titre de l'opportunite"
   const descriptionPreview =
     formState.description_fr ||
-    "Le resume de l'opportunite apparaitra ici pour guider la mise en forme."
+    "<p>Le resume de l'opportunite apparaitra ici pour guider la mise en forme.</p>"
 
   return (
     <form action={handleSubmit} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -122,32 +124,22 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
             />
           </div>
           <div className="mt-5 space-y-5">
-            <label className="grid gap-2 text-sm">
-              <span className="font-medium tracking-wide text-neutral-900">
-                DESCRIPTION (FRANCAIS) *
-              </span>
-              <textarea
-                className="admin-textarea min-h-36"
-                name="description_fr"
-                onChange={(event) => updateField('description_fr', event.target.value)}
-                placeholder="Detaillez l'opportunite ici..."
-                required
-                value={formState.description_fr}
-              />
-            </label>
+            <RichTextEditor
+              label="DESCRIPTION (FRANCAIS) *"
+              name="description_fr"
+              onChange={(value) => updateField('description_fr', value)}
+              placeholder="Detaillez l'opportunite ici avec du texte riche."
+              required
+              value={formState.description_fr}
+            />
             {showEnglishFields ? (
-              <label className="grid gap-2 text-sm">
-                <span className="font-medium tracking-wide text-neutral-900">
-                  DESCRIPTION (ENGLISH)
-                </span>
-                <textarea
-                  className="admin-textarea min-h-32"
-                  name="description_en"
-                  onChange={(event) => updateField('description_en', event.target.value)}
-                  placeholder="Provide details here..."
-                  value={formState.description_en}
-                />
-              </label>
+              <RichTextEditor
+                label="DESCRIPTION (ENGLISH)"
+                name="description_en"
+                onChange={(value) => updateField('description_en', value)}
+                placeholder="Provide rich formatted details here."
+                value={formState.description_en}
+              />
             ) : null}
           </div>
         </section>
@@ -259,7 +251,10 @@ export function OpportunityForm({ mode, initialData }: OpportunityFormProps) {
             <p className="mt-1 text-sm text-neutral-600">
               {formState.organization || 'Organisation'}
             </p>
-            <p className="mt-4 text-sm leading-6 text-neutral-600">{descriptionPreview}</p>
+            <div
+              className="prose prose-sm mt-4 max-w-none prose-p:text-neutral-600 prose-li:text-neutral-600 prose-strong:text-neutral-900 prose-a:text-[#1D9E75]"
+              dangerouslySetInnerHTML={{ __html: normalizeRichTextInput(descriptionPreview) }}
+            />
             <div className="mt-4 flex items-center justify-between text-xs font-medium uppercase tracking-[0.12em] text-neutral-500">
               <span>{formState.deadline || 'Sans limite'}</span>
               <span>{formState.external_link || 'Lien externe'}</span>

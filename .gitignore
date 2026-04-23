@@ -44,6 +44,8 @@ next-env.d.ts
 /screen/
 devserver.log
 server.log
+.next-dev.out.log
+.next-dev.err.log
 playwright-report/
 test-results/
 public/lighthouse-report.html

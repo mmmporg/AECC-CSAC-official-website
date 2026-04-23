@@ -53,8 +53,6 @@ function revalidateAnnouncementPaths() {
   revalidatePath('/admin/annonces')
   revalidatePath('/fr/annonces')
   revalidatePath('/en/annonces')
-  revalidatePath('/fr')
-  revalidatePath('/en')
 }
 
 export async function createAnnouncement(formData: FormData): Promise<ActionResult> {

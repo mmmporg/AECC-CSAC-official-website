@@ -12,6 +12,7 @@ import {
   unarchiveOpportunity
 } from '@/app/actions/opportunities'
 import { getAdminDashboardData } from '@/lib/data/admin'
+import { getRichTextExcerpt } from '@/lib/rich-text'
 
 export default async function AdminDashboardPage() {
   const t = await getTranslations({ locale: 'fr', namespace: 'admin' })
@@ -115,7 +116,7 @@ export default async function AdminDashboardPage() {
                       <div>
                         <p className="font-bold text-neutral-900">{announcement.title_fr}</p>
                         <p className="mt-1 line-clamp-2 text-sm leading-6 text-neutral-600">
-                          {announcement.description_fr}
+                          {getRichTextExcerpt(announcement.description_fr)}
                         </p>
                         <div className="mt-3 flex flex-wrap gap-2">
                           <Link
@@ -184,7 +185,7 @@ export default async function AdminDashboardPage() {
                   <p className="mt-3 text-xl font-bold text-neutral-900">{opportunity.title_fr}</p>
                   <p className="mt-1 text-sm text-neutral-600">{opportunity.organization}</p>
                   <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-600">
-                    {opportunity.description_fr}
+                    {getRichTextExcerpt(opportunity.description_fr)}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Link

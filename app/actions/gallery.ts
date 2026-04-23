@@ -32,7 +32,7 @@ export async function uploadGalleryPhoto(formData: FormData): Promise<ActionResu
     const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`
     const filePath = `${year}/${fileName}`
 
-    const { error: uploadError, data: uploadData } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('gallery')
       .upload(filePath, file)
 
@@ -69,6 +69,7 @@ export async function uploadGalleryPhoto(formData: FormData): Promise<ActionResu
 
     revalidatePath('/admin/galerie')
     revalidatePath('/fr/galerie')
+    revalidatePath('/en/galerie')
     return { success: true }
   } catch (error) {
     return {
@@ -108,6 +109,7 @@ export async function deleteGalleryPhoto(id: string, imageUrl: string): Promise<
 
     revalidatePath('/admin/galerie')
     revalidatePath('/fr/galerie')
+    revalidatePath('/en/galerie')
     return { success: true }
   } catch (error) {
     return {

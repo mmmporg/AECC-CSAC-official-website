@@ -212,6 +212,8 @@
     "form_entry_year": "Year of arrival",
     "form_grad_year": "Expected graduation year",
     "form_linkedin": "LinkedIn URL",
+    "form_email": "Email (visible in directory)",
+    "form_wechat": "WeChat ID",
     "form_bio": "Short bio",
     "submit": "Submit my profile",
     "success_msg": "Thank you! Your profile has been submitted to our team and will be approved shortly.",
@@ -221,6 +223,9 @@
     "error_generic": "Something went wrong.",
     "placeholder_university": "E.g. Shanghai Jiao Tong University",
     "placeholder_degree": "E.g. Master in Computer Science",
-    "placeholder_bio": "A few words about you..."
+    "placeholder_bio": "A few words about you...",
+    "placeholder_email": "E.g. your@email.com",
+    "placeholder_wechat": "E.g. wechat_id_123",
+    "wechat_copied": "ID copied!"
   }
 }

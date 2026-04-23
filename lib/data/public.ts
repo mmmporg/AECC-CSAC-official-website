@@ -1,4 +1,13 @@
+import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
+
+async function timed<T>(name: string, fn: () => Promise<T>): Promise<T> {
+  if (process.env.NODE_ENV !== 'development') return fn()
+  const t0 = performance.now()
+  const result = await fn()
+  console.log(`[db] ${name} ${(performance.now() - t0).toFixed(1)}ms`)
+  return result
+}
 
 export interface GalerieImage {
   id: string;
@@ -40,249 +49,267 @@ interface OpportunityFilters {
 }
 
 export async function getLatestAnnouncements(limit = 3) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('announcements')
-    .select('*')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
-    .limit(limit)
-
-  if (error) return []
-  return (data ?? []) as Announcement[]
+  return timed('getLatestAnnouncements', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+    if (error) return []
+    return (data ?? []) as Announcement[]
+  })
 }
 
 export async function getLatestOpportunities(limit = 2) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('opportunities')
-    .select('*')
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
-    .limit(limit)
-
-  if (error) return []
-  return (data ?? []) as Opportunity[]
+  return timed('getLatestOpportunities', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('opportunities')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+    if (error) return []
+    return (data ?? []) as Opportunity[]
+  })
 }
 
-export async function getFounders() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('founders')
-    .select('*')
-    .order('sort_order', { ascending: true })
+export const getFounders = cache(async () => {
+  return timed('getFounders', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('founders')
+      .select('*')
+      .order('sort_order', { ascending: true })
 
-  if (error) return []
-  return (data ?? []) as Founder[]
-}
+    if (error) return []
+    return (data ?? []) as Founder[]
+  })
+})
 
-export async function getPresidents() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('presidents')
-    .select('*')
-    .order('sort_order', { ascending: true })
+export const getPresidents = cache(async () => {
+  return timed('getPresidents', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('presidents')
+      .select('*')
+      .order('sort_order', { ascending: true })
 
-  if (error) return []
-  return (data ?? []) as President[]
-}
+    if (error) return []
+    return (data ?? []) as President[]
+  })
+})
 
-export async function getTimelineEvents() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('timeline_events')
-    .select('*')
-    .order('sort_order', { ascending: true })
+export const getTimelineEvents = cache(async () => {
+  return timed('getTimelineEvents', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('timeline_events')
+      .select('*')
+      .order('sort_order', { ascending: true })
 
-  if (error) return []
-  return (data ?? []) as TimelineEvent[]
-}
+    if (error) return []
+    return (data ?? []) as TimelineEvent[]
+  })
+})
 
 export async function getAnnouncements(
   filters: AnnouncementFilters
 ): Promise<PaginatedResult<Announcement>> {
-  const supabase = createClient()
-  const page = filters.page ?? 1
-  const pageSize = filters.pageSize ?? 12
-  const from = (page - 1) * pageSize
-  const to = from + pageSize - 1
+  return timed('getAnnouncements', async () => {
+    const supabase = createClient()
+    const page = filters.page ?? 1
+    const pageSize = filters.pageSize ?? 12
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
 
-  let query = supabase
-    .from('announcements')
-    .select('*', { count: 'exact' })
-    .eq('is_active', true)
+    let query = supabase
+      .from('announcements')
+      .select('*', { count: 'exact' })
+      .eq('is_active', true)
 
-  if (filters.category) {
-    query = query.eq('category', filters.category)
-  }
-
-  if (filters.city) {
-    query = query.ilike('city', `%${filters.city}%`)
-  }
-
-  if (filters.date) {
-    const range = getDateRangeForDay(filters.date)
-
-    if (range) {
-      query = query.gte('created_at', range.start).lte('created_at', range.end)
+    if (filters.category) {
+      query = query.eq('category', filters.category)
     }
-  }
 
-  const { data, error, count } = await query
-    .order('created_at', { ascending: false })
-    .range(from, to)
+    if (filters.city) {
+      query = query.ilike('city', `%${filters.city}%`)
+    }
 
-  if (error) return { items: [], total: 0, page, pageSize }
+    if (filters.date) {
+      const range = getDateRangeForDay(filters.date)
 
-  return {
-    items: (data ?? []) as Announcement[],
-    total: count ?? 0,
-    page,
-    pageSize
-  }
+      if (range) {
+        query = query.gte('created_at', range.start).lte('created_at', range.end)
+      }
+    }
+
+    const { data, error, count } = await query
+      .order('created_at', { ascending: false })
+      .range(from, to)
+
+    if (error) return { items: [], total: 0, page, pageSize }
+
+    return {
+      items: (data ?? []) as Announcement[],
+      total: count ?? 0,
+      page,
+      pageSize
+    }
+  })
 }
 
 export async function getAnnouncementById(id: string) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('announcements')
-    .select('*')
-    .eq('id', id)
-    .eq('is_active', true)
-    .single()
+  return timed('getAnnouncementById', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .single()
 
-  if (error) {
-    return null
-  }
-
-  return data as Announcement
+    if (error) return null
+    return data as Announcement
+  })
 }
 
 export async function getSimilarAnnouncements(
   id: string,
   category: AnnouncementCategory
 ) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('announcements')
-    .select('*')
-    .eq('is_active', true)
-    .eq('category', category)
-    .neq('id', id)
-    .order('created_at', { ascending: false })
-    .limit(3)
+  return timed('getSimilarAnnouncements', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('announcements')
+      .select('*')
+      .eq('is_active', true)
+      .eq('category', category)
+      .neq('id', id)
+      .order('created_at', { ascending: false })
+      .limit(3)
 
-  if (error) return []
-  return (data ?? []) as Announcement[]
+    if (error) return []
+    return (data ?? []) as Announcement[]
+  })
 }
 
 export async function getOpportunities(
   filters: OpportunityFilters
 ): Promise<PaginatedResult<Opportunity>> {
-  const supabase = createClient()
-  const page = filters.page ?? 1
-  const pageSize = filters.pageSize ?? 12
-  const from = (page - 1) * pageSize
-  const to = from + pageSize - 1
+  return timed('getOpportunities', async () => {
+    const supabase = createClient()
+    const page = filters.page ?? 1
+    const pageSize = filters.pageSize ?? 12
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
 
-  let query = supabase
-    .from('opportunities')
-    .select('*', { count: 'exact' })
-    .eq('is_active', true)
+    let query = supabase
+      .from('opportunities')
+      .select('*', { count: 'exact' })
+      .eq('is_active', true)
 
-  if (filters.category) {
-    query = query.eq('category', filters.category)
-  }
-
-  if (filters.domain) {
-    const search = filters.domain.trim()
-
-    if (search) {
-      query = query.or(
-        `organization.ilike.%${search}%,title_fr.ilike.%${search}%,title_en.ilike.%${search}%,description_fr.ilike.%${search}%,description_en.ilike.%${search}%`
-      )
+    if (filters.category) {
+      query = query.eq('category', filters.category)
     }
-  }
 
-  if (filters.deadline) {
-    const range = getDateRangeForDay(filters.deadline)
+    if (filters.domain) {
+      const search = filters.domain.trim()
 
-    if (range) {
-      query = query.lte('deadline', range.end)
+      if (search) {
+        query = query.or(
+          `organization.ilike.%${search}%,title_fr.ilike.%${search}%,title_en.ilike.%${search}%,description_fr.ilike.%${search}%,description_en.ilike.%${search}%`
+        )
+      }
     }
-  }
 
-  const { data, error, count } = await query
-    .order('created_at', { ascending: false })
-    .range(from, to)
+    if (filters.deadline) {
+      const range = getDateRangeForDay(filters.deadline)
 
-  if (error) return { items: [], total: 0, page, pageSize }
+      if (range) {
+        query = query.lte('deadline', range.end)
+      }
+    }
 
-  return {
-    items: (data ?? []) as Opportunity[],
-    total: count ?? 0,
-    page,
-    pageSize
-  }
+    const { data, error, count } = await query
+      .order('created_at', { ascending: false })
+      .range(from, to)
+
+    if (error) return { items: [], total: 0, page, pageSize }
+
+    return {
+      items: (data ?? []) as Opportunity[],
+      total: count ?? 0,
+      page,
+      pageSize
+    }
+  })
 }
 
 export async function getOpportunityById(id: string) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('opportunities')
-    .select('*')
-    .eq('id', id)
-    .eq('is_active', true)
-    .single()
+  return timed('getOpportunityById', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('opportunities')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .single()
 
-  if (error) {
-    return null
-  }
-
-  return data as Opportunity
+    if (error) return null
+    return data as Opportunity
+  })
 }
 
 export async function getSimilarOpportunities(
   id: string,
   category: OpportunityCategory
 ) {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('opportunities')
-    .select('*')
-    .eq('is_active', true)
-    .eq('category', category)
-    .neq('id', id)
-    .order('created_at', { ascending: false })
-    .limit(3)
+  return timed('getSimilarOpportunities', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('opportunities')
+      .select('*')
+      .eq('is_active', true)
+      .eq('category', category)
+      .neq('id', id)
+      .order('created_at', { ascending: false })
+      .limit(3)
 
-  if (error) return []
-  return (data ?? []) as Opportunity[]
+    if (error) return []
+    return (data ?? []) as Opportunity[]
+  })
 }
 
 export async function getGalleryPhotos(page: number = 1, pageSize: number = 12) {
-  const supabase = createClient()
-  const from = (page - 1) * pageSize
-  const to = from + pageSize - 1
-  const { data, error, count } = await supabase
-    .from('gallery_photos')
-    .select('*', { count: 'exact' })
-    .order('year', { ascending: false })
-    .order('sort_order', { ascending: true })
-    .range(from, to)
+  return timed('getGalleryPhotos', async () => {
+    const supabase = createClient()
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
+    const { data, error, count } = await supabase
+      .from('gallery_photos')
+      .select('*', { count: 'exact' })
+      .order('year', { ascending: false })
+      .order('sort_order', { ascending: true })
+      .range(from, to)
 
-  if (error) return { items: [], total: 0, page, pageSize }
-  return { items: (data ?? []) as GalleryPhoto[], total: count ?? 0, page, pageSize }
+    if (error) return { items: [], total: 0, page, pageSize }
+    return { items: (data ?? []) as GalleryPhoto[], total: count ?? 0, page, pageSize }
+  })
 }
 
 export async function getGalerieImages() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('galerie_images')
-    .select('*')
-    .order('uploaded_at', { ascending: false })
-    .order('sort_order', { ascending: true })
+  return timed('getGalerieImages', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('galerie_images')
+      .select('*')
+      .order('uploaded_at', { ascending: false })
+      .order('sort_order', { ascending: true })
 
-  if (error) return []
-  return (data ?? []) as GalerieImage[]
+    if (error) return []
+    return (data ?? []) as GalerieImage[]
+  })
 }

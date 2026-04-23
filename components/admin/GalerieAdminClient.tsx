@@ -14,8 +14,8 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
   const [deleteTarget, setDeleteTarget] = useState<GalleryPhoto | null>(null)
   const [isPending, startTransition] = useTransition()
   const [uploadError, setUploadError] = useState<string | null>(null)
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
 
   function handleCancelDelete() {
     setDeleteTarget(null)
@@ -43,15 +43,11 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
     setUploadError(null)
     setUploadSuccess(false)
     setIsUploading(true)
-    setUploadProgress(0)
 
     const formData = new FormData(event.currentTarget)
 
     startTransition(async () => {
-      const result = await uploadGalleryPhoto(formData, (uploaded, total) => {
-        const percent = Math.round((uploaded / total) * 100)
-        setUploadProgress(percent)
-      })
+      const result = await uploadGalleryPhoto(formData)
 
       if (result.success) {
         setUploadSuccess(true)
@@ -60,8 +56,8 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
       }
 
       setUploadError(result.error ?? 'Erreur inconnue')
+      setIsUploading(false)
     })
-    setIsUploading(false)
   }
 
   return (
@@ -140,10 +136,10 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
           <div className="sm:col-span-2">
             <button
               className="rounded-xl bg-brand-500 px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-600 disabled:opacity-50"
-              disabled={isPending}
+              disabled={isPending || isUploading}
               type="submit"
             >
-              {isPending ? 'Envoi en cours...' : 'Uploader la photo'}
+              {isPending || isUploading ? 'Envoi en cours...' : 'Uploader la photo'}
             </button>
           </div>
         </form>

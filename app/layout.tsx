@@ -3,7 +3,12 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'AECC',
-  description: "Association des Étudiants Camerounais en Chine"
+  description: "Association des Étudiants Camerounais en Chine",
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/apple-icon.png'
+  }
 }
 
 export default function RootLayout({

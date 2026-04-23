@@ -1,4 +1,5 @@
-import Image from 'next/image'
+export const revalidate = 600
+
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { AnnouncementCard } from '@/components/public/AnnouncementCard'
@@ -12,6 +13,9 @@ import type { Locale } from '@/lib/i18n'
 import { HeroSection } from '@/components/public/HeroSection'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 import { PageTransition } from '@/components/ui/PageTransition'
+import { HomeStatsBand } from '@/components/public/HomeStatsBand'
+import { HomeMissionSection } from '@/components/public/HomeMissionSection'
+import { HomeFoundersSection } from '@/components/public/HomeFoundersSection'
 
 type FeedItem =
   | { kind: 'announcement'; item: Awaited<ReturnType<typeof getLatestAnnouncements>>[number] }
@@ -37,203 +41,131 @@ export default async function HomePage({
     opportunities[1] ? { kind: 'opportunity', item: opportunities[1] } : null
   ].filter((entry): entry is FeedItem => entry !== null)
 
+  const stats = [
+    { value: '1997', label: t('stats_reunions') },
+    { value: '1999', label: t('stats_fondation') },
+    { value: '19', label: t('stats_presidents') },
+    { value: locale === 'fr' ? '25 ans' : '25 years', label: t('stats_existence') }
+  ]
+
   const missionCards = [
     {
       title: locale === 'fr' ? 'Communaute' : 'Community',
       copy:
         locale === 'fr'
-          ? "Un reseau de solidarite pour accompagner les etudiants camerounais dans toutes les grandes villes de Chine."
-          : 'A support network for Cameroonian students across the main cities of China.',
+          ? "Un reseau actif pour orienter, connecter et soutenir les etudiants camerounais dans les grandes villes de Chine."
+          : 'An active network to orient, connect, and support Cameroonian students across major Chinese cities.',
+      index: '01',
       href: `/${locale}/a-propos`,
-      tone: 'bg-brand-50 text-brand-700'
+      icon: 'community' as const,
+      theme: 'brand' as const
     },
     {
       title: locale === 'fr' ? 'Memoire' : 'Memory',
       copy:
         locale === 'fr'
-          ? "Preserver l'histoire de l'AECC et transmettre les repères construits par les generations precedentes."
-          : 'Preserve AECC history and pass on the milestones built by previous generations.',
+          ? "Une histoire documentee pour garder visibles les reperes, les figures et les decisions qui ont structure l'AECC."
+          : 'A documented history that keeps visible the milestones, people, and decisions that shaped AECC.',
+      index: '02',
       href: `/${locale}/histoire`,
-      tone: 'bg-accent-50 text-accent-400'
+      icon: 'memory' as const,
+      theme: 'heritage' as const
     },
     {
       title: locale === 'fr' ? 'Opportunites' : 'Opportunities',
       copy:
         locale === 'fr'
-          ? "Partager les informations utiles sur les bourses, les stages, les candidatures et les evenements."
-          : 'Share useful information about scholarships, internships, applications and events.',
+          ? 'Des informations utiles sur les bourses, stages, candidatures et initiatives a saisir rapidement.'
+          : 'Useful information on scholarships, internships, applications, and initiatives worth acting on quickly.',
+      index: '03',
       href: `/${locale}/opportunites`,
-      tone: 'bg-[#f8efef] text-[#a6554d]'
+      icon: 'opportunities' as const,
+      theme: 'accent' as const
     }
   ]
 
   return (
     <PageTransition>
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden bg-[linear-gradient(180deg,#fff4e9_0%,#fff8ef_18%,#f6f8ef_48%,#f8ece6_100%)]">
         <HeroSection />
 
-      <section className="border-y border-neutral-200 bg-neutral-50 py-20">
-        <div className="container-shell">
-          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <HomeStatsBand stats={stats} />
+
+        <HomeMissionSection
+          cards={missionCards}
+          eyebrow="AECC"
+          intro={
+            locale === 'fr'
+              ? "Une structure utile, plus lisible et plus dense pour faire circuler l'information, transmettre l'histoire et renforcer l'entraide."
+              : 'A clearer, denser structure built to circulate information, transmit history, and strengthen mutual support.'
+          }
+          locale={locale}
+          statement={
+            locale === 'fr'
+              ? "L'AECC organise l'entraide, garde la memoire visible et rend l'opportunite actionnable."
+              : 'AECC organizes support, keeps memory visible, and turns opportunity into action.'
+          }
+          title={t('mission_title')}
+        />
+
+        <section className="relative border-y border-neutral-200/70 bg-[linear-gradient(135deg,#0d1612_0%,#173f33_30%,#7c2015_72%,#ef9f27_115%)] py-16">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.12),transparent_22%)]" />
+          <div className="container-shell relative grid gap-8 md:grid-cols-[0.86fr_1.14fr] md:items-start">
             <div>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent-400">
-                AECC
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-accent-50">
+                {locale === 'fr' ? 'Flux AECC' : 'AECC feed'}
               </span>
-              <h2 className="mt-3 text-4xl font-black tracking-tight text-neutral-900">
-                {t('mission_title')}
+              <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white md:text-[2.5rem]">
+                {locale === 'fr' ? 'Les informations a voir maintenant' : 'What matters right now'}
               </h2>
-            </div>
-            <p className="max-w-md text-sm leading-7 text-neutral-600">
-              {locale === 'fr'
-                ? "Une plateforme pour informer, orienter et garder un lien durable entre les etudiants camerounais en Chine."
-                : 'A platform to inform, support and keep a durable connection between Cameroonian students in China.'}
-            </p>
-          </div>
-
-          <RevealSection className="grid gap-6 md:grid-cols-3">
-            {missionCards.map((card) => (
-              <RevealItem key={card.title}>
-                <article className="admin-card p-8">
-                  <span
-                    className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl text-lg font-black ${card.tone}`}
-                  >
-                    {card.title.charAt(0)}
-                  </span>
-                  <h3 className="text-xl font-bold text-neutral-900">{card.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-neutral-600">{card.copy}</p>
-                  <Link
-                    className="mt-6 inline-flex text-xs font-bold uppercase tracking-[0.18em] text-brand-600"
-                    href={card.href}
-                  >
-                    {locale === 'fr' ? 'Voir plus' : 'Learn more'}
-                  </Link>
-                </article>
-              </RevealItem>
-            ))}
-          </RevealSection>
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden bg-neutral-100 py-20">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(15,110,86,0.12),transparent_45%),radial-gradient(circle_at_top_right,rgba(212,132,14,0.12),transparent_35%)]" />
-        <div className="container-shell relative grid gap-10 md:grid-cols-[0.78fr_1.22fr] md:items-start">
-          <div className="space-y-6">
-            <span className="text-sm font-bold uppercase tracking-[0.18em] text-brand-700">
-              {locale === 'fr' ? 'Temps fort' : 'Highlights'}
-            </span>
-            <h2 className="text-4xl font-black leading-tight tracking-tight text-neutral-900 md:text-5xl">
-              {locale === 'fr'
-                ? 'Un flux mixte pour agir vite'
-                : 'A mixed feed built for action'}
-            </h2>
-            <p className="max-w-md text-lg leading-8 text-neutral-600">
-              {locale === 'fr'
-                ? "La homepage montre un equilibre clair entre l'entraide immediate et les trajectoires d'avenir : 2 annonces recentes et 2 opportunites utiles."
-                : 'The homepage balances immediate community needs and forward-looking opportunities: 2 recent announcements and 2 useful opportunities.'}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                className="inline-flex rounded-xl bg-brand-600 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-brand-700"
-                href={`/${locale}/annonces`}
-              >
-                {locale === 'fr' ? 'Toutes les annonces' : 'All announcements'}
-              </Link>
-              <Link
-                className="inline-flex rounded-xl bg-accent-300 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-accent-400"
-                href={`/${locale}/opportunites`}
-              >
-                {locale === 'fr' ? 'Toutes les opportunites' : 'All opportunities'}
-              </Link>
-            </div>
-          </div>
-
-          <RevealSection className="grid gap-6 md:grid-cols-2">
-            {mixedFeed.map((entry, index) => (
-              <RevealItem key={`${entry.kind}-${entry.item.id}`}>
-                <div
-                  className={`relative h-full overflow-hidden rounded-[1.75rem] p-[1px] ${
-                    index % 2 === 0
-                      ? 'bg-[linear-gradient(160deg,rgba(15,110,86,0.28),rgba(255,255,255,0.92))]'
-                      : 'bg-[linear-gradient(160deg,rgba(212,132,14,0.24),rgba(255,255,255,0.92))]'
-                  }`}
+              <p className="mt-4 max-w-md text-sm leading-6 text-white/76">
+                {locale === 'fr'
+                  ? "Un flux court, dense et utile: annonces recentes et opportunites a saisir, sans habillage inutile."
+                  : 'A short, dense, useful feed: recent announcements and timely opportunities, without ornamental clutter.'}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  className="inline-flex min-h-11 items-center rounded-xl bg-white px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-neutral-900 shadow-[0_24px_48px_-18px_rgba(0,0,0,0.42)] transition-all hover:-translate-y-1 hover:bg-accent-50"
+                  href={`/${locale}/annonces`}
                 >
-                  <div className="absolute left-5 top-5 z-10 inline-flex rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white">
-                    {entry.kind === 'announcement'
-                      ? locale === 'fr'
-                        ? 'Annonce'
-                        : 'Announcement'
-                      : locale === 'fr'
-                        ? 'Opportunite'
-                        : 'Opportunity'}
-                  </div>
-                  <div className="h-full rounded-[calc(1.75rem-1px)] bg-white/96 p-0 pt-8 shadow-[0_24px_60px_-30px_rgba(26,25,24,0.22)] backdrop-blur-sm">
-                    {entry.kind === 'announcement' ? (
-                      <AnnouncementCard announcement={entry.item} locale={locale} />
-                    ) : (
-                      <OpportunityCard locale={locale} opportunity={entry.item} />
-                    )}
-                  </div>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealSection>
-        </div>
-      </section>
+                  {locale === 'fr' ? 'Toutes les annonces' : 'All announcements'}
+                </Link>
+                <Link
+                  className="inline-flex min-h-11 items-center rounded-xl border border-white/20 bg-black/15 px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-accent-300 hover:bg-black/25"
+                  href={`/${locale}/opportunites`}
+                >
+                  {locale === 'fr' ? 'Toutes les opportunites' : 'All opportunities'}
+                </Link>
+              </div>
+            </div>
 
-      <section className="container-shell py-20">
-        <div className="rounded-[2rem] bg-neutral-100 px-8 py-14 text-center md:px-16 md:py-20">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-700">
-            AECC
-          </span>
-          <h2 className="mt-4 text-4xl font-black tracking-tight text-neutral-900">
-            {t('founders_teaser')}
-          </h2>
-          <RevealSection className="mt-12 flex flex-wrap justify-center gap-4">
-            {founders.slice(0, 6).map((founder) => {
-              const initials = founder.full_name
-                .split(' ')
-                .map((name) => name[0] ?? '')
-                .join('')
-                .slice(0, 2)
-                .toUpperCase()
-
-              return (
-                <RevealItem key={founder.id}>
-                  <div className="flex flex-col items-center gap-2">
-                    {founder.image_url ? (
-                      <Image
-                        alt={founder.full_name}
-                        className="h-20 w-20 rounded-full object-cover shadow-lg"
-                        height={80}
-                        src={founder.image_url}
-                        width={80}
-                      />
-                    ) : (
-                      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-neutral-900 text-2xl font-black text-white shadow-lg">
-                        {initials}
-                      </div>
-                    )}
-                    <span className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-600">
-                      {initials}
-                    </span>
-                  </div>
+            <RevealSection className="grid gap-4 md:grid-cols-2">
+              {mixedFeed.map((entry) => (
+                <RevealItem key={`${entry.kind}-${entry.item.id}`}>
+                  {entry.kind === 'announcement' ? (
+                    <AnnouncementCard announcement={entry.item} locale={locale} />
+                  ) : (
+                    <OpportunityCard locale={locale} opportunity={entry.item} />
+                  )}
                 </RevealItem>
-              )
-            })}
-          </RevealSection>
-          <p className="mx-auto mt-10 max-w-2xl text-sm leading-7 text-neutral-600">
-            {locale === 'fr'
-              ? "Decouvrez les personnes qui ont pose les fondations de l'association et ont porte sa continuite."
-              : 'Discover the people who laid the foundations of the association and carried its continuity.'}
-          </p>
-          <Link
-            className="mt-8 inline-flex rounded-xl bg-brand-600 px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-white transition hover:bg-brand-700"
-            href={`/${locale}/histoire`}
-          >
-            {locale === 'fr' ? 'Voir l histoire' : 'See the history'}
-          </Link>
-        </div>
-      </section>
+              ))}
+            </RevealSection>
+          </div>
+        </section>
+
+        <HomeFoundersSection
+          ctaHref={`/${locale}/histoire`}
+          ctaLabel={locale === 'fr' ? 'Voir l histoire' : 'See the history'}
+          eyebrow="AECC"
+          founders={founders.slice(0, 6)}
+          intro={
+            locale === 'fr'
+              ? "Les personnes qui ont pose les bases de l'association restent visibles, identifiables et reliees a notre histoire collective."
+              : 'The people who laid the foundations of the association stay visible, identifiable, and tied to its collective history.'
+          }
+          locale={locale}
+          title={t('founders_teaser')}
+        />
       </div>
     </PageTransition>
   )

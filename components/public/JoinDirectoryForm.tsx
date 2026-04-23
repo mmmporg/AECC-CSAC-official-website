@@ -128,6 +128,21 @@ export function JoinDirectoryForm() {
           />
         </div>
 
+        <Input
+          className="w-full rounded-xl border-neutral-300 shadow-sm focus:border-brand-500 focus:ring-brand-500"
+          label={t('form_email')}
+          name="email"
+          placeholder={t('placeholder_email')}
+          type="email"
+        />
+        <Input
+          className="w-full rounded-xl border-neutral-300 shadow-sm focus:border-brand-500 focus:ring-brand-500"
+          label={t('form_wechat')}
+          name="wechat"
+          placeholder={t('placeholder_wechat')}
+          type="text"
+        />
+
         <div className="space-y-2 md:col-span-2">
           <label className="block text-sm font-medium tracking-wide text-neutral-900">
             {t('form_bio')}

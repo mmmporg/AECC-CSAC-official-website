@@ -62,8 +62,6 @@ function revalidateHistoryPaths() {
   revalidatePath('/admin/histoire')
   revalidatePath('/fr/histoire')
   revalidatePath('/en/histoire')
-  revalidatePath('/fr')
-  revalidatePath('/en')
 }
 
 // ─── TIMELINE EVENTS ────────────────────────────────────────────────────────

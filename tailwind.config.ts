@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography'
 
 const config: Config = {
   content: [
@@ -18,6 +19,13 @@ const config: Config = {
           600: '#0F6E56',
           700: '#085041',
           800: '#04342C'
+        },
+        heritage: {
+          50: '#FCE7E3',
+          100: '#F8C7BE',
+          400: '#D54832',
+          500: '#B93724',
+          700: '#7C2015'
         },
         accent: {
           50: '#FAEEDA',
@@ -49,7 +57,7 @@ const config: Config = {
       }
     }
   },
-  plugins: []
+  plugins: [typography]
 }
 
 export default config

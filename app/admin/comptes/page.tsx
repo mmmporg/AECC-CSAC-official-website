@@ -11,6 +11,26 @@ import { requireSuperAdminUser } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
+async function createAdminAccountAction(formData: FormData) {
+  'use server'
+  await createAdminAccount(formData)
+}
+
+async function updateAdminRoleAction(formData: FormData) {
+  'use server'
+  await updateAdminRole(formData)
+}
+
+async function resetAdminPasswordAction(formData: FormData) {
+  'use server'
+  await resetAdminPassword(formData)
+}
+
+async function toggleAdminAccountAccessAction(formData: FormData) {
+  'use server'
+  await toggleAdminAccountAccess(formData)
+}
+
 function formatDate(value: string | null) {
   if (!value) {
     return '-'
@@ -45,7 +65,7 @@ export default async function AdminAccountsPage() {
             <p className="text-sm leading-7 text-neutral-600">{t('account_create_subtitle')}</p>
           </div>
 
-          <form action={createAdminAccount} className="grid gap-4 rounded-2xl bg-[#faf7f1] p-5">
+          <form action={createAdminAccountAction} className="grid gap-4 rounded-2xl bg-[#faf7f1] p-5">
             <label className="space-y-2 text-sm font-medium text-neutral-700">
               <span>{t('email')}</span>
               <input
@@ -119,7 +139,7 @@ export default async function AdminAccountsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <form action={updateAdminRole} className="flex gap-2">
+                      <form action={updateAdminRoleAction} className="flex gap-2">
                         <input name="id" type="hidden" value={account.id} />
                         <select
                           className="min-w-[10rem] rounded-lg border border-[#ddd6ca] bg-white px-3 py-2 text-sm text-neutral-900"
@@ -154,7 +174,7 @@ export default async function AdminAccountsPage() {
                     <td className="px-6 py-5 text-neutral-600">{formatDate(account.lastSignInAt)}</td>
                     <td className="px-6 py-5">
                       <div className="flex flex-col items-end gap-3">
-                        <form action={resetAdminPassword} className="flex gap-2">
+                        <form action={resetAdminPasswordAction} className="flex gap-2">
                           <input name="id" type="hidden" value={account.id} />
                           <input
                             className="min-w-[12rem] rounded-lg border border-[#ddd6ca] bg-white px-3 py-2 text-sm text-neutral-900"
@@ -172,7 +192,7 @@ export default async function AdminAccountsPage() {
                           </button>
                         </form>
 
-                        <form action={toggleAdminAccountAccess}>
+                        <form action={toggleAdminAccountAccessAction}>
                           <input name="id" type="hidden" value={account.id} />
                           <input
                             name="disabled"
