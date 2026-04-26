@@ -92,12 +92,12 @@ export default async function AboutPage({
           </div>
           <div className="public-card rounded-3xl p-10 text-center">
             <h3 className="text-2xl font-bold text-brand-700">
-              {locale === 'fr' ? 'Rejoignez notre WeChat' : 'Join our WeChat'}
+              {locale === 'fr' ? 'Rejoignez notre groupe WhatsApp' : 'Join our WhatsApp group'}
             </h3>
-            <div className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-400">
-              QR
+            <div className="mx-auto mt-8 flex h-56 w-56 items-center justify-center rounded-2xl bg-neutral-100">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=AECC-CSAC-WhatsApp-Community" alt="QR code pour WhatsApp" className="h-full w-full object-contain" />
             </div>
-            <p className="mt-6 text-sm font-medium text-neutral-600">AECC_Official_China</p>
+            <p className="mt-6 text-sm font-medium text-neutral-600">AECC-CSAC WhatsApp community</p>
           </div>
         </section>
       </div>
