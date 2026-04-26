@@ -2,13 +2,12 @@ export const revalidate = 3600
 
 import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
-import { FounderCard } from '@/components/public/FounderCard'
+import { PresidentCard } from '@/components/public/PresidentCard'
 import { PublicPageHero } from '@/components/public/PublicPageHero'
 import { Timeline } from '@/components/public/Timeline'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 import { PageTransition } from '@/components/ui/PageTransition'
 import {
-  getFounders,
   getPresidents,
   getTimelineEvents
 } from '@/lib/data/public'
@@ -21,9 +20,8 @@ export default async function HistoryPage({
 }) {
   const locale = params.locale
   const t = await getTranslations({ locale, namespace: 'histoire' })
-  const [timeline, founders, presidents] = await Promise.all([
+  const [timeline, presidents] = await Promise.all([
     getTimelineEvents(),
-    getFounders(),
     getPresidents()
   ])
   const firstBoard = presidents.slice(0, 2)
@@ -185,13 +183,13 @@ export default async function HistoryPage({
 
         <section className="container-shell space-y-6">
           <div className="public-panel p-8 md:p-10">
-            <h2 className="section-heading">{t('fondateurs_title')}</h2>
-            <p className="section-copy">{t('fondateurs_subtitle')}</p>
+            <h2 className="section-heading">{t('presidents_title')}</h2>
+            <p className="section-copy">{t('presidents_subtitle')}</p>
           </div>
           <RevealSection className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
-            {founders.map((founder, i) => (
-              <RevealItem key={founder.id}>
-                <FounderCard founder={founder} locale={locale} index={i} />
+            {presidents.map((president, i) => (
+              <RevealItem key={president.id}>
+                <PresidentCard president={president} locale={locale} index={i} />
               </RevealItem>
             ))}
           </RevealSection>
