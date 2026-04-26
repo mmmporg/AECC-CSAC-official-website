@@ -4,6 +4,8 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { OpportunityForm } from '@/components/admin/OpportunityForm'
 import { getAdminOpportunity } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditOpportunityPage({
   params
 }: {

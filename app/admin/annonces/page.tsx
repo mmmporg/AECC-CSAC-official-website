@@ -8,6 +8,8 @@ import {
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { getAdminAnnouncements } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminAnnouncementsPage() {
   const t = await getTranslations({ locale: 'fr', namespace: 'admin' })
   const announcements = await getAdminAnnouncements()
@@ -29,36 +31,6 @@ export default async function AdminAnnouncementsPage() {
           </Link>
         </div>
 
-        <div className="admin-card p-5">
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="relative max-w-lg flex-1">
-              <input
-                className="admin-input bg-[#f1ede5] pl-4"
-                placeholder="Rechercher par titre, ville..."
-                readOnly
-                value=""
-              />
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-2 text-sm font-semibold uppercase tracking-[0.08em] text-neutral-600">
-                Filtres:
-              </span>
-              {['Toutes', 'Logement', 'Vente', 'Evenement', 'Service'].map((label, index) => (
-                <span
-                  className={`rounded-full px-4 py-2 text-sm font-medium ${
-                    index === 0
-                      ? 'bg-brand-600 text-white'
-                      : 'border border-[#e6dfd2] bg-white text-neutral-600'
-                  }`}
-                  key={label}
-                >
-                  {label}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className="admin-card overflow-hidden">
           <table className="min-w-full divide-y divide-[#ece7dd] text-sm">
             <thead className="bg-[#f0ece4] text-left text-neutral-600">
@@ -75,7 +47,7 @@ export default async function AdminAnnouncementsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#ece7dd] bg-white">
-              {announcements.slice(0, 12).map((announcement, index) => {
+              {announcements.map((announcement, index) => {
                 const statusLabel = announcement.is_active ? t('status_active') : t('status_archived')
                 const statusClass = announcement.is_active
                   ? 'bg-brand-50 text-brand-700'
@@ -157,26 +129,16 @@ export default async function AdminAnnouncementsPage() {
                   </tr>
                 )
               })}
+
+              {announcements.length === 0 ? (
+                <tr>
+                  <td className="py-12 text-center text-neutral-500" colSpan={5}>
+                    Aucune annonce disponible.
+                  </td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
-          <div className="flex items-center justify-between border-t border-[#ece7dd] bg-[#faf7f1] px-6 py-4 text-sm text-neutral-600">
-            <span>Affichage 1-{Math.min(announcements.length, 12)} sur {announcements.length} annonces</span>
-            <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-neutral-400">
-                &lt;
-              </span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-brand-600 font-semibold text-white">
-                1
-              </span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white font-medium text-neutral-600">
-                2
-              </span>
-              <span className="text-neutral-400">...</span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-neutral-600">
-                &gt;
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </AdminLayout>

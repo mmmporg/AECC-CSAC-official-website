@@ -3,6 +3,8 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { PresidentForm } from '@/components/admin/PresidentForm'
 import { getAdminHistoryData } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditPresidentPage({
   params
 }: {

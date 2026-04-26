@@ -5,6 +5,7 @@ import { useState, useTransition } from 'react'
 import { createTimelineEvent, updateTimelineEvent } from '@/app/actions/history'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import type { TimelineEvent } from '@/lib/supabase/types'
 
 interface TimelineFormProps {
@@ -23,6 +24,8 @@ export function TimelineForm({ mode, initialData }: TimelineFormProps) {
   const router = useRouter()
   const [feedback, setFeedback] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [descriptionFr, setDescriptionFr] = useState(initialData?.description_fr ?? '')
+  const [descriptionEn, setDescriptionEn] = useState(initialData?.description_en ?? '')
 
   function handleSubmit(formData: FormData) {
     startTransition(async () => {
@@ -36,7 +39,7 @@ export function TimelineForm({ mode, initialData }: TimelineFormProps) {
         return
       }
 
-      setFeedback(mode === 'create' ? 'Événement créé.' : 'Événement mis à jour.')
+      setFeedback(mode === 'create' ? 'Evenement cree.' : 'Evenement mis a jour.')
       router.push('/admin/histoire')
       router.refresh()
     })
@@ -44,26 +47,24 @@ export function TimelineForm({ mode, initialData }: TimelineFormProps) {
 
   return (
     <form action={handleSubmit} className="surface-card grid gap-5 p-6">
-      <Input defaultValue={initialData?.period} label="Période (ex: Juillet 1999)" name="period" required />
+      <Input defaultValue={initialData?.period} label="Periode (ex: Juillet 1999)" name="period" required />
       <Input defaultValue={initialData?.title_fr} label="Titre (FR)" name="title_fr" required />
       <Input defaultValue={initialData?.title_en ?? ''} label="Title (EN)" name="title_en" />
-      <label className="grid gap-2 text-sm">
-        <span className="font-medium text-neutral-900">Description (FR)</span>
-        <textarea
-          className="min-h-28 rounded-lg border border-neutral-200 px-4 py-3 outline-none focus:border-brand-400"
-          defaultValue={initialData?.description_fr}
-          name="description_fr"
-          required
-        />
-      </label>
-      <label className="grid gap-2 text-sm">
-        <span className="font-medium text-neutral-900">Description (EN)</span>
-        <textarea
-          className="min-h-28 rounded-lg border border-neutral-200 px-4 py-3 outline-none focus:border-brand-400"
-          defaultValue={initialData?.description_en ?? ''}
-          name="description_en"
-        />
-      </label>
+      <RichTextEditor
+        label="Description (FR)"
+        name="description_fr"
+        onChange={setDescriptionFr}
+        placeholder="Detaillez l'evenement avec du texte riche."
+        required
+        value={descriptionFr}
+      />
+      <RichTextEditor
+        label="Description (EN)"
+        name="description_en"
+        onChange={setDescriptionEn}
+        placeholder="Add a rich text English description."
+        value={descriptionEn}
+      />
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm">
           <span className="font-medium text-neutral-900">Couleur</span>
@@ -72,8 +73,10 @@ export function TimelineForm({ mode, initialData }: TimelineFormProps) {
             defaultValue={initialData?.color ?? 'green'}
             name="color"
           >
-            {colorOptions.map((c) => (
-              <option key={c.value} value={c.value}>{c.label}</option>
+            {colorOptions.map((color) => (
+              <option key={color.value} value={color.value}>
+                {color.label}
+              </option>
             ))}
           </select>
         </label>
@@ -87,7 +90,7 @@ export function TimelineForm({ mode, initialData }: TimelineFormProps) {
       {feedback ? <p className="text-sm text-brand-700">{feedback}</p> : null}
       <div className="flex gap-3">
         <Button disabled={isPending} type="submit">
-          {mode === 'create' ? 'Créer' : 'Enregistrer'}
+          {mode === 'create' ? 'Creer' : 'Enregistrer'}
         </Button>
         <Button onClick={() => router.back()} type="button" variant="outline">
           Annuler

@@ -87,6 +87,8 @@ export interface GalleryPhoto {
   id: string
   title_fr: string | null
   title_en: string | null
+  description_fr: string | null
+  description_en: string | null
   image_url: string
   year: number
   event_name: string | null

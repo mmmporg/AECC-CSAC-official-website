@@ -4,6 +4,8 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { AnnouncementForm } from '@/components/admin/AnnouncementForm'
 import { getAdminAnnouncement } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditAnnouncementPage({
   params
 }: {

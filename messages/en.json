@@ -3,6 +3,7 @@
     "home": "Home",
     "histoire": "History",
     "annonces": "Announcements",
+    "galerie": "Photo Gallery",
     "opportunites": "Opportunities",
     "apropos": "About",
     "annuaire": "Directory",
@@ -28,7 +29,8 @@
     "mission_opportunities_copy": "Publish useful information about scholarships, jobs, applications and events.",
     "latest_announcements": "Latest announcements",
     "latest_opportunities": "Latest opportunities",
-    "founders_teaser": "Discover the founders"
+    "founders_teaser": "Discover the founders",
+    "founders_more": "+ 8 more founding members"
   },
   "annonces": {
     "title": "Announcements",
@@ -90,6 +92,10 @@
     "label": "Origins & History",
     "title": "25 years of history",
     "subtitle": "From the informal student network of 1997 to a structured international association",
+    "stats_first_gatherings": "First gatherings",
+    "stats_official_founding": "Official founding",
+    "stats_presidents": "Presidents",
+    "stats_years_of_existence": "Years of existence",
     "fondateurs_title": "Founding mothers & fathers",
     "fondateurs_subtitle": "Official list of the 17 founding members",
     "presidents_title": "Presidents",
@@ -97,7 +103,9 @@
     "table_city": "City",
     "table_name": "Name",
     "in_memoriam": "In memoriam",
-    "premier_bureau": "First board"
+    "premier_bureau": "First board",
+    "first_board_issa_description": "First representative of the Cameroonian students' network in China, she laid the groundwork for what would become AECC at the founding General Assembly in 1999 in Beijing.",
+    "first_board_solange_description": "Elected president during AECC's 25th anniversary in 2022, she embodies the association's continuity and international reach, with 19 presidents spread across every continent."
   },
   "about": {
     "title": "About AECC",

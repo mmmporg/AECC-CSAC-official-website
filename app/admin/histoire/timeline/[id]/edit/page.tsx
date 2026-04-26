@@ -3,6 +3,8 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { TimelineForm } from '@/components/admin/TimelineForm'
 import { getAdminHistoryData } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditTimelineEventPage({
   params
 }: {

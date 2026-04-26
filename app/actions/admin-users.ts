@@ -12,6 +12,11 @@ interface ActionResult {
   error?: string
 }
 
+export interface AdminUserActionState {
+  success: boolean
+  error?: string
+}
+
 const VALID_ROLES = new Set<AdminRole>(['admin', 'super_admin'])
 const MIN_PASSWORD_LENGTH = 10
 const DISABLE_DURATION = '876000h'
@@ -193,4 +198,32 @@ export async function toggleAdminAccountAccess(formData: FormData): Promise<Acti
       success: false
     }
   }
+}
+
+export async function createAdminAccountFormAction(
+  _previousState: AdminUserActionState,
+  formData: FormData
+): Promise<AdminUserActionState> {
+  return createAdminAccount(formData)
+}
+
+export async function updateAdminRoleFormAction(
+  _previousState: AdminUserActionState,
+  formData: FormData
+): Promise<AdminUserActionState> {
+  return updateAdminRole(formData)
+}
+
+export async function resetAdminPasswordFormAction(
+  _previousState: AdminUserActionState,
+  formData: FormData
+): Promise<AdminUserActionState> {
+  return resetAdminPassword(formData)
+}
+
+export async function toggleAdminAccountAccessFormAction(
+  _previousState: AdminUserActionState,
+  formData: FormData
+): Promise<AdminUserActionState> {
+  return toggleAdminAccountAccess(formData)
 }

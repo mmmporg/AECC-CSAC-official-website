@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { submitPublicAnnouncement } from '@/app/actions/announcements'
+import { submitPublicAnnouncement } from '@/app/actions/announcement-public'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Toast } from '@/components/ui/Toast'

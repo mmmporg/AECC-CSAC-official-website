@@ -3,6 +3,7 @@
     "home": "Accueil",
     "histoire": "Histoire",
     "annonces": "Annonces",
+    "galerie": "Galerie Photos",
     "opportunites": "Opportunités",
     "apropos": "À propos",
     "annuaire": "Annuaire",
@@ -28,7 +29,8 @@
     "mission_opportunities_copy": "Diffuser des informations utiles sur les bourses, stages, candidatures et événements.",
     "latest_announcements": "Dernières annonces",
     "latest_opportunities": "Dernières opportunités",
-    "founders_teaser": "Découvrir les fondateurs"
+    "founders_teaser": "Découvrir les fondateurs",
+    "founders_more": "+ 8 autres membres fondateurs"
   },
   "annonces": {
     "title": "Annonces",
@@ -90,6 +92,10 @@
     "label": "Genèse & Histoire",
     "title": "25 ans d'histoire",
     "subtitle": "De l'Amicale informelle de 1997 à une association internationale structurée",
+    "stats_first_gatherings": "Premières réunions",
+    "stats_official_founding": "Fondation officielle",
+    "stats_presidents": "Présidents",
+    "stats_years_of_existence": "D'existence",
     "fondateurs_title": "Pères & Mères Fondateurs",
     "fondateurs_subtitle": "Liste officielle des 17 membres fondateurs",
     "presidents_title": "Présidents",
@@ -97,7 +103,9 @@
     "table_city": "Ville",
     "table_name": "Nom",
     "in_memoriam": "In memoriam",
-    "premier_bureau": "Premier bureau"
+    "premier_bureau": "Premier bureau",
+    "first_board_issa_description": "Première représentante de l'Amicale des étudiants camerounais en Chine, elle a posé les bases de ce qui allait devenir l'AECC lors de la 1ère Assemblée Générale de 1999 à Beijing.",
+    "first_board_solange_description": "Choisie présidente lors du 25e anniversaire de l'AECC en 2022, elle incarne la continuité et le rayonnement international de l'association, avec 19 présidents répartis sur tous les continents."
   },
   "about": {
     "title": "À propos de l'AECC",

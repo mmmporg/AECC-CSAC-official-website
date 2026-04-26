@@ -34,6 +34,7 @@ export async function Header({ locale }: HeaderProps) {
           home: t('home'),
           histoire: t('histoire'),
           annonces: t('annonces'),
+          galerie: t('galerie'),
           annuaire: t('annuaire'),
           opportunites: t('opportunites'),
           apropos: t('apropos')

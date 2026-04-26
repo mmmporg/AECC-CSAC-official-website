@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { getGalleryPhotos } from '@/lib/data/public'
+import { getAllGalleryPhotos } from '@/lib/data/public'
 import { PageTransition } from '@/components/ui/PageTransition'
 import { RevealSection, RevealItem } from '@/components/ui/RevealSection'
 import { GalerieGrid } from '@/components/public/GalerieGrid'
@@ -26,8 +26,7 @@ export default async function GaleriePage({
   params: { locale: Locale }
 }) {
   const locale = params.locale
-  const photosResult = await getGalleryPhotos()
-  const photos = photosResult.items
+  const photos = await getAllGalleryPhotos()
 
   const title = locale === 'fr' ? 'Galerie Photos' : 'Photo Gallery'
   const subtitle =

@@ -53,6 +53,15 @@ export function HeroSection() {
       <DotPattern />
       <motion.div
         aria-hidden="true"
+        animate={shouldReduce ? { opacity: 0.045 } : { opacity: 0.05 }}
+        className="pointer-events-none absolute right-[-1.75rem] top-1/2 z-0 select-none font-serif text-[25rem] font-semibold leading-none text-white md:right-[2%] md:text-[31rem]"
+        style={{ fontFamily: 'system-ui, Georgia, serif' }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        学
+      </motion.div>
+      <motion.div
+        aria-hidden="true"
         animate={shouldReduce ? { opacity: 0.6 } : { x: [0, 18, 0], y: [0, -12, 0], opacity: [0.45, 0.72, 0.45] }}
         className="pointer-events-none absolute left-[8%] top-[20%] h-48 w-48 rounded-full border border-white/15"
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -134,23 +143,10 @@ export function HeroSection() {
         </div>
 
         <motion.aside
-          animate={
-            shouldReduce
-              ? { opacity: 1, y: 0, rotate: -2 }
-              : { opacity: 1, y: [0, -10, 0], rotate: [-2, 0, -2] }
-          }
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
           className="relative ml-auto hidden w-full max-w-[32rem] md:block"
           initial={shouldReduce ? false : { opacity: 0, y: 24, rotate: 0 }}
-          transition={
-            shouldReduce
-              ? { delay: 0.38, duration: 0.55, ease: [0.22, 1, 0.36, 1] }
-              : {
-                  opacity: { delay: 0.38, duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-                  y: { delay: 1, duration: 5.2, repeat: Infinity, ease: 'easeInOut' },
-                  rotate: { delay: 1, duration: 5.2, repeat: Infinity, ease: 'easeInOut' }
-                }
-          }
-          whileHover={shouldReduce ? {} : { y: -8, rotate: 0.6, scale: 1.02 }}
+          transition={{ delay: 0.38, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="absolute -bottom-5 -left-5 h-full w-full rounded-[1.7rem] bg-[linear-gradient(135deg,rgba(29,158,117,0.42),rgba(213,72,50,0.42),rgba(239,159,39,0.34))] blur-sm" />
           <div className="relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-[linear-gradient(155deg,#05120e_0%,#10352b_34%,#631a12_72%,#ef9f27_130%)] px-7 py-7 text-white shadow-[0_35px_80px_-26px_rgba(0,0,0,0.75)]">

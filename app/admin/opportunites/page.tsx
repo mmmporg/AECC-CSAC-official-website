@@ -8,6 +8,8 @@ import {
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { getAdminOpportunities } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminOpportunitiesPage() {
   const t = await getTranslations({ locale: 'fr', namespace: 'admin' })
   const opportunities = await getAdminOpportunities()

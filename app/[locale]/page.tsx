@@ -157,7 +157,8 @@ export default async function HomePage({
           ctaHref={`/${locale}/histoire`}
           ctaLabel={locale === 'fr' ? 'Voir l histoire' : 'See the history'}
           eyebrow="AECC"
-          founders={founders.slice(0, 6)}
+          founders={founders.slice(0, 9)}
+          moreLabel={t('founders_more')}
           intro={
             locale === 'fr'
               ? "Les personnes qui ont pose les bases de l'association restent visibles, identifiables et reliees a notre histoire collective."

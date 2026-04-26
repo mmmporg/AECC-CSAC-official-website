@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState, useTransition, type FormEvent } from 'react'
 import { deleteGalleryPhoto, uploadGalleryPhoto } from '@/app/actions/gallery'
+import { RichTextEditor } from '@/components/ui/RichTextEditor'
 import type { GalleryPhoto } from '@/lib/supabase/types'
 
 interface GalerieAdminClientProps {
@@ -12,6 +13,8 @@ interface GalerieAdminClientProps {
 export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
   const [images, setImages] = useState<GalleryPhoto[]>(initialImages)
   const [deleteTarget, setDeleteTarget] = useState<GalleryPhoto | null>(null)
+  const [descriptionFr, setDescriptionFr] = useState('')
+  const [descriptionEn, setDescriptionEn] = useState('')
   const [isPending, startTransition] = useTransition()
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [uploadSuccess, setUploadSuccess] = useState(false)
@@ -63,31 +66,48 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
   return (
     <div className="space-y-10">
       <div className="admin-card p-6">
-        <h2 className="mb-4 text-xl font-bold text-neutral-800">Ajouter une photo</h2>
+        <h2 className="mb-4 text-xl font-bold text-neutral-800">Ajouter un evenement photo</h2>
         <form className="grid gap-4 sm:grid-cols-2" onSubmit={handleUpload}>
           <div className="sm:col-span-2">
-            <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor="image">
-              Fichier image <span className="text-error">*</span>
+            <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor="images">
+              Photos de l&apos;evenement <span className="text-error">*</span>
             </label>
             <input
               accept="image/*"
               className="w-full rounded-lg border border-[#ece7dd] px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-brand-50 file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand-700"
-              id="image"
-              name="image"
+              id="images"
+              multiple
+              name="images"
               required
               type="file"
             />
+            <p className="mt-2 text-xs leading-5 text-neutral-500">
+              Vous pouvez selectionner plusieurs photos pour un seul et meme evenement.
+            </p>
           </div>
 
           <div>
             <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor="title_fr">
-              Titre (FR)
+              Titre de l&apos;evenement (FR)
             </label>
             <input
               className="w-full rounded-lg border border-[#ece7dd] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
               id="title_fr"
               name="title_fr"
               placeholder="Ex. Reunion annuelle 2024"
+              type="text"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor="title_en">
+              Titre de l&apos;evenement (EN)
+            </label>
+            <input
+              className="w-full rounded-lg border border-[#ece7dd] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              id="title_en"
+              name="title_en"
+              placeholder="Ex. Annual gathering 2024"
               type="text"
             />
           </div>
@@ -108,9 +128,9 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
             />
           </div>
 
-          <div className="sm:col-span-2">
+          <div>
             <label className="mb-1 block text-sm font-semibold text-neutral-700" htmlFor="event_name">
-              Nom de l&apos;evenement
+              Nom technique de regroupement
             </label>
             <input
               className="w-full rounded-lg border border-[#ece7dd] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -118,6 +138,30 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
               name="event_name"
               placeholder="Ex. Soiree de fin d'annee"
               type="text"
+            />
+            <p className="mt-2 text-xs leading-5 text-neutral-500">
+              Si vous ajoutez d&apos;autres photos plus tard avec ce meme nom, elles seront rattachees
+              au meme evenement public.
+            </p>
+          </div>
+
+          <div className="sm:col-span-2">
+            <RichTextEditor
+              label="Description (FR)"
+              name="description_fr"
+              onChange={setDescriptionFr}
+              placeholder="Decrivez l'evenement en francais..."
+              value={descriptionFr}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <RichTextEditor
+              label="Description (EN)"
+              name="description_en"
+              onChange={setDescriptionEn}
+              placeholder="Describe the event in English..."
+              value={descriptionEn}
             />
           </div>
 
@@ -129,7 +173,7 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
 
           {uploadSuccess ? (
             <p className="sm:col-span-2 rounded-lg bg-brand-50 px-3 py-2 text-sm text-brand-700">
-              Photo ajoutee avec succes.
+              Evenement ajoute avec succes.
             </p>
           ) : null}
 
@@ -139,7 +183,7 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
               disabled={isPending || isUploading}
               type="submit"
             >
-              {isPending || isUploading ? 'Envoi en cours...' : 'Uploader la photo'}
+              {isPending || isUploading ? 'Envoi en cours...' : 'Uploader l evenement'}
             </button>
           </div>
         </form>
@@ -150,7 +194,7 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
           <thead className="bg-[#f0ece4] text-left text-neutral-600">
             <tr>
               <th className="px-6 py-4 font-semibold uppercase tracking-[0.08em]">Apercu</th>
-              <th className="px-6 py-4 font-semibold uppercase tracking-[0.08em]">Titre</th>
+              <th className="px-6 py-4 font-semibold uppercase tracking-[0.08em]">Evenement</th>
               <th className="px-6 py-4 font-semibold uppercase tracking-[0.08em]">Date</th>
               <th className="px-6 py-4 text-right font-semibold uppercase tracking-[0.08em]">Actions</th>
             </tr>
@@ -173,6 +217,11 @@ export function GalerieAdminClient({ initialImages }: GalerieAdminClientProps) {
                   {image.title_fr ?? image.event_name ?? (
                     <span className="italic text-neutral-400">Sans titre</span>
                   )}
+                  {image.event_name ? (
+                    <p className="mt-1 text-xs uppercase tracking-[0.14em] text-neutral-400">
+                      {image.event_name}
+                    </p>
+                  ) : null}
                 </td>
                 <td className="px-6 py-4 text-neutral-500">{image.year}</td>
                 <td className="px-6 py-4 text-right">

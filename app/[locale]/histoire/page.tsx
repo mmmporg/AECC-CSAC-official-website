@@ -44,20 +44,34 @@ export default async function HistoryPage({
 
         <section className="py-2">
           <div className="container-shell">
-            <div className="public-panel grid gap-12 p-8 md:grid-cols-2 md:items-center md:p-10">
-              <div className="overflow-hidden rounded-2xl shadow-card">
-                <div className="aspect-video bg-gradient-to-br from-brand-700 via-brand-500 to-accent-300" />
-              </div>
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-brand-700">
-                  {locale === 'fr' ? 'Le contexte initial' : 'The initial context'}
-                </h2>
-                <p className="text-base leading-8 text-neutral-600">
-                  {locale === 'fr'
-                    ? "A la fin des annees 90, la communaute estudiantine camerounaise en Chine se densifie. L'AECC nait de ce besoin de solidarite, d'organisation et de representation."
-                    : 'By the late 1990s, the Cameroonian student community in China was growing. AECC emerged from the need for solidarity, structure and representation.'}
-                </p>
-              </div>
+            <div className="public-panel overflow-hidden p-3 sm:p-4 md:p-5">
+              <RevealSection className="grid grid-cols-2 overflow-hidden rounded-[1.75rem] border border-neutral-200/80 bg-white/80 md:grid-cols-4">
+                {[
+                  { value: '1997', label: t('stats_first_gatherings') },
+                  { value: '1999', label: t('stats_official_founding') },
+                  { value: '19', label: t('stats_presidents') },
+                  { value: locale === 'fr' ? '25 ans' : '25 years', label: t('stats_years_of_existence') }
+                ].map((stat, index) => {
+                  const mobileDivider = index % 2 === 1 ? 'border-l border-neutral-200/80' : ''
+                  const mobileRowDivider = index >= 2 ? 'border-t border-neutral-200/80' : ''
+                  const desktopDivider = index >= 1 ? 'md:border-l md:border-t-0 md:border-neutral-200/80' : 'md:border-t-0'
+
+                  return (
+                    <RevealItem key={`${stat.value}-${stat.label}`}>
+                      <div
+                        className={`group flex min-h-[7.75rem] flex-col justify-center gap-1.5 px-4 py-5 motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] md:min-h-[8.9rem] md:px-7 md:py-6 md:hover:-translate-y-0.5 ${mobileDivider} ${mobileRowDivider} ${desktopDivider}`}
+                      >
+                        <p className="font-black leading-[0.9] tracking-[-0.065em] text-brand-400 tabular-nums text-[clamp(1.9rem,6vw,2.35rem)] md:text-[2.6rem]">
+                          {stat.value}
+                        </p>
+                        <p className="max-w-[12ch] text-[0.78rem] font-medium leading-[1.35] text-neutral-600 sm:text-[0.86rem] md:max-w-[14ch] md:text-[0.95rem] md:leading-[1.45]">
+                          {stat.label}
+                        </p>
+                      </div>
+                    </RevealItem>
+                  )
+                })}
+              </RevealSection>
             </div>
           </div>
         </section>
@@ -83,6 +97,12 @@ export default async function HistoryPage({
                   index % 2 === 0
                     ? 'from-brand-700 via-brand-500 to-accent-300'
                     : 'from-[#0d1612] via-[#173f33] to-[#7c2015]'
+                const descriptionKey =
+                  president.full_name === 'Issa Rouhaya'
+                    ? 'first_board_issa_description'
+                    : president.full_name === 'Solange Meying'
+                      ? 'first_board_solange_description'
+                      : null
 
                 return (
                   <article
@@ -142,9 +162,7 @@ export default async function HistoryPage({
                             {president.full_name}
                           </h3>
                           <p className="mt-3 text-sm leading-6 text-neutral-600 md:mt-4 md:text-base md:leading-7">
-                            {locale === 'fr'
-                              ? "Figure cle de la structuration initiale de l'AECC au moment de l'Assemblee Generale fondatrice."
-                              : 'A key figure in the initial structuring of AECC during the founding General Assembly.'}
+                            {descriptionKey ? t(descriptionKey) : ''}
                           </p>
                         </div>
 

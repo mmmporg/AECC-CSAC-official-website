@@ -300,6 +300,23 @@ export async function getGalleryPhotos(page: number = 1, pageSize: number = 12) 
   })
 }
 
+export async function getAllGalleryPhotos() {
+  return timed('getAllGalleryPhotos', async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('gallery_photos')
+      .select('*')
+      .order('year', { ascending: false })
+      .order('sort_order', { ascending: true })
+
+    if (error) {
+      return []
+    }
+
+    return (data ?? []) as GalleryPhoto[]
+  })
+}
+
 export async function getGalerieImages() {
   return timed('getGalerieImages', async () => {
     const supabase = createClient()

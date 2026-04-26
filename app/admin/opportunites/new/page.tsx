@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { OpportunityForm } from '@/components/admin/OpportunityForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function NewOpportunityPage() {
   const t = await getTranslations({ locale: 'fr', namespace: 'admin' })
 

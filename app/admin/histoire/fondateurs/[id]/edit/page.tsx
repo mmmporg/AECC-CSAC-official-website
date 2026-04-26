@@ -3,6 +3,8 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { FounderForm } from '@/components/admin/FounderForm'
 import { getAdminHistoryData } from '@/lib/data/admin'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EditFounderPage({
   params
 }: {

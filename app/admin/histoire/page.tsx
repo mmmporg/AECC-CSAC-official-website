@@ -1,7 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import {
+  deleteFounder,
+  deletePresident,
+  deleteTimelineEvent
+} from '@/app/actions/history'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { getAdminHistoryData } from '@/lib/data/admin'
+
+export const dynamic = 'force-dynamic'
 
 function toneClass(color: string) {
   switch (color) {
@@ -23,6 +30,21 @@ function getInitials(name: string) {
     .map((part) => part[0] ?? '')
     .join('')
     .toUpperCase()
+}
+
+async function deleteTimelineEventAction(formData: FormData) {
+  'use server'
+  await deleteTimelineEvent(formData.get('id') as string)
+}
+
+async function deleteFounderAction(formData: FormData) {
+  'use server'
+  await deleteFounder(formData.get('id') as string)
+}
+
+async function deletePresidentAction(formData: FormData) {
+  'use server'
+  await deletePresident(formData.get('id') as string)
 }
 
 export default async function AdminHistoryPage() {
@@ -77,6 +99,15 @@ export default async function AdminHistoryPage() {
                 >
                   Modifier
                 </Link>
+                <form action={deleteTimelineEventAction}>
+                  <input name="id" type="hidden" value={event.id} />
+                  <button
+                    className="rounded-lg px-3 py-2 text-sm font-medium text-error transition hover:bg-error/10"
+                    type="submit"
+                  >
+                    Supprimer
+                  </button>
+                </form>
               </div>
             </article>
           ))}
@@ -120,12 +151,20 @@ export default async function AdminHistoryPage() {
                       <p className="text-sm text-neutral-600">{founder.role_fr ?? 'Sans role'}</p>
                     </div>
                   </div>
-                  <Link
-                    className="text-sm font-semibold text-brand-600"
-                    href={`/admin/histoire/fondateurs/${founder.id}/edit`}
-                  >
-                    Modifier
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      className="text-sm font-semibold text-brand-600"
+                      href={`/admin/histoire/fondateurs/${founder.id}/edit`}
+                    >
+                      Modifier
+                    </Link>
+                    <form action={deleteFounderAction}>
+                      <input name="id" type="hidden" value={founder.id} />
+                      <button className="text-sm font-semibold text-error" type="submit">
+                        Supprimer
+                      </button>
+                    </form>
+                  </div>
                 </div>
               ))}
             </div>
@@ -172,12 +211,20 @@ export default async function AdminHistoryPage() {
                       </p>
                     </div>
                   </div>
-                  <Link
-                    className="text-sm font-semibold text-brand-600"
-                    href={`/admin/histoire/presidents/${president.id}/edit`}
-                  >
-                    Modifier
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      className="text-sm font-semibold text-brand-600"
+                      href={`/admin/histoire/presidents/${president.id}/edit`}
+                    >
+                      Modifier
+                    </Link>
+                    <form action={deletePresidentAction}>
+                      <input name="id" type="hidden" value={president.id} />
+                      <button className="text-sm font-semibold text-error" type="submit">
+                        Supprimer
+                      </button>
+                    </form>
+                  </div>
                 </div>
               ))}
             </div>

@@ -14,6 +14,8 @@ import {
 import { getAdminDashboardData } from '@/lib/data/admin'
 import { getRichTextExcerpt } from '@/lib/rich-text'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDashboardPage() {
   const t = await getTranslations({ locale: 'fr', namespace: 'admin' })
   const dashboard = await getAdminDashboardData()

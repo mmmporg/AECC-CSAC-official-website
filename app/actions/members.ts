@@ -10,6 +10,11 @@ interface ActionResult {
   error?: string
 }
 
+export interface MemberActionState {
+  success: boolean
+  error?: string
+}
+
 const MAX_NAME_LENGTH = 80
 const MAX_UNIVERSITY_LENGTH = 160
 const MAX_DEGREE_LENGTH = 120
@@ -185,18 +190,38 @@ export async function getPublicMembers() {
 }
 
 export async function toggleMemberStatus(id: string, active: boolean): Promise<void> {
-  const user = await requireAdminUser()
-  const supabase = createClient()
-  const { error } = await supabase
-    .from('members')
-    .update({ approved_by: user.id, is_active: active })
-    .eq('id', id)
+  try {
+    const user = await requireAdminUser()
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('members')
+      .update({ approved_by: user.id, is_active: active })
+      .eq('id', id)
 
-  if (error) {
-    throw new Error(error.message)
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    revalidatePath('/admin/membres')
+    revalidatePath('/fr/annuaire')
+    revalidatePath('/en/annuaire')
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : 'Unexpected error')
   }
+}
 
-  revalidatePath('/admin/membres')
-  revalidatePath('/fr/annuaire')
-  revalidatePath('/en/annuaire')
+export async function toggleMemberStatusFormAction(
+  id: string,
+  active: boolean,
+  _previousState: MemberActionState
+): Promise<MemberActionState> {
+  try {
+    await toggleMemberStatus(id, active)
+    return { success: true }
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unexpected error',
+      success: false
+    }
+  }
 }

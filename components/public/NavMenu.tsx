@@ -11,6 +11,7 @@ interface NavMenuProps {
     home: string
     histoire: string
     annonces: string
+    galerie: string
     opportunites: string
     apropos: string
     annuaire: string
@@ -41,6 +42,7 @@ export function NavMenu({ locale, translations }: NavMenuProps) {
     { href: `/${locale}`, label: translations.home, exact: true },
     { href: `/${locale}/histoire`, label: translations.histoire },
     { href: `/${locale}/annonces`, label: translations.annonces },
+    { href: `/${locale}/galerie`, label: translations.galerie },
     { href: `/${locale}/annuaire`, label: translations.annuaire },
     { href: `/${locale}/opportunites`, label: translations.opportunites },
     { href: `/${locale}/a-propos`, label: translations.apropos }

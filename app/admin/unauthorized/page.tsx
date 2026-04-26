@@ -1,10 +1,14 @@
 import Link from 'next/link'
-import { AdminLayout } from '@/components/admin/AdminLayout'
 
 export default function AdminUnauthorizedPage() {
   return (
-    <AdminLayout title="Acces refuse">
-      <div className="mx-auto max-w-3xl">
+    <div className="admin-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-[10%] -top-[20%] h-[28rem] w-[28rem] rounded-full bg-brand-100/60 blur-3xl" />
+        <div className="absolute -bottom-[12%] -left-[10%] h-80 w-80 rounded-full bg-accent-50 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-3xl">
         <div className="admin-card overflow-hidden">
           <div className="bg-[#f7efe3] px-8 py-10">
             <p className="text-sm font-black uppercase tracking-[0.2em] text-[#8c5a0a]">
@@ -42,6 +46,6 @@ export default function AdminUnauthorizedPage() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </div>
   )
 }
